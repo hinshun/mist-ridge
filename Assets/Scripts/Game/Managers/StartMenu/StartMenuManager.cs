@@ -11,11 +11,15 @@ namespace MistRidge
         [SerializeField]
         private readonly Settings settings;
 
+        private readonly SceneLoader sceneLoader;
         private int selectionIndex;
 
-        public StartMenuManager(Settings settings)
+        public StartMenuManager(
+            Settings settings,
+            SceneLoader sceneLoader)
         {
             this.settings = settings;
+            this.sceneLoader = sceneLoader;
         }
 
         public void Initialize()
@@ -52,7 +56,17 @@ namespace MistRidge
 
         public void Select()
         {
-            Debug.Log(settings.menuItems[selectionIndex].textContent + " selected");
+            StartMenuItem item = settings.menuItems[selectionIndex].item;
+
+            switch(item)
+            {
+                case(StartMenuItem.NewGame):
+                    NewGame();
+                    break;
+                case(StartMenuItem.Quit):
+                    Quit();
+                    break;
+            }
         }
 
         private void ResetMenuItems()
@@ -63,9 +77,20 @@ namespace MistRidge
             }
         }
 
+        private void NewGame()
+        {
+            sceneLoader.Load(settings.newGameSceneName);
+        }
+
+        private void Quit()
+        {
+            UnityApplication.Quit();
+        }
+
         [Serializable]
         public class Settings
         {
+            public string newGameSceneName;
             public StartMenuItem startMenuItem;
             public MenuItem[] menuItems;
         }
