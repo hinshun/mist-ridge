@@ -1,11 +1,10 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using System;
 using Zenject;
 
 namespace MistRidge
 {
-    public class GameInstaller : MonoInstaller
+    public class GlobalInstaller : MonoInstaller
     {
         [SerializeField]
         Settings settings;
@@ -19,6 +18,8 @@ namespace MistRidge
 
         void InstallInput()
         {
+            Container.Bind<InControl.InControlManager>().ToSinglePrefab(settings.InControlManagerPrefab);
+
             Container.Bind<InputManager>().ToSingle();
             Container.BindAllInterfacesToSingle<InputManager>();
 
@@ -39,6 +40,7 @@ namespace MistRidge
         public class Settings
         {
             public SceneLoader.Settings SceneLoader;
+            public GameObject InControlManagerPrefab;
         }
     }
 }

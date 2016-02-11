@@ -10,7 +10,9 @@ namespace MistRidge
         public ReadOnlyCollection<Input> inputs;
         private readonly Input.Factory inputFactory;
 
-        public InputManager(Input.Factory inputFactory)
+        public InputManager(
+                Input.Factory inputFactory,
+                InControl.InControlManager inControlManager)
         {
             this.inputFactory = inputFactory;
         }
