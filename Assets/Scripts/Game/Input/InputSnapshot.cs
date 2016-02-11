@@ -4,10 +4,10 @@ namespace MistRidge
 {
     public struct InputSnapshot
     {
-        public Vector3 move;
-        public bool submitPressed;
-        public bool cancelPressed;
-        public bool startPressed;
-        public bool jumpPressed;
+        public InControl.TwoAxisInputControl move;
+        public bool menuPressed;
+        public InControl.InputControl submit;
+        public InControl.InputControl cancel;
+        public InControl.InputControl jump;
     }
 }

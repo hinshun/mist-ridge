@@ -6,8 +6,9 @@ namespace MistRidge
 {
     public class Input : ITickable
     {
+        private readonly InControl.InputDevice device;
+
         public InputSnapshot current;
-        private InControl.InputDevice device;
 
         public Input(InControl.InputDevice device)
         {
@@ -16,16 +17,13 @@ namespace MistRidge
 
         public void Tick()
         {
-            float horizontal = device.Direction.X;
-            float vertical = device.Direction.Y;
-
             current = new InputSnapshot()
             {
-                move = new Vector3(horizontal, 0, vertical),
-                submitPressed = device.Action1,
-                cancelPressed = device.Action2,
-                startPressed = device.MenuWasPressed,
-                jumpPressed = device.Action1,
+                move = device.Direction,
+                menuPressed = device.MenuWasPressed,
+                submit = device.Action1,
+                cancel = device.Action2,
+                jump = device.Action1,
             };
         }
 

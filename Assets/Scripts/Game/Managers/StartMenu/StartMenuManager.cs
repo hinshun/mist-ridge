@@ -33,10 +33,10 @@ namespace MistRidge
                 }
             }
 
-            SelectMenuItem(0);
+            MoveSelection(0);
         }
 
-        public void SelectMenuItem(int indexDiff)
+        public void MoveSelection(int indexDiff)
         {
             MenuItem selectedMenuItem = settings.menuItems[selectionIndex];
             selectedMenuItem.textItem.text = selectedMenuItem.textContent;
@@ -48,6 +48,11 @@ namespace MistRidge
             }
             selectedMenuItem = settings.menuItems[selectionIndex];
             selectedMenuItem.textItem.text = "> " + selectedMenuItem.textContent;
+        }
+
+        public void Select()
+        {
+            Debug.Log(settings.menuItems[selectionIndex].textContent + " selected");
         }
 
         private void ResetMenuItems()
