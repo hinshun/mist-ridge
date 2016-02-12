@@ -22,7 +22,7 @@ namespace MistRidge
         {
             foreach(Input input in inputManager.inputs)
             {
-                if (input.current.submit.WasPressed)
+                if (input.Current.submit.WasPressed)
                 {
                     playerManager.SpawnPlayer(input);
                     return;

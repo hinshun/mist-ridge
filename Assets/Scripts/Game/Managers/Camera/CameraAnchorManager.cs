@@ -8,19 +8,19 @@ namespace MistRidge
     public class CameraAnchorManager : ITickable
     {
         private readonly Settings settings;
-        private readonly CameraAnchorView anchorView;
-        private readonly CameraOriginView originView;
+        private readonly CameraAnchorView cameraAnchorView;
+        private readonly CameraOriginView cameraOriginView;
         private readonly PlayerManager playerManager;
 
         public CameraAnchorManager(
                 Settings settings,
-                CameraAnchorView anchorView,
-                CameraOriginView originView,
+                CameraAnchorView cameraAnchorView,
+                CameraOriginView cameraOriginView,
                 PlayerManager playerManager)
         {
             this.settings = settings;
-            this.anchorView = anchorView;
-            this.originView = originView;
+            this.cameraAnchorView = cameraAnchorView;
+            this.cameraOriginView = cameraOriginView;
             this.playerManager = playerManager;
         }
 
@@ -28,21 +28,28 @@ namespace MistRidge
         {
             Vector3 center = CenterPoint(playerManager.PlayerViews);
 
-            anchorView.transform.position = Vector3.Lerp(
-                anchorView.transform.position,
+            cameraAnchorView.transform.position = Vector3.Lerp(
+                cameraAnchorView.transform.position,
                 center,
                 settings.centeringSpeed * Time.deltaTime
             );
 
             Vector3 originProjection = new Vector3(
-                originView.transform.position.x,
-                anchorView.transform.position.y,
-                originView.transform.position.z
+                cameraOriginView.transform.position.x,
+                cameraAnchorView.transform.position.y,
+                cameraOriginView.transform.position.z
             );
+
+            Vector3 lookDirection = originProjection - center;
+            if (lookDirection == Vector3.zero)
+            {
+                return;
+            }
+
             Quaternion rotation = Quaternion.LookRotation(originProjection - center);
 
-            anchorView.transform.rotation = Quaternion.Lerp(
-                anchorView.transform.rotation,
+            cameraAnchorView.transform.rotation = Quaternion.Lerp(
+                cameraAnchorView.transform.rotation,
                 rotation,
                 settings.rotationSpeed * Time.deltaTime
             );

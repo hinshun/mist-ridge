@@ -22,16 +22,16 @@ namespace MistRidge
         {
             foreach(Input input in inputManager.inputs)
             {
-                if (input.current.submit.WasPressed)
+                if (input.Current.submit.WasPressed)
                 {
                     startMenuManager.Select();
                     return;
                 }
 
-                if (input.current.move.Up.WasPressed)
+                if (input.Current.move.Up.WasPressed)
                 {
                     startMenuManager.MoveSelection(1);
-                } else if (input.current.move.Down.WasPressed)
+                } else if (input.Current.move.Down.WasPressed)
                 {
                     startMenuManager.MoveSelection(-1);
                 }

@@ -40,13 +40,20 @@ namespace MistRidge
         {
             Container.Bind<CameraOriginView>().ToSinglePrefab(settings.Camera.Prefab);
             Container.Bind<CameraAnchorView>().ToSinglePrefab(settings.Camera.Prefab);
+            Container.Bind<CameraRigView>().ToSinglePrefab(settings.Camera.Prefab);
+            Container.Bind<CameraView>().ToSinglePrefab(settings.Camera.Prefab);
+
             Container.Bind<CameraAnchorManager>().ToSingle();
             Container.BindAllInterfacesToSingle<CameraAnchorManager>();
+
+            Container.Bind<CameraManager>().ToSingle();
+            Container.BindAllInterfacesToSingle<CameraManager>();
         }
 
         void InstallSettings()
         {
             Container.Bind<CameraAnchorManager.Settings>().ToSingleInstance(settings.Camera.Anchor);
+            Container.Bind<CameraManager.Settings>().ToSingleInstance(settings.Camera.Camera);
         }
 
         [Serializable]
@@ -66,6 +73,7 @@ namespace MistRidge
             {
                 public GameObject Prefab;
                 public CameraAnchorManager.Settings Anchor;
+                public CameraManager.Settings Camera;
             }
         }
     }

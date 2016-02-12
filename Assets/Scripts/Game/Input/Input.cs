@@ -7,12 +7,19 @@ namespace MistRidge
     public class Input : ITickable
     {
         private readonly InControl.InputDevice device;
-
-        public InputSnapshot current;
+        private InputSnapshot current;
 
         public Input(InControl.InputDevice device)
         {
             this.device = device;
+        }
+
+        public InputSnapshot Current
+        {
+            get
+            {
+                return current;
+            }
         }
 
         public void Tick()
