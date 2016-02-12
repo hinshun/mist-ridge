@@ -10,7 +10,9 @@ namespace MistRidge
         [SerializeField]
         private readonly Settings settings;
 
-        public SceneLoader(Settings settings)
+        public SceneLoader(
+                Settings settings,
+                UnityFixGI unityFixGI)
         {
             this.settings = settings;
         }

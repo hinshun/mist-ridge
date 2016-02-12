@@ -29,6 +29,7 @@ namespace MistRidge
         void InstallUtility()
         {
             Container.Bind<SceneLoader>().ToSingle();
+            Container.Bind<UnityFixGI>().ToSinglePrefab(settings.UnityFixGIPrefab);
         }
 
         void InstallSettings()
@@ -41,6 +42,7 @@ namespace MistRidge
         {
             public SceneLoader.Settings SceneLoader;
             public GameObject InControlManagerPrefab;
+            public GameObject UnityFixGIPrefab;
         }
     }
 }
