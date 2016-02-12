@@ -45,11 +45,7 @@ namespace MistRidge
             MenuItem selectedMenuItem = settings.menuItems[selectionIndex];
             selectedMenuItem.textItem.text = selectedMenuItem.textContent;
 
-            selectionIndex = (selectionIndex + indexDiff) % settings.menuItems.Length;
-            if (selectionIndex < 0)
-            {
-                selectionIndex += settings.menuItems.Length;
-            }
+            selectionIndex = (selectionIndex + indexDiff + settings.menuItems.Length) % settings.menuItems.Length;
             selectedMenuItem = settings.menuItems[selectionIndex];
             selectedMenuItem.textItem.text = "> " + selectedMenuItem.textContent;
         }
