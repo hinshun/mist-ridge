@@ -4,25 +4,24 @@ using System.Collections;
 using System.Collections.Generic;
 using Zenject;
 
-public abstract class StateMachine<TStateMachine, TState, TStates, TStateFactory> : IInitializable
-    where TStateMachine : StateMachine<TStateMachine, TState, TStates, TStateFactory>
-    where TState : State<TStateMachine, TState, TStates, TStateFactory>
-    where TStates : struct, IComparable, IFormattable, IConvertible
-    where TStateFactory : StateFactory<TStateMachine, TState, TStates, TStateFactory>
+public abstract class StateMachine<TStateMachine, TState, TStateType, TStateFactory>
+    where TStateMachine : StateMachine<TStateMachine, TState, TStateType, TStateFactory>
+    where TState : State<TStateMachine, TState, TStateType, TStateFactory>
+    where TStateType : struct, IComparable, IFormattable, IConvertible
+    where TStateFactory : StateFactory<TStateMachine, TState, TStateType, TStateFactory>
 {
+    protected float timeEnteredState;
     protected TState state = null;
     protected TState lastState = null;
     protected readonly TStateFactory stateFactory;
-    protected float timeEnteredState;
 
-    public StateMachine(TStateFactory stateFactory)
+    public StateMachine(
+            TStateFactory stateFactory)
     {
         this.stateFactory = stateFactory;
     }
 
-    public abstract void Initialize();
-
-    public void ChangeState(TStates stateReference, params object[] constructorArgs)
+    public void ChangeState(TStateType stateType, params object[] constructorArgs)
     {
         ChangingState();
         if (state != null)
@@ -30,30 +29,29 @@ public abstract class StateMachine<TStateMachine, TState, TStates, TStateFactory
             state.ExitState();
         }
 
-        state = stateFactory.Create(stateReference, constructorArgs);
+        state = stateFactory.Create(stateType, constructorArgs);
         state.EnterState();
     }
 
-
-    public TStates CurrentStateReference()
+    public TStateType CurrentStateType()
     {
-        return state.stateReference;
+        return state.StateType;
     }
 
-    void ChangingState()
+    public void Tick()
     {
-        lastState = state;
-        timeEnteredState = Time.time;
-    }
-
-
-    public void Step()
-    {
+        Debug.Log(state.StateType);
         EarlyGlobalUpdate();
 
         state.Update();
 
         LateGlobalUpdate();
+    }
+
+    private void ChangingState()
+    {
+        lastState = state;
+        timeEnteredState = Time.time;
     }
 
     protected virtual void EarlyGlobalUpdate() { }

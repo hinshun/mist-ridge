@@ -69,7 +69,7 @@ namespace MistRidge
             Vector3 localCenter = Vector3.zero;
             foreach (PlayerView playerView in playerViews)
             {
-                localCenter += playerView.transform.position;
+                localCenter += playerView.Position;
             }
 
             return localCenter / playerViews.Count;

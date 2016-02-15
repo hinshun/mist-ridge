@@ -5,7 +5,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class PlayerManager : IInitializable
+    public class PlayerManager : IInitializable, ITickable
     {
         private readonly PlayerFacade.Factory playerFacadeFactory;
         private List<PlayerFacade> playerFacades;
@@ -30,11 +30,19 @@ namespace MistRidge
             playerViews = new List<PlayerView>();
         }
 
+        public void Tick()
+        {
+            foreach (PlayerFacade playerFacade in playerFacades)
+            {
+                playerFacade.Tick();
+            }
+        }
+
         public void SpawnPlayer(Input input)
         {
             PlayerFacade playerFacade = playerFacadeFactory.Create(input);
             playerFacades.Add(playerFacade);
-            playerViews.Add(playerFacade.View);
+            playerViews.Add(playerFacade.PlayerView);
         }
     }
 }

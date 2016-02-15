@@ -2,21 +2,31 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class PlayerFacade : Facade
+    public class PlayerFacade : Facade, ITickable
     {
-        private readonly PlayerView view;
+        private readonly PlayerView playerView;
+        private readonly PlayerController playerController;
 
-        public PlayerFacade(PlayerView view)
+        public PlayerFacade(
+            PlayerView playerView,
+            PlayerStateMachine playerStateMachine,
+            PlayerController playerController)
         {
-            this.view = view;
+            this.playerView = playerView;
+            this.playerController = playerController;
         }
 
-        public PlayerView View
+        public PlayerView PlayerView
         {
             get
             {
-                return view;
+                return playerView;
             }
+        }
+
+        public void Tick()
+        {
+            playerController.Tick();
         }
 
         public class Factory : FacadeFactory<Input, PlayerFacade>

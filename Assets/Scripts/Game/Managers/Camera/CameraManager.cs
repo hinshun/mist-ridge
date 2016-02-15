@@ -42,7 +42,7 @@ namespace MistRidge
             zoom = xMax = yMax = 0f;
             foreach (PlayerView playerView in playerViews)
             {
-                Vector3 relativePosition = cameraRigView.transform.InverseTransformPoint(playerView.transform.position);
+                Vector3 relativePosition = cameraRigView.transform.InverseTransformPoint(playerView.Position);
 
                 float xBound = Mathf.Abs(relativePosition.x);
                 float yBound = Mathf.Abs(relativePosition.y);

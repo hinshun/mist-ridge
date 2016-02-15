@@ -7,14 +7,14 @@ namespace MistRidge
     public class Input : ITickable
     {
         private readonly InControl.InputDevice device;
-        private InputSnapshot current;
+        private InputMapping current;
 
         public Input(InControl.InputDevice device)
         {
             this.device = device;
         }
 
-        public InputSnapshot Current
+        public InputMapping Current
         {
             get
             {
@@ -24,9 +24,9 @@ namespace MistRidge
 
         public void Tick()
         {
-            current = new InputSnapshot()
+            current = new InputMapping()
             {
-                move = device.Direction,
+                moveDirection = device.Direction,
                 menuPressed = device.MenuWasPressed,
                 submit = device.Action1,
                 cancel = device.Action2,

@@ -12,11 +12,12 @@ namespace MistRidge
         public override void InstallBindings()
         {
             InstallPlayer();
+            InstallCollision();
             InstallCamera();
             InstallSettings();
         }
 
-        void InstallPlayer()
+        private void InstallPlayer()
         {
             Container.BindFacadeFactory<Input, PlayerFacade, PlayerFacade.Factory>(InstallPlayerFacade);
 
@@ -25,23 +26,36 @@ namespace MistRidge
 
             Container.Bind<PlayerInputHandler>().ToSingle();
             Container.BindAllInterfacesToSingle<PlayerInputHandler>();
+
+            Container.Bind<PlayerStateFactory>().ToSingle();
         }
 
-        void InstallPlayerFacade(DiContainer subContainer, Input input)
+        private void InstallPlayerFacade(DiContainer subContainer, Input input)
         {
             subContainer.BindInstance(input);
             subContainer.Bind<PlayerView>().ToSinglePrefab(settings.Player.Prefab);
 
             subContainer.Bind<PlayerController>().ToSingle();
-            subContainer.BindAllInterfacesToSingle<PlayerController>();
+            subContainer.Bind<IInitializable>().ToSingle<PlayerController>();
+
+            subContainer.Bind<PlayerStateMachine>().ToSingle();
         }
 
-        void InstallCamera()
+        private void InstallCollision()
+        {
+            Container.Bind<Collidable>().ToSinglePrefab(settings.Player.Collision.DefaultCollidablePrefab);
+
+            Container.Bind<CollisionSphere.Factory>().ToSingle();
+            Container.Bind<Grounding.Factory>().ToSingle();
+        }
+
+        private void InstallCamera()
         {
             Container.Bind<CameraOriginView>().ToSinglePrefab(settings.Camera.Prefab);
             Container.Bind<CameraAnchorView>().ToSinglePrefab(settings.Camera.Prefab);
             Container.Bind<CameraRigView>().ToSinglePrefab(settings.Camera.Prefab);
             Container.Bind<CameraView>().ToSinglePrefab(settings.Camera.Prefab);
+            Container.Bind<Camera>().ToSinglePrefab(settings.Camera.Prefab);
 
             Container.Bind<CameraAnchorManager>().ToSingle();
             Container.BindAllInterfacesToSingle<CameraAnchorManager>();
@@ -50,10 +64,21 @@ namespace MistRidge
             Container.BindAllInterfacesToSingle<CameraManager>();
         }
 
-        void InstallSettings()
+        private void InstallSettings()
         {
             Container.Bind<CameraAnchorManager.Settings>().ToSingleInstance(settings.Camera.Anchor);
             Container.Bind<CameraManager.Settings>().ToSingleInstance(settings.Camera.Camera);
+
+            Container.Bind<PlayerController.Settings>().ToSingleInstance(settings.Player.Controller);
+
+            Container.Bind<PlayerStateMachine.Settings>().ToSingleInstance(settings.Player.StateMachine);
+
+            Container.Bind<PlayerIdleState.Settings>().ToSingleInstance(settings.Player.IdleState);
+            Container.Bind<PlayerWalkState.Settings>().ToSingleInstance(settings.Player.WalkState);
+            Container.Bind<PlayerJumpState.Settings>().ToSingleInstance(settings.Player.JumpState);
+            Container.Bind<PlayerFallState.Settings>().ToSingleInstance(settings.Player.FallState);
+
+            Container.Bind<Grounding.Settings>().ToSingleInstance(settings.Player.Collision.Grounding);
         }
 
         [Serializable]
@@ -66,6 +91,20 @@ namespace MistRidge
             public class PlayerSettings
             {
                 public GameObject Prefab;
+                public CollisionSettings Collision;
+                public PlayerController.Settings Controller;
+                public PlayerStateMachine.Settings StateMachine;
+                public PlayerIdleState.Settings IdleState;
+                public PlayerWalkState.Settings WalkState;
+                public PlayerJumpState.Settings JumpState;
+                public PlayerFallState.Settings FallState;
+
+                [Serializable]
+                public class CollisionSettings
+                {
+                    public GameObject DefaultCollidablePrefab;
+                    public Grounding.Settings Grounding;
+                }
             }
 
             [Serializable]
