@@ -73,17 +73,10 @@ namespace MistRidge
             viewportOrigin.z = camera.nearClipPlane;
 
             Vector3 viewportPoint = new Vector3(
-                Mathf.Clamp(viewportOrigin.x + (input.Current.moveDirection.X * 0.1f), 0f, 1f),
-                Mathf.Clamp(viewportOrigin.y + (input.Current.moveDirection.Y * 0.1f), 0f, 1f),
+                Mathf.Clamp(viewportOrigin.x + (input.Current.moveDirection.X * settings.tolerance), 0f, 1f),
+                Mathf.Clamp(viewportOrigin.y + (input.Current.moveDirection.Y * settings.tolerance), 0f, 1f),
                 camera.nearClipPlane
             );
-
-            Debug.DrawLine(
-                camera.ViewportToWorldPoint(viewportOrigin),
-                camera.ViewportToWorldPoint(viewportPoint),
-                Color.black
-            );
-
 
             float rayDistance;
             Ray ray = camera.ViewportPointToRay(viewportPoint);
@@ -92,21 +85,15 @@ namespace MistRidge
             if (feetPlanar.Raycast(ray, out rayDistance)) {
                 lookDirection = (ray.GetPoint(rayDistance) - playerView.Position).normalized;
 
-                Debug.DrawLine(
-                    camera.ViewportToWorldPoint(viewportPoint),
-                    ray.GetPoint(rayDistance),
-                    Color.black
-                );
-
-                Debug.DrawLine(
-                    playerView.Position,
-                    ray.GetPoint(rayDistance),
-                    Color.black
-                );
-
                 if (settings.Debug.showLookingDirection)
                 {
+                    Debug.DrawLine(camera.ViewportToWorldPoint(viewportOrigin), camera.ViewportToWorldPoint(viewportPoint), Color.black);
+
                     Debug.DrawLine(playerView.Position, playerView.Position + lookDirection, Color.black);
+
+                    Debug.DrawLine(camera.ViewportToWorldPoint(viewportPoint), ray.GetPoint(rayDistance), Color.black);
+
+                    Debug.DrawLine(playerView.Position, ray.GetPoint(rayDistance), Color.black);
                 }
             }
         }
@@ -120,6 +107,7 @@ namespace MistRidge
         public class Settings
         {
             public DebugSettings Debug;
+            public float tolerance;
 
             [Serializable]
             public class DebugSettings
