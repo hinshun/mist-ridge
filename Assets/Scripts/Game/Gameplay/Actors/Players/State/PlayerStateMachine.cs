@@ -73,10 +73,17 @@ namespace MistRidge
             viewportOrigin.z = camera.nearClipPlane;
 
             Vector3 viewportPoint = new Vector3(
-                Mathf.Clamp(viewportOrigin.x + input.Current.moveDirection.X, 0f, 1f),
-                Mathf.Clamp(viewportOrigin.y + input.Current.moveDirection.Y, 0f, 1f),
+                Mathf.Clamp(viewportOrigin.x + (input.Current.moveDirection.X * 0.1f), 0f, 1f),
+                Mathf.Clamp(viewportOrigin.y + (input.Current.moveDirection.Y * 0.1f), 0f, 1f),
                 camera.nearClipPlane
             );
+
+            Debug.DrawLine(
+                camera.ViewportToWorldPoint(viewportOrigin),
+                camera.ViewportToWorldPoint(viewportPoint),
+                Color.black
+            );
+
 
             float rayDistance;
             Ray ray = camera.ViewportPointToRay(viewportPoint);
@@ -85,17 +92,26 @@ namespace MistRidge
             if (feetPlanar.Raycast(ray, out rayDistance)) {
                 lookDirection = (ray.GetPoint(rayDistance) - playerView.Position).normalized;
 
+                Debug.DrawLine(
+                    camera.ViewportToWorldPoint(viewportPoint),
+                    ray.GetPoint(rayDistance),
+                    Color.black
+                );
+
+                Debug.DrawLine(
+                    playerView.Position,
+                    ray.GetPoint(rayDistance),
+                    Color.black
+                );
+
                 if (settings.Debug.showLookingDirection)
                 {
-                    Debug.DrawLine(playerView.Position, playerView.Position + lookDirection, settings.Debug.lookingDirectionColor);
+                    Debug.DrawLine(playerView.Position, playerView.Position + lookDirection, Color.black);
                 }
             }
         }
 
         protected override void LateGlobalUpdate() {
-			if ((moveDirection * playerController.DeltaTime).y < -0.4) {
-				Debug.Log ("goodness");
-			}
             playerView.Position += moveDirection * playerController.DeltaTime;
             playerView.MeshTransform.rotation = Quaternion.LookRotation(lookDirection, playerView.Up);
         }
@@ -109,7 +125,6 @@ namespace MistRidge
             public class DebugSettings
             {
                 public bool showLookingDirection;
-                public Color lookingDirectionColor;
             }
         }
     }

@@ -132,7 +132,7 @@ namespace MistRidge
             if (farGround.isFound)
             {
                 // Check if flushing against wall
-                if (IsGroundStandable(farGround))
+                if (!IsGroundStandable(farGround))
                 {
                     if (flushGround.isFound
                         && IsGroundStandable(flushGround)
@@ -171,29 +171,29 @@ namespace MistRidge
 
         public void DebugGround()
         {
-            if (settings.Debug.Primary.showNormal)
+            if (settings.Debug.showPrimary)
             {
-                DebugGround(primaryGround, settings.Debug.Primary.color);
+                DebugGround(primaryGround, Color.yellow);
             }
 
-            if (settings.Debug.Near.showNormal)
+            if (settings.Debug.showNear)
             {
-                DebugGround(nearGround, settings.Debug.Near.color);
+                DebugGround(nearGround, Color.blue);
             }
 
-            if (settings.Debug.Far.showNormal)
+            if (settings.Debug.showFar)
             {
-                DebugGround(farGround, settings.Debug.Far.color);
+                DebugGround(farGround, Color.red);
             }
 
-            if (settings.Debug.Flush.showNormal)
+            if (settings.Debug.showFlush)
             {
-                DebugGround(flushGround, settings.Debug.Flush.color);
+                DebugGround(flushGround, Color.cyan);
             }
 
-            if (settings.Debug.Step.showNormal)
+            if (settings.Debug.showStep)
             {
-                DebugGround(stepGround, settings.Debug.Step.color);
+                DebugGround(stepGround, Color.green);
             }
         }
 
@@ -204,8 +204,8 @@ namespace MistRidge
                 DebugDraw.DrawVector(
                     groundHit.point,
                     groundHit.normal,
-                    settings.Debug.raySize,
-                    settings.Debug.markerSize,
+                    2f,
+                    1f,
                     color,
                     0,
                     false
@@ -441,21 +441,11 @@ namespace MistRidge
             [Serializable]
             public class DebugSettings
             {
-                public GroundDebugConfig Primary;
-                public GroundDebugConfig Near;
-                public GroundDebugConfig Far;
-                public GroundDebugConfig Flush;
-                public GroundDebugConfig Step;
-
-                public float raySize;
-                public float markerSize;
-
-                [Serializable]
-                public class GroundDebugConfig
-                {
-                    public bool showNormal;
-                    public Color color;
-                }
+                public bool showPrimary;
+                public bool showNear;
+                public bool showFar;
+                public bool showFlush;
+                public bool showStep;
             }
         }
     }

@@ -431,7 +431,7 @@ namespace MistRidge
             {
                 foreach (CollisionSphere collisionSphere in collisionSpheres)
                 {
-                    Gizmos.color = settings.Debug.collisionSphereColor;
+                    Gizmos.color = Color.green;
                     Gizmos.DrawWireSphere(collisionSphere.Position, collisionSphere.Radius);
                 }
             }
@@ -461,7 +461,6 @@ namespace MistRidge
                 public Vector3 forceMovement;
                 public bool showPushbackMessages;
                 public bool showCollisionSpheres;
-                public Color collisionSphereColor;
             }
         }
     }

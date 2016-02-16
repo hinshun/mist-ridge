@@ -40,7 +40,6 @@ public abstract class StateMachine<TStateMachine, TState, TStateType, TStateFact
 
     public void Tick()
     {
-        Debug.Log(state.StateType);
         EarlyGlobalUpdate();
 
         state.Update();
