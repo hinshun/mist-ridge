@@ -8,10 +8,9 @@ namespace MistRidge
 {
     public class StartMenuManager : IInitializable
     {
-        [SerializeField]
         private readonly Settings settings;
-
         private readonly SceneLoader sceneLoader;
+
         private int selectionIndex;
 
         public StartMenuManager(

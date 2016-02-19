@@ -39,7 +39,7 @@ namespace MistRidge
             current = new InputMapping()
             {
                 direction = device.Direction,
-                menuPressed = device.MenuWasPressed,
+                menuWasPressed = device.MenuWasPressed,
                 submit = device.Action1,
                 cancel = device.Action2,
                 jump = device.Action1,

@@ -15,16 +15,13 @@ namespace MistRidge
             InstallSettings();
         }
 
-        void InstallStartMenu()
+        private void InstallStartMenu()
         {
             Container.Bind<StartMenuManager>().ToSingle();
             Container.BindAllInterfacesToSingle<StartMenuManager>();
-
-            Container.Bind<StartMenuInputHandler>().ToSingle();
-            Container.BindAllInterfacesToSingle<StartMenuInputHandler>();
         }
 
-        void InstallSettings()
+        private void InstallSettings()
         {
             Container.Bind<StartMenuManager.Settings>().ToSingleInstance(settings.StartMenu);
         }

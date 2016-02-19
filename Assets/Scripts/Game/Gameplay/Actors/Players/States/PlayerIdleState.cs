@@ -6,7 +6,7 @@ namespace MistRidge
 {
     public class PlayerIdleState : PlayerBaseState
     {
-        Settings settings;
+        private readonly Settings settings;
 
         public PlayerIdleState(
                 Settings settings,

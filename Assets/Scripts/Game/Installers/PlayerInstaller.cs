@@ -24,9 +24,6 @@ namespace MistRidge
             Container.Bind<PlayerManager>().ToSingle();
             Container.BindAllInterfacesToSingle<PlayerManager>();
 
-            Container.Bind<PlayerInputHandler>().ToSingle();
-            Container.BindAllInterfacesToSingle<PlayerInputHandler>();
-
             Container.Bind<PlayerStateFactory>().ToSingle();
         }
 

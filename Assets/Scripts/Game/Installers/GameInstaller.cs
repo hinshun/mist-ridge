@@ -4,19 +4,28 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class GlobalInstaller : MonoInstaller
+    public class GameInstaller : MonoInstaller
     {
         [SerializeField]
-        Settings settings;
+        private Settings settings;
 
         public override void InstallBindings()
         {
+            InstallGame();
             InstallInput();
             InstallUtility();
             InstallSettings();
         }
 
-        void InstallInput()
+        private void InstallGame()
+        {
+            Container.Bind<GameManager>().ToSingle();
+            Container.BindAllInterfacesToSingle<GameManager>();
+
+            Container.Bind<GameStateMachine>().ToSingle();
+        }
+
+        private void InstallInput()
         {
             Container.Bind<InControl.InControlManager>().ToSinglePrefab(settings.InControlManagerPrefab);
 
@@ -26,13 +35,13 @@ namespace MistRidge
             Container.Bind<Input.Factory>().ToSingle();
         }
 
-        void InstallUtility()
+        private void InstallUtility()
         {
             Container.Bind<SceneLoader>().ToSingle();
             Container.Bind<UnityFixGI>().ToSinglePrefab(settings.UnityFixGIPrefab);
         }
 
-        void InstallSettings()
+        private void InstallSettings()
         {
             Container.Bind<SceneLoader.Settings>().ToSingleInstance(settings.SceneLoader);
         }

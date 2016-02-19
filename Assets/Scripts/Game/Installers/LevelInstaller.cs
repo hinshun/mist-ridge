@@ -7,7 +7,7 @@ namespace MistRidge
     public class LevelInstaller : MonoInstaller
     {
         [SerializeField]
-        Settings settings;
+        private Settings settings;
 
         public override void InstallBindings()
         {

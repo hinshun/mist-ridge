@@ -7,7 +7,7 @@ namespace MistRidge
 {
     public class InputManager : IInitializable, ITickable
     {
-        public ReadOnlyCollection<Input> inputs;
+        private ReadOnlyCollection<Input> inputs;
         private readonly Input.Factory inputFactory;
 
         public InputManager(
@@ -15,6 +15,14 @@ namespace MistRidge
                 InControl.InControlManager inControlManager)
         {
             this.inputFactory = inputFactory;
+        }
+
+        public ReadOnlyCollection<Input> Inputs
+        {
+            get
+            {
+                return inputs;
+            }
         }
 
         public void Initialize()

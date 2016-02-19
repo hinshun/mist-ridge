@@ -1,26 +1,29 @@
 using UnityEngine;
 using System;
-using System.Collections.Generic;
 using Zenject;
 
 namespace MistRidge
 {
-    public class StartMenuInputHandler : ITickable
+    public class GameStartState : GameBaseState
     {
         private readonly StartMenuManager startMenuManager;
         private readonly InputManager inputManager;
 
-        public StartMenuInputHandler(
+        public GameStartState(
                 StartMenuManager startMenuManager,
-                InputManager inputManager)
+                InputManager inputManager,
+                GameStateMachine stateMachine)
+            : base(stateMachine)
         {
             this.startMenuManager = startMenuManager;
             this.inputManager = inputManager;
+
+            stateType = GameStateType.Start;
         }
 
-        public void Tick()
+        public override void Update()
         {
-            foreach(Input input in inputManager.inputs)
+            foreach(Input input in inputManager.Inputs)
             {
                 if (input.Current.submit.WasPressed)
                 {
@@ -36,6 +39,16 @@ namespace MistRidge
                     startMenuManager.MoveSelection(-1);
                 }
             }
+        }
+
+        public override void EnterState()
+        {
+            // Do Nothing
+        }
+
+        public override void ExitState()
+        {
+            // Do Nothing
         }
     }
 }

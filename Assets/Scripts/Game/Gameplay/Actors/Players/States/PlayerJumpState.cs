@@ -6,7 +6,7 @@ namespace MistRidge
 {
     public class PlayerJumpState : PlayerBaseState
     {
-        Settings settings;
+        private readonly Settings settings;
 
         public PlayerJumpState(
                 Settings settings,
