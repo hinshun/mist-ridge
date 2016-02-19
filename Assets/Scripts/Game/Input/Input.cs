@@ -6,12 +6,24 @@ namespace MistRidge
 {
     public class Input : ITickable
     {
+        private readonly int deviceNum;
         private readonly InControl.InputDevice device;
         private InputMapping current;
 
-        public Input(InControl.InputDevice device)
+        public Input(
+                int deviceNum,
+                InControl.InputDevice device)
         {
+            this.deviceNum = deviceNum;
             this.device = device;
+        }
+
+        public int DeviceNum
+        {
+            get
+            {
+                return deviceNum;
+            }
         }
 
         public InputMapping Current
@@ -34,7 +46,7 @@ namespace MistRidge
             };
         }
 
-        public class Factory : Factory<InControl.InputDevice, Input>
+        public class Factory : Factory<int, InControl.InputDevice, Input>
         {
         }
     }

@@ -27,7 +27,7 @@ namespace MistRidge
 
                 if (device != null)
                 {
-                    Input input = inputFactory.Create(device);
+                    Input input = inputFactory.Create(deviceNum, device);
                     viableInputs.Add(input);
                 }
             }

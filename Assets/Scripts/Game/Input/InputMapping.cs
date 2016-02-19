@@ -4,7 +4,7 @@ namespace MistRidge
 {
     public struct InputMapping
     {
-        public InControl.TwoAxisInputControl moveDirection;
+        public InControl.TwoAxisInputControl direction;
         public bool menuPressed;
         public InControl.InputControl submit;
         public InControl.InputControl cancel;

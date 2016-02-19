@@ -36,7 +36,7 @@ namespace MistRidge
             subContainer.Bind<PlayerView>().ToSinglePrefab(settings.Player.Prefab);
 
             subContainer.Bind<PlayerController>().ToSingle();
-            subContainer.Bind<IInitializable>().ToSingle<PlayerController>();
+            subContainer.BindAllInterfacesToSingle<PlayerController>();
 
             subContainer.Bind<PlayerStateMachine>().ToSingle();
         }
