@@ -2,17 +2,14 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class PlayerFacade : Facade, IInitializable, ITickable
+    public class PlayerFacade : Facade
     {
-        private readonly Input input;
         private readonly PlayerView playerView;
 
         public PlayerFacade(
-            Input input,
             PlayerView playerView,
             PlayerStateMachine playerStateMachine)
         {
-            this.input = input;
             this.playerView = playerView;
         }
 

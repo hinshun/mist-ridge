@@ -15,6 +15,9 @@ namespace MistRidge
         [SerializeField]
         private Transform meshTransform;
 
+        [SerializeField]
+        private MeshRenderer meshRenderer;
+
         private ReadOnlyCollection<Collider> readOnlyColliders;
 
         public Vector3 Position
@@ -66,6 +69,14 @@ namespace MistRidge
             get
             {
                 return meshTransform;
+            }
+        }
+
+        public MeshRenderer MeshRenderer
+        {
+            get
+            {
+                return meshRenderer;
             }
         }
 

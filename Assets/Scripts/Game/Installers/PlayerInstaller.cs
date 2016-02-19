@@ -38,6 +38,9 @@ namespace MistRidge
             subContainer.Bind<PlayerController>().ToSingle();
             subContainer.BindAllInterfacesToSingle<PlayerController>();
 
+            subContainer.Bind<PlayerInternalManager>().ToSingle();
+            subContainer.BindAllInterfacesToSingle<PlayerInternalManager>();
+
             subContainer.Bind<PlayerStateMachine>().ToSingle();
         }
 
@@ -70,8 +73,8 @@ namespace MistRidge
             Container.Bind<CameraManager.Settings>().ToSingleInstance(settings.Camera.Camera);
 
             Container.Bind<PlayerController.Settings>().ToSingleInstance(settings.Player.Controller);
-
             Container.Bind<PlayerStateMachine.Settings>().ToSingleInstance(settings.Player.StateMachine);
+            Container.Bind<PlayerInternalManager.Settings>().ToSingleInstance(settings.Player.InternalManager);
 
             Container.Bind<PlayerIdleState.Settings>().ToSingleInstance(settings.Player.IdleState);
             Container.Bind<PlayerWalkState.Settings>().ToSingleInstance(settings.Player.WalkState);
@@ -94,6 +97,7 @@ namespace MistRidge
                 public CollisionSettings Collision;
                 public PlayerController.Settings Controller;
                 public PlayerStateMachine.Settings StateMachine;
+                public PlayerInternalManager.Settings InternalManager;
                 public PlayerIdleState.Settings IdleState;
                 public PlayerWalkState.Settings WalkState;
                 public PlayerJumpState.Settings JumpState;
