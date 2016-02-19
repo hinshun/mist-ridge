@@ -13,6 +13,7 @@ namespace MistRidge
         {
             InstallPlayer();
             InstallCollision();
+            InstallCamera();
             InstallSettings();
         }
 
@@ -51,6 +52,21 @@ namespace MistRidge
             Container.Bind<Grounding.Factory>().ToSingle();
         }
 
+        private void InstallCamera()
+        {
+            Container.Bind<CameraOriginView>().ToSinglePrefab(settings.Camera.Prefab);
+            Container.Bind<CameraAnchorView>().ToSinglePrefab(settings.Camera.Prefab);
+            Container.Bind<CameraRigView>().ToSinglePrefab(settings.Camera.Prefab);
+            Container.Bind<CameraView>().ToSinglePrefab(settings.Camera.Prefab);
+            Container.Bind<Camera>().ToSinglePrefab(settings.Camera.Prefab);
+
+            Container.Bind<CameraAnchorManager>().ToSingle();
+            Container.BindAllInterfacesToSingle<CameraAnchorManager>();
+
+            Container.Bind<CameraManager>().ToSingle();
+            Container.BindAllInterfacesToSingle<CameraManager>();
+        }
+
         private void InstallSettings()
         {
             Container.Bind<PlayerController.Settings>().ToSingleInstance(settings.Player.Controller);
@@ -63,12 +79,16 @@ namespace MistRidge
             Container.Bind<PlayerFallState.Settings>().ToSingleInstance(settings.Player.FallState);
 
             Container.Bind<Grounding.Settings>().ToSingleInstance(settings.Player.Collision.Grounding);
+
+            Container.Bind<CameraAnchorManager.Settings>().ToSingleInstance(settings.Camera.Anchor);
+            Container.Bind<CameraManager.Settings>().ToSingleInstance(settings.Camera.Camera);
         }
 
         [Serializable]
         public class Settings
         {
             public PlayerSettings Player;
+            public CameraSettings Camera;
 
             [Serializable]
             public class PlayerSettings
@@ -89,6 +109,14 @@ namespace MistRidge
                     public GameObject DefaultCollidablePrefab;
                     public Grounding.Settings Grounding;
                 }
+            }
+
+            [Serializable]
+            public class CameraSettings
+            {
+                public GameObject Prefab;
+                public CameraAnchorManager.Settings Anchor;
+                public CameraManager.Settings Camera;
             }
         }
     }
