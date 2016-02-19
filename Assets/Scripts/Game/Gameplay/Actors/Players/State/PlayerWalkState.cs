@@ -32,7 +32,7 @@ namespace MistRidge
                 return;
             }
 
-            if (input.Current.moveDirection.Vector != Vector2.zero) {
+            if (input.Current.direction.Vector != Vector2.zero) {
                 stateMachine.MoveDirection = Vector3.MoveTowards(
                     stateMachine.MoveDirection,
                     stateMachine.LookDirection * settings.walkSpeed,

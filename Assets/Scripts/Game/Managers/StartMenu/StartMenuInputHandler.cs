@@ -28,10 +28,10 @@ namespace MistRidge
                     return;
                 }
 
-                if (input.Current.moveDirection.Up.WasPressed)
+                if (input.Current.direction.Up.WasPressed)
                 {
                     startMenuManager.MoveSelection(1);
-                } else if (input.Current.moveDirection.Down.WasPressed)
+                } else if (input.Current.direction.Down.WasPressed)
                 {
                     startMenuManager.MoveSelection(-1);
                 }
