@@ -28,7 +28,11 @@ namespace MistRidge
         {
             float zoom = CameraZoomForEncapsulation(playerManager.PlayerViews);
             float cappedZoom = Mathf.Max(zoom, settings.minZoom);
-            cameraView.transform.localPosition = new Vector3(0f, 0f, -cappedZoom);
+            cameraView.LocalPosition = new Vector3(
+                cameraView.LocalPosition.x,
+                cameraView.LocalPosition.y,
+                -cappedZoom
+            );
         }
 
         private float CameraZoomForEncapsulation(List<PlayerView> playerViews)

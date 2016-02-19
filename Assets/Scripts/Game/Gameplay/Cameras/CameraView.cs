@@ -15,6 +15,18 @@ namespace MistRidge
             }
         }
 
+        public Vector3 LocalPosition
+        {
+            get
+            {
+                return transform.localPosition;
+            }
+            set
+            {
+                transform.localPosition = value;
+            }
+        }
+
         public float VerticalTanFov
         {
             get
