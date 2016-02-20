@@ -6,17 +6,20 @@ namespace MistRidge
 {
     public class GameStartState : GameBaseState
     {
-        private readonly StartMenuManager startMenuManager;
+        private readonly MenuSignal.Trigger menuSignalTrigger;
         private readonly InputManager inputManager;
+        private readonly CameraView cameraView;
 
         public GameStartState(
-                StartMenuManager startMenuManager,
+                MenuSignal.Trigger menuSignalTrigger,
                 InputManager inputManager,
+                CameraView cameraView,
                 GameStateMachine stateMachine)
             : base(stateMachine)
         {
-            this.startMenuManager = startMenuManager;
+            this.menuSignalTrigger = menuSignalTrigger;
             this.inputManager = inputManager;
+            this.cameraView = cameraView;
 
             stateType = GameStateType.Start;
         }
@@ -25,30 +28,31 @@ namespace MistRidge
         {
             foreach(Input input in inputManager.Inputs)
             {
-                if (input.Current.submit.WasPressed)
+                if (input.Mapping.Submit.WasPressed)
                 {
-                    startMenuManager.Select();
+                    menuSignalTrigger.Fire(MenuSignalType.Submit);
                     return;
                 }
 
-                if (input.Current.direction.Up.WasPressed)
+                if (input.Mapping.Direction.Up.WasPressed)
                 {
-                    startMenuManager.MoveSelection(1);
-                } else if (input.Current.direction.Down.WasPressed)
+                    menuSignalTrigger.Fire(MenuSignalType.Up);
+                }
+                else if (input.Mapping.Direction.Down.WasPressed)
                 {
-                    startMenuManager.MoveSelection(-1);
+                    menuSignalTrigger.Fire(MenuSignalType.Down);
                 }
             }
         }
 
         public override void EnterState()
         {
-            // Do Nothing
+            cameraView.AudioListener.enabled = false;
         }
 
         public override void ExitState()
         {
-            // Do Nothing
+            cameraView.AudioListener.enabled = true;
         }
     }
 }

@@ -4,14 +4,27 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class GameManager : ITickable
+    public class GameManager : IInitializable, IDisposable, ITickable
     {
+        private readonly GameStateSignal gameStateSignal;
         private readonly GameStateMachine stateMachine;
 
         public GameManager(
+                GameStateSignal gameStateSignal,
                 GameStateMachine stateMachine)
         {
+            this.gameStateSignal = gameStateSignal;
             this.stateMachine = stateMachine;
+        }
+
+        public void Initialize()
+        {
+            gameStateSignal.Event += OnStateChange;
+        }
+
+        public void Dispose()
+        {
+            gameStateSignal.Event -= OnStateChange;
         }
 
         public void Tick()
@@ -19,9 +32,9 @@ namespace MistRidge
             stateMachine.Tick();
         }
 
-        public void Play()
+        public void OnStateChange(GameStateType gameStateType)
         {
-            stateMachine.ChangeState(GameStateType.Play);
+            stateMachine.ChangeState(gameStateType);
         }
     }
 }

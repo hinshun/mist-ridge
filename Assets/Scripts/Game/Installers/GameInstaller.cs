@@ -1,6 +1,8 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using Zenject;
+using Zenject.Commands;
 
 namespace MistRidge
 {
@@ -11,10 +13,23 @@ namespace MistRidge
 
         public override void InstallBindings()
         {
+            InitExecutionOrder();
             InstallGame();
+            InstallSignals();
             InstallInput();
             InstallUtility();
             InstallSettings();
+        }
+
+        private void InitExecutionOrder()
+        {
+            Container.Install<ExecutionOrderInstaller>(
+                new List<Type>()
+                {
+                    typeof(InputManager),
+                    typeof(GameManager),
+                }
+            );
         }
 
         private void InstallGame()
@@ -23,6 +38,16 @@ namespace MistRidge
             Container.BindAllInterfacesToSingle<GameManager>();
 
             Container.Bind<GameStateMachine>().ToSingle();
+            Container.Bind<GameStateFactory>().ToSingle();
+        }
+
+        private void InstallSignals()
+        {
+            Container.BindSignal<MenuSignal>();
+            Container.BindTrigger<MenuSignal.Trigger>();
+
+            Container.BindSignal<GameStateSignal>();
+            Container.BindTrigger<GameStateSignal.Trigger>();
         }
 
         private void InstallInput()

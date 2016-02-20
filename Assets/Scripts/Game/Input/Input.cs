@@ -8,7 +8,7 @@ namespace MistRidge
     {
         private readonly int deviceNum;
         private readonly InControl.InputDevice device;
-        private InputMapping current;
+        private InputMapping mapping;
 
         public Input(
                 int deviceNum,
@@ -26,23 +26,23 @@ namespace MistRidge
             }
         }
 
-        public InputMapping Current
+        public InputMapping Mapping
         {
             get
             {
-                return current;
+                return mapping;
             }
         }
 
         public void Tick()
         {
-            current = new InputMapping()
+            mapping = new InputMapping()
             {
-                direction = device.Direction,
-                menuWasPressed = device.MenuWasPressed,
-                submit = device.Action1,
-                cancel = device.Action2,
-                jump = device.Action1,
+                Direction = device.Direction,
+                MenuWasPressed = device.MenuWasPressed,
+                Submit = device.Action1,
+                Cancel = device.Action2,
+                Jump = device.Action1,
             };
         }
 

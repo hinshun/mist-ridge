@@ -25,7 +25,7 @@ namespace MistRidge
         {
             foreach(Input input in inputManager.Inputs)
             {
-                if (input.Current.menuWasPressed)
+                if (input.Mapping.MenuWasPressed)
                 {
                     playerManager.SpawnPlayer(input);
                     return;

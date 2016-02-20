@@ -6,23 +6,28 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class StartMenuManager : IInitializable
+    public class StartMenuManager : IInitializable, IDisposable
     {
         private readonly Settings settings;
+        private readonly MenuSignal menuSignal;
         private readonly SceneLoader sceneLoader;
 
         private int selectionIndex;
 
         public StartMenuManager(
             Settings settings,
+            MenuSignal menuSignal,
             SceneLoader sceneLoader)
         {
             this.settings = settings;
+            this.menuSignal = menuSignal;
             this.sceneLoader = sceneLoader;
         }
 
         public void Initialize()
         {
+            menuSignal.Event += OnMenuActionReceived;
+
             ResetMenuItems();
 
             for (int i = 0; i < settings.menuItems.Length; ++i)
@@ -39,17 +44,28 @@ namespace MistRidge
             MoveSelection(0);
         }
 
-        public void MoveSelection(int indexDiff)
+        public void Dispose()
         {
-            MenuItem selectedMenuItem = settings.menuItems[selectionIndex];
-            selectedMenuItem.textItem.text = selectedMenuItem.textContent;
-
-            selectionIndex = (selectionIndex + indexDiff + settings.menuItems.Length) % settings.menuItems.Length;
-            selectedMenuItem = settings.menuItems[selectionIndex];
-            selectedMenuItem.textItem.text = "#" + selectedMenuItem.textContent;
+            menuSignal.Event -= OnMenuActionReceived;
         }
 
-        public void Select()
+        private void OnMenuActionReceived(MenuSignalType menuSignalType)
+        {
+            switch (menuSignalType)
+            {
+                case MenuSignalType.Submit:
+                    Select();
+                    break;
+                case MenuSignalType.Up:
+                    MoveSelection(1);
+                    break;
+                case MenuSignalType.Down:
+                    MoveSelection(-1);
+                    break;
+            }
+        }
+
+        private void Select()
         {
             StartMenuItem item = settings.menuItems[selectionIndex].item;
 
@@ -62,6 +78,16 @@ namespace MistRidge
                     Quit();
                     break;
             }
+        }
+
+        private void MoveSelection(int indexDiff)
+        {
+            MenuItem selectedMenuItem = settings.menuItems[selectionIndex];
+            selectedMenuItem.textItem.text = selectedMenuItem.textContent;
+
+            selectionIndex = (selectionIndex + indexDiff + settings.menuItems.Length) % settings.menuItems.Length;
+            selectedMenuItem = settings.menuItems[selectionIndex];
+            selectedMenuItem.textItem.text = "#" + selectedMenuItem.textContent;
         }
 
         private void ResetMenuItems()

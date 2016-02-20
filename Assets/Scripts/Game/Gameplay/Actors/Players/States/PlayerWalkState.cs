@@ -22,7 +22,7 @@ namespace MistRidge
 
         public override void Update()
         {
-            if (input.Current.jump.WasPressed) {
+            if (input.Mapping.Jump.WasPressed) {
                 stateMachine.ChangeState(PlayerStateType.Jump);
                 return;
             }
@@ -32,7 +32,7 @@ namespace MistRidge
                 return;
             }
 
-            if (input.Current.direction.Vector != Vector2.zero) {
+            if (input.Mapping.Direction.Vector != Vector2.zero) {
                 stateMachine.MoveDirection = Vector3.MoveTowards(
                     stateMachine.MoveDirection,
                     stateMachine.LookDirection * settings.walkSpeed,

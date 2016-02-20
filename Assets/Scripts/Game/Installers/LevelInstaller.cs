@@ -17,12 +17,13 @@ namespace MistRidge
 
         private void InstallLevel()
         {
+            Container.Bind<LevelManager>().ToSingle();
+            Container.BindAllInterfacesToSingle<LevelManager>();
         }
 
         private void InstallSettings()
         {
             Container.Bind<ChunkManager.Settings>().ToSingleInstance(settings.ChunkManager);
-
         }
 
         [Serializable]

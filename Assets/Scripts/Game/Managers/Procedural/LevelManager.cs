@@ -4,23 +4,24 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class LevelManager
+    public class LevelManager : IInitializable
     {
-        private readonly Settings settings;
+        private readonly GameStateSignal.Trigger gameStateTrigger;
 
         public LevelManager(
-                Settings settings)
+                GameStateSignal.Trigger gameStateTrigger)
         {
-            this.settings = settings;
+            this.gameStateTrigger = gameStateTrigger;
+        }
+
+        public void Initialize()
+        {
+            gameStateTrigger.Fire(GameStateType.Play);
         }
 
         public void Generate()
         {
-        }
-
-        [Serializable]
-        public class Settings
-        {
+            // Do Nothing
         }
     }
 }

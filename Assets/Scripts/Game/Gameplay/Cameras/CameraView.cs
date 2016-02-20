@@ -6,6 +6,7 @@ namespace MistRidge
     public class CameraView : MonoBehaviour
     {
         new private Camera camera;
+        private AudioListener audioListener;
 
         public Camera Camera
         {
@@ -24,6 +25,14 @@ namespace MistRidge
             set
             {
                 transform.localPosition = value;
+            }
+        }
+
+        public AudioListener AudioListener
+        {
+            get
+            {
+                return audioListener;
             }
         }
 
@@ -46,6 +55,7 @@ namespace MistRidge
         private void Awake()
         {
             camera = GetComponent<Camera>();
+            audioListener = GetComponent<AudioListener>();
         }
     }
 }

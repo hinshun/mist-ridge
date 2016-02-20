@@ -65,7 +65,7 @@ namespace MistRidge
         }
 
         protected override void EarlyGlobalUpdate() {
-            if (input.Current.direction.Vector.magnitude == 0) {
+            if (input.Mapping.Direction.Vector.magnitude == 0) {
                 return;
             }
 
@@ -73,8 +73,8 @@ namespace MistRidge
             viewportOrigin.z = camera.nearClipPlane;
 
             Vector3 viewportPoint = new Vector3(
-                Mathf.Clamp(viewportOrigin.x + (input.Current.direction.X * settings.tolerance), 0f, 1f),
-                Mathf.Clamp(viewportOrigin.y + (input.Current.direction.Y * settings.tolerance), 0f, 1f),
+                Mathf.Clamp(viewportOrigin.x + (input.Mapping.Direction.X * settings.tolerance), 0f, 1f),
+                Mathf.Clamp(viewportOrigin.y + (input.Mapping.Direction.Y * settings.tolerance), 0f, 1f),
                 camera.nearClipPlane
             );
 
