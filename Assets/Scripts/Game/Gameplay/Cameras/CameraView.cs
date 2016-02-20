@@ -36,19 +36,19 @@ namespace MistRidge
             }
         }
 
-        public float VerticalTanFov
-        {
-            get
-            {
-                return 0.8f * Mathf.Tan(Mathf.Deg2Rad * camera.fieldOfView / 2f);;
-            }
-        }
-
         public float HorizontalTanFov
         {
             get
             {
-                return 0.8f * Mathf.Tan(Mathf.Deg2Rad * camera.fieldOfView / 2f) * camera.aspect;
+                return Mathf.Tan(Mathf.Deg2Rad * camera.fieldOfView / 2f) * camera.aspect;
+            }
+        }
+
+        public float VerticalTanFov
+        {
+            get
+            {
+                return Mathf.Tan(Mathf.Deg2Rad * camera.fieldOfView / 2f);;
             }
         }
 

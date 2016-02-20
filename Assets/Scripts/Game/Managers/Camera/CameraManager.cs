@@ -53,12 +53,12 @@ namespace MistRidge
 
                 if (relativePosition.z < 0)
                 {
-                    xBound -= relativePosition.z * cameraView.HorizontalTanFov;
-                    yBound -= relativePosition.z * cameraView.VerticalTanFov;
+                    xBound -= relativePosition.z * settings.horizontalPercentage * cameraView.HorizontalTanFov;
+                    yBound -= relativePosition.z * settings.verticalPercentage * cameraView.VerticalTanFov;
                 }
 
-                xBound /= cameraView.HorizontalTanFov;
-                yBound /= cameraView.VerticalTanFov;
+                xBound /= settings.horizontalPercentage * cameraView.HorizontalTanFov;
+                yBound /= settings.verticalPercentage * cameraView.VerticalTanFov;
 
                 if (settings.Debug.showBounds)
                 {
@@ -89,6 +89,8 @@ namespace MistRidge
         {
             public DebugSettings Debug;
             public float minZoom;
+            public float verticalPercentage;
+            public float horizontalPercentage;
 
             [Serializable]
             public class DebugSettings
