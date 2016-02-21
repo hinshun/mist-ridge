@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using Zenject;
-using ModestTree;
 
 namespace MistRidge
 {
@@ -24,7 +23,7 @@ namespace MistRidge
                     return container.Instantiate<GamePlayState>(constructorArgs);
             }
 
-            Assert.That(false);
+            Debug.LogError("Failed to create valid game state");
             return null;
         }
     }

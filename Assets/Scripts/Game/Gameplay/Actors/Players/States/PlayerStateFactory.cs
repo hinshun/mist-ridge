@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using Zenject;
-using ModestTree;
 
 namespace MistRidge
 {
@@ -27,7 +26,7 @@ namespace MistRidge
                     return container.Instantiate<PlayerFallState>(constructorArgs);
             }
 
-            Assert.That(false);
+            Debug.LogError("Failed to create valid player state");
             return null;
         }
     }

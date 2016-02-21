@@ -64,17 +64,22 @@ namespace MistRidge
         {
             Container.Bind<SceneLoader>().ToSingle();
             Container.Bind<UnityFixGI>().ToSinglePrefab(settings.UnityFixGIPrefab);
+
+            Container.Bind<Generator>().ToSingle();
+            Container.BindAllInterfacesToSingle<Generator>();
         }
 
         private void InstallSettings()
         {
             Container.Bind<SceneLoader.Settings>().ToSingleInstance(settings.SceneLoader);
+            Container.Bind<Generator.Settings>().ToSingleInstance(settings.Generator);
         }
 
         [Serializable]
         public class Settings
         {
             public SceneLoader.Settings SceneLoader;
+            public Generator.Settings Generator;
             public GameObject InControlManagerPrefab;
             public GameObject UnityFixGIPrefab;
         }

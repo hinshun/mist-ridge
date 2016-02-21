@@ -12,6 +12,8 @@ namespace MistRidge
         public override void InstallBindings()
         {
             InstallLevel();
+            InstallCheckpoints();
+            InstallChunks();
             InstallSettings();
         }
 
@@ -21,15 +23,64 @@ namespace MistRidge
             Container.BindAllInterfacesToSingle<LevelManager>();
         }
 
+        private void InstallCheckpoints()
+        {
+            /* Container.Bind<Checkpoint.Factory>().ToSingle(); */
+            /* Container.Bind<CheckpointView>().ToTransientPrefab(settings.Checkpoint.Prefab); */
+        }
+
+        private void InstallChunks()
+        {
+            Container.BindFacadeFactory<ChunkConfig, ChunkFacade, ChunkFacadeFactory>(InstallChunkFacade);
+
+            Container.Bind<IChunkFeatureContainer>().ToSingle<ChunkFeatureContainer>();
+            Container.Bind<IChunkFeaturePickingStrategy>().ToSingle<RandomChunkFeaturePickingStrategy>();
+            Container.Bind<IChunkPlacingStrategy>().ToSingle<SpiralChunkPlacingStrategy>();
+
+            Container.Bind<IInitializable>().ToSingle<SpiralChunkPlacingStrategy>();
+
+            Container.BindGameObjectFactory<PlatformView.Factory>(settings.Chunk.PlatformPrefab);
+
+            Container.Bind<ChunkManager>().ToSingle();
+            Container.BindAllInterfacesToSingle<ChunkManager>();
+        }
+
+        private void InstallChunkFacade(DiContainer subContainer, ChunkConfig chunkConfig)
+        {
+            subContainer.BindInstance(chunkConfig);
+
+            subContainer.Bind<ChunkView>().ToSinglePrefab(settings.Chunk.ChunkPrefab);
+            subContainer.Bind<ChunkBaseView>().ToSinglePrefab(settings.Chunk.ChunkBasePrefab);
+
+            subContainer.Bind<Chunk>().ToSingle();
+            subContainer.BindAllInterfacesToSingle<Chunk>();
+
+            subContainer.Bind<ChunkBase>().ToSingle();
+            subContainer.BindAllInterfacesToSingle<ChunkBase>();
+        }
+
         private void InstallSettings()
         {
-            Container.Bind<ChunkManager.Settings>().ToSingleInstance(settings.ChunkManager);
+            Container.Bind<ChunkFeatureContainer.Settings>().ToSingleInstance(settings.Chunk.ChunkFeatureContainer);
+            Container.Bind<ChunkManager.Settings>().ToSingleInstance(settings.Chunk.ChunkManager);
+            Container.Bind<Checkpoint.Settings>().ToSingleInstance(settings.Checkpoint);
         }
 
         [Serializable]
         public class Settings
         {
-            public ChunkManager.Settings ChunkManager;
+            public ChunkSettings Chunk;
+            public Checkpoint.Settings Checkpoint;
+
+            [Serializable]
+            public class ChunkSettings
+            {
+                public GameObject ChunkPrefab;
+                public GameObject ChunkBasePrefab;
+                public GameObject PlatformPrefab;
+                public ChunkFeatureContainer.Settings ChunkFeatureContainer;
+                public ChunkManager.Settings ChunkManager;
+            }
         }
     }
 }

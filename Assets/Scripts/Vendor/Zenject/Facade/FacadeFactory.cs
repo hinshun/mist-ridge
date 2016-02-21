@@ -69,14 +69,14 @@ namespace Zenject
         [Inject]
         Action<DiContainer, TParam1> _containerInitializer = null;
 
-        public TFacade Create(TParam1 param1)
+        public virtual TFacade Create(TParam1 param1)
         {
             var facade = CreateSubContainer(param1).Resolve<TFacade>();
             facade.Initialize();
             return facade;
         }
 
-        DiContainer CreateSubContainer(TParam1 param1)
+        protected DiContainer CreateSubContainer(TParam1 param1)
         {
             Assert.IsNotNull(_containerInitializer);
             var subContainer = _container.CreateSubContainer();
