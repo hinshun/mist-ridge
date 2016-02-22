@@ -4,74 +4,87 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class SpiralChunkPlacingStrategy : IChunkPlacingStrategy, IInitializable
+    public class SpiralChunkPlacingStrategy : IChunkPlacingStrategy
     {
-        private Vector3 topLeft;
-        private Vector3 topRight;
-        private Vector3 left;
-        private Vector3 right;
-        private Vector3 bottomLeft;
-        private Vector3 bottomRight;
+        private readonly ChunkReference chunkReference;
 
-        public void Initialize()
+        public SpiralChunkPlacingStrategy(
+                ChunkManager chunkManager)
         {
-            topLeft = Unit(new Vector2(3f, -4f));
-            topRight = Unit(new Vector2(-1.5f, -5f));
-            left = Unit(new Vector2(4.5f, 1f));
-            right = Unit(new Vector2(-4.5f, -1f));
-            bottomLeft = Unit(new Vector2(1.5f, 5f));
-            bottomRight = Unit(new Vector2(-3f, 4f));
+            this.chunkReference = chunkManager.ChunkReference;
         }
 
-        public Vector3 Placement(ChunkConfig chunkConfig)
+        public void Placement(ChunkView chunkView, ChunkConfig chunkConfig)
         {
             if (chunkConfig.chunkNum == 0)
             {
-                return Vector3.zero;
+                chunkView.Rotation *= Quaternion.AngleAxis(
+                    120,
+                    chunkView.Up
+                );
+                chunkView.Position = Vector3.zero;
+                return;
             }
 
             int depth = Mathf.FloorToInt((3 + Mathf.Sqrt((12 * chunkConfig.chunkNum) - 3)) / 6);
-            int depthStartChunkNum = (3 * depth * (depth - 1)) + 1;
+            int side = Mathf.CeilToInt((float)chunkConfig.chunkNum / depth) - (3 * depth) + 2;
 
-            int side = Mathf.CeilToInt((float)chunkConfig.chunkNum / depth) - 3 * depth + 2;
+            SetRotation(chunkView, chunkConfig, depth, side);
+            SetBirdseyePosition(chunkView, chunkConfig, depth, side);
+        }
+
+        private void SetRotation(ChunkView chunkView, ChunkConfig chunkConfig, int depth, int side)
+        {
+            int depthStartChunkNum = (3 * depth * (depth - 1)) + 1;
+            int depthEndChunkNum = 3 * depth * (depth + 1);
+
+            if (chunkConfig.chunkNum == depthStartChunkNum || chunkConfig.chunkNum == depthEndChunkNum)
+            {
+                side = 5;
+            }
+
+            side = (side + 5) % 6;
+
+            chunkView.Rotation *= Quaternion.AngleAxis(
+                -(side * 60),
+                chunkView.Up
+            );
+        }
+
+        private void SetBirdseyePosition(ChunkView chunkView, ChunkConfig chunkConfig, int depth, int side)
+        {
+            int depthStartChunkNum = (3 * depth * (depth - 1)) + 1;
             int sideStartChunkNum = depthStartChunkNum + (depth * side);
             int sideChunkNum = chunkConfig.chunkNum - sideStartChunkNum;
 
             switch (side)
             {
                 case 0:
-                    return Position(topLeft, topRight, sideChunkNum, depth, chunkConfig.chunkNum);
+                    chunkView.Position = Position(chunkReference.Northwest, chunkReference.Northeast, sideChunkNum, depth, chunkConfig.chunkNum);
+                    return;
                 case 1:
-                    return Position(left, topLeft, sideChunkNum, depth, chunkConfig.chunkNum);
+                    chunkView.Position = Position(chunkReference.West, chunkReference.Northwest, sideChunkNum, depth, chunkConfig.chunkNum);
+                    return;
                 case 2:
-                    return Position(bottomLeft, left, sideChunkNum, depth, chunkConfig.chunkNum);
+                    chunkView.Position = Position(chunkReference.Southwest, chunkReference.West, sideChunkNum, depth, chunkConfig.chunkNum);
+                    return;
                 case 3:
-                    return Position(bottomRight, bottomLeft, sideChunkNum, depth, chunkConfig.chunkNum);
+                    chunkView.Position = Position(chunkReference.Southeast, chunkReference.Southwest, sideChunkNum, depth, chunkConfig.chunkNum);
+                    return;
                 case 4:
-                    return Position(right, bottomRight, sideChunkNum, depth, chunkConfig.chunkNum);
+                    chunkView.Position = Position(chunkReference.East, chunkReference.Southeast, sideChunkNum, depth, chunkConfig.chunkNum);
+                    return;
                 case 5:
-                    return Position(topRight, right, sideChunkNum, depth, chunkConfig.chunkNum);
+                    chunkView.Position = Position(chunkReference.Northeast, chunkReference.East, sideChunkNum, depth, chunkConfig.chunkNum);
+                    return;
             }
 
             Debug.LogError("Failed to compute spiral chunk position");
-            return Vector3.zero;
-        }
-
-        private Vector3 Unit(Vector2 direction)
-        {
-            float xScale = 4f;
-            float yScale = 4f;
-
-            return new Vector3(
-                direction.x * xScale,
-                0,
-                direction.y * yScale * Mathf.Sqrt(3) / 2
-            );
         }
 
         private Vector3 Position(Vector3 sideDirection, Vector3 depthDirection, int sideChunkNum, int depth, int chunkNum)
         {
-            return ((sideChunkNum + 1) * sideDirection) + ((depth - sideChunkNum - 1) * depthDirection) + (Vector3.down * chunkNum);
+            return ((sideChunkNum + 1) * sideDirection) + ((depth - sideChunkNum - 1) * depthDirection) + (0 * Vector3.down * chunkNum);
         }
     }
 }

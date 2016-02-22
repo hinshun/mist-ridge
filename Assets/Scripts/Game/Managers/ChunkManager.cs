@@ -21,6 +21,14 @@ namespace MistRidge
             this.chunkFacadeFactory = chunkFacadeFactory;
         }
 
+        public ChunkReference ChunkReference
+        {
+            get
+            {
+                return settings.chunkReference;
+            }
+        }
+
         public ReadOnlyCollection<ChunkFacade> ChunkFacades
         {
             get
@@ -51,6 +59,7 @@ namespace MistRidge
         public class Settings
         {
             public int chunkCount;
+            public ChunkReference chunkReference;
         }
     }
 }

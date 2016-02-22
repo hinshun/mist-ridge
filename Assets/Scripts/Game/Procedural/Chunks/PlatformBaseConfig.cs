@@ -6,12 +6,12 @@ namespace MistRidge
     [Serializable]
     public struct PlatformBaseConfig
     {
+        public bool spawnForwardLeft;
+        public bool spawnForwardRight;
+        public bool spawnLeft;
         public bool spawnCenter;
-        public bool spawnTop;
-        public bool spawnTopLeft;
-        public bool spawnTopRight;
-        public bool spawnBottom;
-        public bool spawnBottomLeft;
-        public bool spawnBottomRight;
+        public bool spawnRight;
+        public bool spawnBackwardLeft;
+        public bool spawnBackwardRight;
     }
 }

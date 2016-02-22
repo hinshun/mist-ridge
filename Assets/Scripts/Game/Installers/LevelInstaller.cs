@@ -31,18 +31,16 @@ namespace MistRidge
 
         private void InstallChunks()
         {
-            Container.BindFacadeFactory<ChunkConfig, ChunkFacade, ChunkFacadeFactory>(InstallChunkFacade);
-
             Container.Bind<IChunkFeatureContainer>().ToSingle<ChunkFeatureContainer>();
             Container.Bind<IChunkFeaturePickingStrategy>().ToSingle<RandomChunkFeaturePickingStrategy>();
             Container.Bind<IChunkPlacingStrategy>().ToSingle<SpiralChunkPlacingStrategy>();
-
-            Container.Bind<IInitializable>().ToSingle<SpiralChunkPlacingStrategy>();
 
             Container.BindGameObjectFactory<PlatformView.Factory>(settings.Chunk.PlatformPrefab);
 
             Container.Bind<ChunkManager>().ToSingle();
             Container.BindAllInterfacesToSingle<ChunkManager>();
+
+            Container.BindFacadeFactory<ChunkConfig, ChunkFacade, ChunkFacadeFactory>(InstallChunkFacade);
         }
 
         private void InstallChunkFacade(DiContainer subContainer, ChunkConfig chunkConfig)

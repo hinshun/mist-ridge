@@ -26,13 +26,12 @@ namespace MistRidge
         public void Initialize()
         {
             chunkFeatureView.Parent = chunkView.transform;
-
-            PositionChunk();
+            PlaceChunk();
         }
 
-        private void PositionChunk()
+        private void PlaceChunk()
         {
-            chunkView.Position = chunkPlacingStrategy.Placement(chunkConfig);
+            chunkPlacingStrategy.Placement(chunkView, chunkConfig);
         }
     }
 }

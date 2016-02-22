@@ -18,7 +18,7 @@ namespace Zenject
         [Inject]
         Action<DiContainer> _containerInitializer = null;
 
-        public TFacade Create()
+        public virtual TFacade Create()
         {
             var facade = CreateSubContainer(_container, _containerInitializer).Resolve<TFacade>();
             facade.Initialize();
@@ -111,14 +111,14 @@ namespace Zenject
         [Inject]
         Action<DiContainer, TParam1, TParam2> _containerInitializer = null;
 
-        public TFacade Create(TParam1 param1, TParam2 param2)
+        public virtual TFacade Create(TParam1 param1, TParam2 param2)
         {
             var facade = CreateSubContainer(param1, param2).Resolve<TFacade>();
             facade.Initialize();
             return facade;
         }
 
-        DiContainer CreateSubContainer(TParam1 param1, TParam2 param2)
+        protected DiContainer CreateSubContainer(TParam1 param1, TParam2 param2)
         {
             Assert.IsNotNull(_containerInitializer);
             var subContainer = _container.CreateSubContainer();
@@ -153,14 +153,14 @@ namespace Zenject
         [Inject]
         Action<DiContainer, TParam1, TParam2, TParam3> _containerInitializer = null;
 
-        public TFacade Create(TParam1 param1, TParam2 param2, TParam3 param3)
+        public virtual TFacade Create(TParam1 param1, TParam2 param2, TParam3 param3)
         {
             var facade = CreateSubContainer(param1, param2, param3).Resolve<TFacade>();
             facade.Initialize();
             return facade;
         }
 
-        DiContainer CreateSubContainer(TParam1 param1, TParam2 param2, TParam3 param3)
+        protected DiContainer CreateSubContainer(TParam1 param1, TParam2 param2, TParam3 param3)
         {
             Assert.IsNotNull(_containerInitializer);
             var subContainer = _container.CreateSubContainer();
@@ -195,14 +195,14 @@ namespace Zenject
         [Inject]
         ModestTree.Util.Action<DiContainer, TParam1, TParam2, TParam3, TParam4> _containerInitializer = null;
 
-        public TFacade Create(TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4)
+        public virtual TFacade Create(TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4)
         {
             var facade = CreateSubContainer(param1, param2, param3, param4).Resolve<TFacade>();
             facade.Initialize();
             return facade;
         }
 
-        DiContainer CreateSubContainer(TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4)
+        protected DiContainer CreateSubContainer(TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4)
         {
             Assert.IsNotNull(_containerInitializer);
             var subContainer = _container.CreateSubContainer();
@@ -237,14 +237,14 @@ namespace Zenject
         [Inject]
         ModestTree.Util.Action<DiContainer, TParam1, TParam2, TParam3, TParam4, TParam5> _containerInitializer = null;
 
-        public TFacade Create(TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4, TParam5 param5)
+        public virtual TFacade Create(TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4, TParam5 param5)
         {
             var facade = CreateSubContainer(param1, param2, param3, param4, param5).Resolve<TFacade>();
             facade.Initialize();
             return facade;
         }
 
-        DiContainer CreateSubContainer(TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4, TParam5 param5)
+        protected DiContainer CreateSubContainer(TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4, TParam5 param5)
         {
             Assert.IsNotNull(_containerInitializer);
             var subContainer = _container.CreateSubContainer();
@@ -279,14 +279,14 @@ namespace Zenject
         [Inject]
         ModestTree.Util.Action<DiContainer, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6> _containerInitializer = null;
 
-        public TFacade Create(TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4, TParam5 param5, TParam6 param6)
+        public virtual TFacade Create(TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4, TParam5 param5, TParam6 param6)
         {
             var facade = CreateSubContainer(param1, param2, param3, param4, param5, param6).Resolve<TFacade>();
             facade.Initialize();
             return facade;
         }
 
-        DiContainer CreateSubContainer(TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4, TParam5 param5, TParam6 param6)
+        protected DiContainer CreateSubContainer(TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4, TParam5 param5, TParam6 param6)
         {
             Assert.IsNotNull(_containerInitializer);
             var subContainer = _container.CreateSubContainer();
@@ -321,14 +321,14 @@ namespace Zenject
         [Inject]
         ModestTree.Util.Action<DiContainer, TParam1, TParam2, TParam3, TParam4, TParam5, TParam6, TParam7> _containerInitializer = null;
 
-        public TFacade Create(TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4, TParam5 param5, TParam6 param6, TParam7 param7)
+        public virtual TFacade Create(TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4, TParam5 param5, TParam6 param6, TParam7 param7)
         {
             var facade = CreateSubContainer(param1, param2, param3, param4, param5, param6, param7).Resolve<TFacade>();
             facade.Initialize();
             return facade;
         }
 
-        DiContainer CreateSubContainer(TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4, TParam5 param5, TParam6 param6, TParam7 param7)
+        protected DiContainer CreateSubContainer(TParam1 param1, TParam2 param2, TParam3 param3, TParam4 param4, TParam5 param5, TParam6 param6, TParam7 param7)
         {
             Assert.IsNotNull(_containerInitializer);
             var subContainer = _container.CreateSubContainer();

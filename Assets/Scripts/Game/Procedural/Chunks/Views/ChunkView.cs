@@ -17,5 +17,26 @@ namespace MistRidge
                 transform.position = value;
             }
         }
+
+        public Quaternion Rotation
+        {
+            get
+            {
+                return transform.rotation;
+            }
+            set
+            {
+                transform.rotation = value;
+            }
+        }
+
+        public Vector3 Up
+        {
+            get
+            {
+                return transform.up;
+            }
+        }
+
     }
 }

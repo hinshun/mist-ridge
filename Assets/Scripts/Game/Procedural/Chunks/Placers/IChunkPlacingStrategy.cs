@@ -5,6 +5,6 @@ namespace MistRidge
 {
     public interface IChunkPlacingStrategy
     {
-        Vector3 Placement(ChunkConfig chunkConfig);
+        void Placement(ChunkView chunkView, ChunkConfig chunkConfig);
     }
 }

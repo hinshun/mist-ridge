@@ -1,30 +1,94 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Zenject;
 
 namespace MistRidge
 {
     public class ChunkBase : IInitializable
     {
+        private readonly ChunkManager chunkManager;
         private readonly ChunkView chunkView;
         private readonly ChunkBaseView chunkBaseView;
         private readonly ChunkFeatureView chunkFeatureView;
         private readonly PlatformView.Factory platformViewFactory;
 
-        private ReadOnlyCollection<PlatformView> platformViews;
+        private PlatformView forwardLeftPlatformView;
+        private PlatformView forwardRightPlatformView;
+        private PlatformView leftPlatformView;
+        private PlatformView centerPlatformView;
+        private PlatformView rightPlatformView;
+        private PlatformView backwardLeftPlatformView;
+        private PlatformView backwardRightPlatformView;
 
         public ChunkBase(
+                ChunkManager chunkManager,
                 ChunkView chunkView,
                 ChunkBaseView chunkBaseView,
                 ChunkFeatureView chunkFeatureView,
                 PlatformView.Factory platformViewFactory)
         {
+            this.chunkManager = chunkManager;
             this.chunkView = chunkView;
             this.chunkBaseView = chunkBaseView;
             this.chunkFeatureView = chunkFeatureView;
             this.platformViewFactory = platformViewFactory;
+        }
+
+        public PlatformView ForwardLeftPlatformView
+        {
+            get
+            {
+                return forwardLeftPlatformView;
+            }
+        }
+
+        public PlatformView ForwardRightPlatformView
+        {
+            get
+            {
+                return forwardRightPlatformView;
+            }
+        }
+
+        public PlatformView LeftPlatformView
+        {
+            get
+            {
+                return leftPlatformView;
+            }
+        }
+
+        public PlatformView CenterPlatformView
+        {
+            get
+            {
+                return centerPlatformView;
+            }
+        }
+
+        public PlatformView RightPlatformView
+        {
+            get
+            {
+                return rightPlatformView;
+            }
+        }
+
+        public PlatformView BackwardLeftPlatformView
+        {
+            get
+            {
+                return backwardLeftPlatformView;
+            }
+        }
+
+        public PlatformView BackwardRightPlatformView
+        {
+            get
+            {
+                return backwardRightPlatformView;
+            }
         }
 
         public void Initialize()
@@ -37,84 +101,69 @@ namespace MistRidge
         private void SpawnPlatforms()
         {
             PlatformBaseConfig platformBaseConfig = chunkFeatureView.PlatformBaseConfig;
-            List<PlatformView> spawnedPlatformViews = new List<PlatformView>();
 
             SpawnPlatform(
-                spawnedPlatformViews,
+                "Forward Left Platform",
+                platformBaseConfig.spawnForwardLeft,
+                chunkManager.ChunkReference.ForwardLeft,
+                out forwardLeftPlatformView
+            );
+
+            SpawnPlatform(
+                "Forward Right Platform",
+                platformBaseConfig.spawnForwardRight,
+                chunkManager.ChunkReference.ForwardRight,
+                out forwardRightPlatformView
+            );
+
+            SpawnPlatform(
+                "Left Platform",
+                platformBaseConfig.spawnLeft,
+                chunkManager.ChunkReference.Left,
+                out leftPlatformView
+            );
+
+            SpawnPlatform(
+                "Center Platform",
                 platformBaseConfig.spawnCenter,
-                Vector2.zero
+                chunkManager.ChunkReference.Center,
+                out centerPlatformView
             );
 
             SpawnPlatform(
-                spawnedPlatformViews,
-                platformBaseConfig.spawnTop,
-                new Vector3(
-                    0,
-                    -2f
-                )
+                "Right Platform",
+                platformBaseConfig.spawnRight,
+                chunkManager.ChunkReference.Right,
+                out rightPlatformView
             );
 
             SpawnPlatform(
-                spawnedPlatformViews,
-                platformBaseConfig.spawnTopLeft,
-                new Vector3(
-                    1.5f,
-                    -1f
-                )
+                "Backward Left Platform",
+                platformBaseConfig.spawnBackwardLeft,
+                chunkManager.ChunkReference.BackwardLeft,
+                out backwardLeftPlatformView
             );
 
             SpawnPlatform(
-                spawnedPlatformViews,
-                platformBaseConfig.spawnTopRight,
-                new Vector3(
-                    -1.5f,
-                    -1f
-                )
+                "Backward Right Platform",
+                platformBaseConfig.spawnBackwardRight,
+                chunkManager.ChunkReference.BackwardRight,
+                out backwardRightPlatformView
             );
-
-            SpawnPlatform(
-                spawnedPlatformViews,
-                platformBaseConfig.spawnBottom,
-                new Vector3(
-                    0,
-                    2f
-                )
-            );
-
-            SpawnPlatform(
-                spawnedPlatformViews,
-                platformBaseConfig.spawnBottomLeft,
-                new Vector3(
-                    1.5f,
-                    1f
-                )
-            );
-
-            SpawnPlatform(
-                spawnedPlatformViews,
-                platformBaseConfig.spawnBottomRight,
-                new Vector3(
-                    -1.5f,
-                    1f
-                )
-            );
-
-            platformViews = new ReadOnlyCollection<PlatformView>(spawnedPlatformViews);
         }
 
-        private void SpawnPlatform(List<PlatformView> spawnedPlatformViews, bool spawn, Vector2 position)
+        private void SpawnPlatform(string name, bool isSpawnable, Vector3 scaledPosition, out PlatformView platformView)
         {
-            if (spawn)
+            if (isSpawnable)
             {
-                PlatformView platformView = platformViewFactory.Create();
-                platformView.Position = new Vector3(
-                    position.x * platformView.LocalScale.x,
-                    0,
-                    position.y * platformView.LocalScale.z * Mathf.Sqrt(3) / 2
-                );
+                platformView = platformViewFactory.Create();
+                platformView.name = name;
+                platformView.Position = scaledPosition;
                 platformView.Parent = chunkBaseView.transform;
-
-                spawnedPlatformViews.Add(platformView);
+            }
+            else
+            {
+                platformView = null;
             }
         }
     }
