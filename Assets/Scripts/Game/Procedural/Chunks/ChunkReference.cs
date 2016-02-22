@@ -11,9 +11,6 @@ namespace MistRidge
         private Vector3 localScale;
 
         [SerializeField]
-        private Quaternion originRotation;
-
-        [SerializeField]
         private Mesh platformBaseMesh;
 
         private Vector3 forwardLeft;
@@ -35,14 +32,6 @@ namespace MistRidge
             get
             {
                 return localScale;
-            }
-        }
-
-        public Quaternion OriginRotation
-        {
-            get
-            {
-                return originRotation;
             }
         }
 
