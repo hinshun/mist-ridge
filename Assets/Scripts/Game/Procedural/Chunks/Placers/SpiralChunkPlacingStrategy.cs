@@ -7,11 +7,13 @@ namespace MistRidge
     public class SpiralChunkPlacingStrategy : IChunkPlacingStrategy
     {
         private readonly ChunkReference chunkReference;
+        private readonly int chunkCount;
 
         public SpiralChunkPlacingStrategy(
                 ChunkManager chunkManager)
         {
             this.chunkReference = chunkManager.ChunkReference;
+            this.chunkCount = chunkManager.ChunkCount;
         }
 
         public void Placement(ChunkView chunkView, ChunkConfig chunkConfig)
@@ -22,7 +24,7 @@ namespace MistRidge
                     120,
                     chunkView.Up
                 );
-                chunkView.Position = Vector3.zero;
+                chunkView.Position = Vector3.zero + Altitude(chunkConfig);
                 return;
             }
 
@@ -60,31 +62,36 @@ namespace MistRidge
             switch (side)
             {
                 case 0:
-                    chunkView.Position = Position(chunkReference.Northwest, chunkReference.Northeast, sideChunkNum, depth, chunkConfig.chunkNum);
+                    chunkView.Position = Position(chunkConfig, chunkReference.Northwest, chunkReference.Northeast, sideChunkNum, depth);
                     return;
                 case 1:
-                    chunkView.Position = Position(chunkReference.West, chunkReference.Northwest, sideChunkNum, depth, chunkConfig.chunkNum);
+                    chunkView.Position = Position(chunkConfig, chunkReference.West, chunkReference.Northwest, sideChunkNum, depth);
                     return;
                 case 2:
-                    chunkView.Position = Position(chunkReference.Southwest, chunkReference.West, sideChunkNum, depth, chunkConfig.chunkNum);
+                    chunkView.Position = Position(chunkConfig, chunkReference.Southwest, chunkReference.West, sideChunkNum, depth);
                     return;
                 case 3:
-                    chunkView.Position = Position(chunkReference.Southeast, chunkReference.Southwest, sideChunkNum, depth, chunkConfig.chunkNum);
+                    chunkView.Position = Position(chunkConfig, chunkReference.Southeast, chunkReference.Southwest, sideChunkNum, depth);
                     return;
                 case 4:
-                    chunkView.Position = Position(chunkReference.East, chunkReference.Southeast, sideChunkNum, depth, chunkConfig.chunkNum);
+                    chunkView.Position = Position(chunkConfig, chunkReference.East, chunkReference.Southeast, sideChunkNum, depth);
                     return;
                 case 5:
-                    chunkView.Position = Position(chunkReference.Northeast, chunkReference.East, sideChunkNum, depth, chunkConfig.chunkNum);
+                    chunkView.Position = Position(chunkConfig, chunkReference.Northeast, chunkReference.East, sideChunkNum, depth);
                     return;
             }
 
             Debug.LogError("Failed to compute spiral chunk position");
         }
 
-        private Vector3 Position(Vector3 sideDirection, Vector3 depthDirection, int sideChunkNum, int depth, int chunkNum)
+        private Vector3 Position(ChunkConfig chunkConfig, Vector3 sideDirection, Vector3 depthDirection, int sideChunkNum, int depth)
         {
-            return ((sideChunkNum + 1) * sideDirection) + ((depth - sideChunkNum - 1) * depthDirection) + (0 * Vector3.down * chunkNum);
+            return ((sideChunkNum + 1) * sideDirection) + ((depth - sideChunkNum - 1) * depthDirection) + Altitude(chunkConfig);
+        }
+
+        private Vector3 Altitude(ChunkConfig chunkConfig)
+        {
+            return 2 * Vector3.up * (chunkCount - chunkConfig.chunkNum);
         }
     }
 }

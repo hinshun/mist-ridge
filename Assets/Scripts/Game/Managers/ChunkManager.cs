@@ -29,6 +29,14 @@ namespace MistRidge
             }
         }
 
+        public int ChunkCount
+        {
+            get
+            {
+                return settings.chunkCount;
+            }
+        }
+
         public ReadOnlyCollection<ChunkFacade> ChunkFacades
         {
             get

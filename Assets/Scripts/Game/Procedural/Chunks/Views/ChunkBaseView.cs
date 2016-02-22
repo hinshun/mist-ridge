@@ -6,6 +6,18 @@ namespace MistRidge
 {
     public class ChunkBaseView : ChunkChildView
     {
+        public Vector3 Position
+        {
+            get
+            {
+                return transform.position;
+            }
+            set
+            {
+                transform.position = value;
+            }
+        }
+
         public Vector3 LocalPosition
         {
             get

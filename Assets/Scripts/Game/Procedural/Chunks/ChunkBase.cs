@@ -7,7 +7,7 @@ namespace MistRidge
 {
     public class ChunkBase : IInitializable
     {
-        private readonly ChunkManager chunkManager;
+        private readonly ChunkReference chunkReference;
         private readonly ChunkView chunkView;
         private readonly ChunkBaseView chunkBaseView;
         private readonly ChunkFeatureView chunkFeatureView;
@@ -28,7 +28,7 @@ namespace MistRidge
                 ChunkFeatureView chunkFeatureView,
                 PlatformView.Factory platformViewFactory)
         {
-            this.chunkManager = chunkManager;
+            this.chunkReference = chunkManager.ChunkReference;
             this.chunkView = chunkView;
             this.chunkBaseView = chunkBaseView;
             this.chunkFeatureView = chunkFeatureView;
@@ -96,6 +96,11 @@ namespace MistRidge
             chunkBaseView.Parent = chunkView.transform;
             SpawnPlatforms();
             chunkBaseView.LocalPosition = Vector3.zero;
+            chunkBaseView.LocalScale = new Vector3(
+                chunkBaseView.LocalScale.x,
+                chunkBaseView.Position.y / 2,
+                chunkBaseView.LocalScale.z
+            );
         }
 
         private void SpawnPlatforms()
@@ -105,49 +110,49 @@ namespace MistRidge
             SpawnPlatform(
                 "Forward Left Platform",
                 platformBaseConfig.spawnForwardLeft,
-                chunkManager.ChunkReference.ForwardLeft,
+                chunkReference.ForwardLeft,
                 out forwardLeftPlatformView
             );
 
             SpawnPlatform(
                 "Forward Right Platform",
                 platformBaseConfig.spawnForwardRight,
-                chunkManager.ChunkReference.ForwardRight,
+                chunkReference.ForwardRight,
                 out forwardRightPlatformView
             );
 
             SpawnPlatform(
                 "Left Platform",
                 platformBaseConfig.spawnLeft,
-                chunkManager.ChunkReference.Left,
+                chunkReference.Left,
                 out leftPlatformView
             );
 
             SpawnPlatform(
                 "Center Platform",
                 platformBaseConfig.spawnCenter,
-                chunkManager.ChunkReference.Center,
+                chunkReference.Center,
                 out centerPlatformView
             );
 
             SpawnPlatform(
                 "Right Platform",
                 platformBaseConfig.spawnRight,
-                chunkManager.ChunkReference.Right,
+                chunkReference.Right,
                 out rightPlatformView
             );
 
             SpawnPlatform(
                 "Backward Left Platform",
                 platformBaseConfig.spawnBackwardLeft,
-                chunkManager.ChunkReference.BackwardLeft,
+                chunkReference.BackwardLeft,
                 out backwardLeftPlatformView
             );
 
             SpawnPlatform(
                 "Backward Right Platform",
                 platformBaseConfig.spawnBackwardRight,
-                chunkManager.ChunkReference.BackwardRight,
+                chunkReference.BackwardRight,
                 out backwardRightPlatformView
             );
         }
