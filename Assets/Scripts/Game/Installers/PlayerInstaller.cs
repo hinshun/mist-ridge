@@ -30,6 +30,8 @@ namespace MistRidge
         private void InstallPlayerFacade(DiContainer subContainer, Input input)
         {
             subContainer.BindInstance(input);
+            subContainer.Bind<Grounding>().ToSingle();
+
             subContainer.Bind<PlayerView>().ToSinglePrefab(settings.Player.Prefab);
 
             subContainer.Bind<PlayerController>().ToSingle();
@@ -46,7 +48,7 @@ namespace MistRidge
             Container.Bind<Collidable>().ToSinglePrefab(settings.Player.Collision.DefaultCollidablePrefab);
 
             Container.Bind<CollisionSphere.Factory>().ToSingle();
-            Container.Bind<Grounding.Factory>().ToSingle();
+
         }
 
         private void InstallCamera()

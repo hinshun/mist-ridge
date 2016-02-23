@@ -21,18 +21,14 @@ namespace MistRidge
 
         private Collidable collidable;
 
-        private CollisionSphere collisionSphere;
-
         public Grounding(
                 Settings settings,
                 PlayerView playerView,
-                Collidable defaultCollidable,
-                CollisionSphere collisionSphere)
+                Collidable defaultCollidable)
         {
             this.settings = settings;
             this.playerView = playerView;
             this.defaultCollidable = defaultCollidable;
-            this.collisionSphere = collisionSphere;
         }
 
         public Vector3 PrimaryNormal
@@ -76,7 +72,7 @@ namespace MistRidge
          * Scans surface below controller for ground. Follows up the initial
          * scan with subsequent scans to handle different edge cases.
          */
-        public void ProbeGround()
+        public void ProbeGround(CollisionSphere collisionSphere)
         {
             ResetGrounds();
 
@@ -92,7 +88,7 @@ namespace MistRidge
                 collidable = GetCollidable(hit);
                 transform = hit.transform;
 
-                SimulateSphereCast(hit.normal, out hit);
+                SimulateSphereCast(collisionSphere, hit.normal, out hit);
 
                 primaryGround = new GroundHit(hit);
 
@@ -108,13 +104,13 @@ namespace MistRidge
                 // Now the collision is on an edge, so normals of the two faces
                 // on either side of the edge are computed and stored in nearHit
                 // and farHit
-                HandleEdgeCollision(hit);
+                HandleEdgeCollision(collisionSphere, hit);
             }
             // If initial SphereCast fails, which is likely due to controller
             // clipping a wall, fallback to raycast simulating SphereCast data
             else if (Raycast(origin, playerView.Down, out hit))
             {
-                HandleClippingCollision(hit);
+                HandleClippingCollision(collisionSphere, hit);
             }
             else
             {
@@ -122,7 +118,7 @@ namespace MistRidge
             }
         }
 
-        public bool IsGrounded(bool currentlyGrounded, float distance)
+        public bool IsGrounded(CollisionSphere collisionSphere, bool currentlyGrounded, float distance)
         {
             if (!primaryGround.isFound || primaryGround.distance > distance)
             {
@@ -145,12 +141,12 @@ namespace MistRidge
                 }
 
                 // Check if at edge of ledge, or high angle slope
-                if (!OnSteadyGround(farGround.normal, primaryGround.point))
+                if (!OnSteadyGround(collisionSphere, farGround.normal, primaryGround.point))
                 {
                     if (nearGround.isFound
                         && nearGround.distance < distance
                         && IsGroundStandable(nearGround)
-                        && !OnSteadyGround(nearGround.normal, nearGround.point))
+                        && !OnSteadyGround(collisionSphere, nearGround.normal, nearGround.point))
                     {
                         return true;
                     }
@@ -218,7 +214,7 @@ namespace MistRidge
          * surface is not too extreme of an ledge, allowing player to smoothly
          * fall off surfaces and not hang on edge of ledges
          */
-        private bool OnSteadyGround(Vector3 normal, Vector3 point)
+        private bool OnSteadyGround(CollisionSphere collisionSphere, Vector3 normal, Vector3 point)
         {
             float angle = Vector3.Angle(normal, playerView.Up);
 
@@ -237,7 +233,7 @@ namespace MistRidge
             return distanceFromCenter <= distanceRatio * collisionSphere.Radius;
         }
 
-        private void HandleEdgeCollision(RaycastHit hit)
+        private void HandleEdgeCollision(CollisionSphere collisionSphere, RaycastHit hit)
         {
             Vector3 towardCenter = Math3d.ProjectVectorOnPlane(
                 playerView.Up,
@@ -267,7 +263,7 @@ namespace MistRidge
             // wall, attempt to flush against it on the ground
             if (Vector3.Angle(hit.normal, playerView.Up) > collidable.StandAngle)
             {
-                FlushGround(hit);
+                FlushGround(collisionSphere, hit);
             }
 
             // If we are standing on a ledge then face the nearest center of
@@ -296,7 +292,7 @@ namespace MistRidge
             }
         }
 
-        private void FlushGround(RaycastHit hit)
+        private void FlushGround(CollisionSphere collisionSphere, RaycastHit hit)
         {
             Vector3 downslopeDirection = CollisionMath.DownslopeDirection(hit.normal, playerView.Down);
 
@@ -308,7 +304,7 @@ namespace MistRidge
             {
                 RaycastHit sphereCastHit;
 
-                if (SimulateSphereCast(flushHit.normal, out sphereCastHit))
+                if (SimulateSphereCast(collisionSphere, flushHit.normal, out sphereCastHit))
                 {
                     flushGround = new GroundHit(sphereCastHit);
                 }
@@ -319,14 +315,14 @@ namespace MistRidge
             }
         }
 
-        private void HandleClippingCollision(RaycastHit hit)
+        private void HandleClippingCollision(CollisionSphere collisionSphere, RaycastHit hit)
         {
             collidable = GetCollidable(hit);
             transform = hit.transform;
 
             RaycastHit sphereCastHit;
 
-            if (SimulateSphereCast(hit.normal, out sphereCastHit))
+            if (SimulateSphereCast(collisionSphere, hit.normal, out sphereCastHit))
             {
                 primaryGround = new GroundHit(sphereCastHit);
             }
@@ -342,7 +338,7 @@ namespace MistRidge
          * Raycasting downwards from a point along the controller's bottom sphere,
          * based on the provided normal.
          */
-        private bool SimulateSphereCast(Vector3 groundNormal, out RaycastHit hit)
+        private bool SimulateSphereCast(CollisionSphere collisionSphere, Vector3 groundNormal, out RaycastHit hit)
         {
             float groundAngle = Vector3.Angle(groundNormal, playerView.Up) * Mathf.Deg2Rad;
 
@@ -415,10 +411,6 @@ namespace MistRidge
                 maxDistance: Mathf.Infinity,
                 layerMask: settings.walkableLayerMask
             );
-        }
-
-        public class Factory : Factory<PlayerView, CollisionSphere, Grounding>
-        {
         }
 
         [Serializable]

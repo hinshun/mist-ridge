@@ -26,7 +26,6 @@ namespace MistRidge
 
         private Vector3 lastGroundPosition;
         private Grounding grounding;
-        private readonly Grounding.Factory groundingFactory;
 
         private bool isClamping = true;
         private bool isSlopeLimiting = true;
@@ -40,13 +39,13 @@ namespace MistRidge
                 PlayerView playerView,
                 Collidable defaultCollidable,
                 CollisionSphere.Factory collisionSphereFactory,
-                Grounding.Factory groundingFactory)
+                Grounding grounding)
         {
             this.settings = settings;
             this.playerView = playerView;
             this.defaultCollidable = defaultCollidable;
             this.collisionSphereFactory = collisionSphereFactory;
-            this.groundingFactory = groundingFactory;
+            this.grounding = grounding;
         }
 
         public float DeltaTime
@@ -141,12 +140,12 @@ namespace MistRidge
 
         public bool AcquiringGround()
         {
-            return grounding.IsGrounded(false, 0.01f);
+            return grounding.IsGrounded(feetSphere, false, 0.01f);
         }
 
         public bool MaintainingGround()
         {
-            return grounding.IsGrounded(true, 0.5f);
+            return grounding.IsGrounded(feetSphere, true, 0.5f);
         }
 
         private void Step()
@@ -189,7 +188,7 @@ namespace MistRidge
         private void ProbeGround()
         {
             PushIgnoredColliders();
-            grounding.ProbeGround();
+            grounding.ProbeGround(feetSphere);
             PopIgnoredColliders();
         }
 
@@ -421,8 +420,6 @@ namespace MistRidge
             collisionSpheres = new ReadOnlyCollection<CollisionSphere>(newCollisionSpheres);
             feetSphere = collisionSpheres[0];
             headSphere = collisionSpheres[collisionSpheres.Count - 1];
-
-            grounding = groundingFactory.Create(playerView, feetSphere);
         }
 
         private void OnDrawGizmos()
