@@ -9,15 +9,21 @@ namespace MistRidge
     public class ChunkManager : IInitializable
     {
         private readonly Settings settings;
+        private readonly List<IChunkFeatureContainer> chunkFeatureContainers;
+        private readonly IChunkFeatureContainerPickingStrategy chunkFeatureContainerPickingStrategy;
         private readonly ChunkFacadeFactory chunkFacadeFactory;
 
         private ReadOnlyCollection<ChunkFacade> chunkFacades;
 
         public ChunkManager(
                 Settings settings,
+                List<IChunkFeatureContainer> chunkFeatureContainers,
+                IChunkFeatureContainerPickingStrategy chunkFeatureContainerPickingStrategy,
                 ChunkFacadeFactory chunkFacadeFactory)
         {
             this.settings = settings;
+            this.chunkFeatureContainers = chunkFeatureContainers;
+            this.chunkFeatureContainerPickingStrategy = chunkFeatureContainerPickingStrategy;
             this.chunkFacadeFactory = chunkFacadeFactory;
         }
 
@@ -54,6 +60,7 @@ namespace MistRidge
                 ChunkConfig chunkConfig = new ChunkConfig()
                 {
                     chunkNum = chunkNum,
+                    chunkFeatureContainer = chunkFeatureContainerPickingStrategy.Pick(chunkFeatureContainers)
                 };
 
                 ChunkFacade chunkFacade = chunkFacadeFactory.Create(chunkConfig);

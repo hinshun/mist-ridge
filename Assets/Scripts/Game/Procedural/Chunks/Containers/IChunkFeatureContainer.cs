@@ -5,6 +5,6 @@ namespace MistRidge
 {
     public interface IChunkFeatureContainer
     {
-        List<GameObject> ChunkFeatures();
+        List<ChunkFeature> ChunkFeatures();
     }
 }

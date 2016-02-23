@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using Zenject;
 
 namespace MistRidge
@@ -31,7 +32,12 @@ namespace MistRidge
 
         private void InstallChunks()
         {
-            Container.Bind<IChunkFeatureContainer>().ToSingle<ChunkFeatureContainer>();
+            foreach(Biome biome in settings.Chunk.biomes)
+            {
+                Container.Bind<IChunkFeatureContainer>().ToInstance(biome);
+            }
+
+            Container.Bind<IChunkFeatureContainerPickingStrategy>().ToSingle<BiomePickingStrategy>();
             Container.Bind<IChunkFeaturePickingStrategy>().ToSingle<RandomChunkFeaturePickingStrategy>();
             Container.Bind<IChunkPlacingStrategy>().ToSingle<SpiralChunkPlacingStrategy>();
 
@@ -59,7 +65,6 @@ namespace MistRidge
 
         private void InstallSettings()
         {
-            Container.Bind<ChunkFeatureContainer.Settings>().ToSingleInstance(settings.Chunk.ChunkFeatureContainer);
             Container.Bind<ChunkManager.Settings>().ToSingleInstance(settings.Chunk.ChunkManager);
             Container.Bind<Checkpoint.Settings>().ToSingleInstance(settings.Checkpoint);
         }
@@ -76,8 +81,8 @@ namespace MistRidge
                 public GameObject ChunkPrefab;
                 public GameObject ChunkBasePrefab;
                 public GameObject PlatformPrefab;
-                public ChunkFeatureContainer.Settings ChunkFeatureContainer;
                 public ChunkManager.Settings ChunkManager;
+                public List<Biome> biomes;
             }
         }
     }

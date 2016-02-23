@@ -5,6 +5,6 @@ namespace MistRidge
 {
     public interface IChunkFeaturePickingStrategy
     {
-        GameObject Pick(List<GameObject> chunkFeatures);
+        ChunkFeature Pick(IChunkFeatureContainer chunkFeatureContainer);
     }
 }

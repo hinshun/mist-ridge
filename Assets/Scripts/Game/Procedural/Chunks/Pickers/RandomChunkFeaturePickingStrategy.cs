@@ -13,8 +13,9 @@ namespace MistRidge
             this.generator = generator;
         }
 
-        public GameObject Pick(List<GameObject> chunkFeatures)
+        public ChunkFeature Pick(IChunkFeatureContainer chunkFeatureContainer)
         {
+            List<ChunkFeature> chunkFeatures = chunkFeatureContainer.ChunkFeatures();
             int randomIndex = generator.Random.Next(chunkFeatures.Count);
             return chunkFeatures[randomIndex];
         }

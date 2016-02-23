@@ -14,7 +14,7 @@ namespace MistRidge
             this.settings = settings;
         }
 
-        public List<GameObject> ChunkFeatures()
+        public List<ChunkFeature> ChunkFeatures()
         {
             return settings.chunkFeatures;
         }
@@ -22,7 +22,7 @@ namespace MistRidge
         [Serializable]
         public class Settings
         {
-            public List<GameObject> chunkFeatures;
+            public List<ChunkFeature> chunkFeatures;
         }
     }
 }
