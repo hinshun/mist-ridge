@@ -4,7 +4,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    [CreateAssetMenu(menuName = "Chunks/Reference")]
+    [CreateAssetMenu(menuName = "Chunks/Chunk Reference")]
     public class ChunkReference : ScriptableObject
     {
         [SerializeField]

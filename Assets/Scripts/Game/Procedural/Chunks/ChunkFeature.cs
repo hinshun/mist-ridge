@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace MistRidge
 {
-    [CreateAssetMenu(menuName = "Chunks/Feature")]
+    [CreateAssetMenu(menuName = "Chunks/Chunk Feature")]
     public class ChunkFeature : ScriptableObject
     {
         [SerializeField]

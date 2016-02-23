@@ -6,12 +6,16 @@ namespace MistRidge
 {
     public class PlayerInventory : IInitializable
     {
+        private ItemManager itemManager;
         private ItemPickupSignal itemPickupSignal;
 
         private Item itemHeld;
 
-        public PlayerInventory(ItemPickupSignal itemPickupSignal)
+        public PlayerInventory(
+                ItemManager itemManager,
+                ItemPickupSignal itemPickupSignal)
         {
+            this.itemManager = itemManager;
             this.itemPickupSignal = itemPickupSignal;
         }
 
@@ -22,7 +26,8 @@ namespace MistRidge
 
         private void OnItemPickup(ItemType itemType)
         {
-            Debug.Log("Picked up: " + itemType);
+            Item item = itemManager.GetItem(itemType);
+            Debug.Log("Picked up: " + item.Name);
         }
     }
 }
