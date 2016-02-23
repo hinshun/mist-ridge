@@ -8,7 +8,7 @@ namespace MistRidge
     public class PlayerManager : IInitializable, ITickable
     {
         private readonly PlayerFacade.Factory playerFacadeFactory;
-        private List<PlayerFacade> playerFacades;
+        private Dictionary<Input, PlayerFacade> playerFacades;
         private List<PlayerView> playerViews;
 
         public List<PlayerView> PlayerViews
@@ -26,13 +26,13 @@ namespace MistRidge
 
         public void Initialize()
         {
-            playerFacades = new List<PlayerFacade>();
+            playerFacades = new Dictionary<Input, PlayerFacade>();
             playerViews = new List<PlayerView>();
         }
 
         public void Tick()
         {
-            foreach (PlayerFacade playerFacade in playerFacades)
+            foreach (PlayerFacade playerFacade in playerFacades.Values)
             {
                 playerFacade.Tick();
             }
@@ -40,9 +40,12 @@ namespace MistRidge
 
         public void SpawnPlayer(Input input)
         {
-            PlayerFacade playerFacade = playerFacadeFactory.Create(input);
-            playerFacades.Add(playerFacade);
-            playerViews.Add(playerFacade.PlayerView);
+            if (!playerFacades.ContainsKey(input))
+            {
+                PlayerFacade playerFacade = playerFacadeFactory.Create(input);
+                playerFacades[input] = playerFacade;
+                playerViews.Add(playerFacade.PlayerView);
+            }
         }
     }
 }
