@@ -1,23 +1,24 @@
+using UnityEngine;
 using Zenject;
 
 namespace MistRidge
 {
     public class PlayerFacade : Facade
     {
-        private readonly PlayerView playerView;
+        private readonly Grounding grounding;
 
         public PlayerFacade(
-            PlayerView playerView,
+            Grounding grounding,
             PlayerStateMachine playerStateMachine)
         {
-            this.playerView = playerView;
+            this.grounding = grounding;
         }
 
-        public PlayerView PlayerView
+        public Vector3 GroundingPosition
         {
             get
             {
-                return playerView;
+                return grounding.PrimaryPoint;
             }
         }
 

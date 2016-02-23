@@ -9,13 +9,18 @@ namespace MistRidge
     {
         private readonly PlayerFacade.Factory playerFacadeFactory;
         private Dictionary<Input, PlayerFacade> playerFacades;
-        private List<PlayerView> playerViews;
 
-        public List<PlayerView> PlayerViews
+        public List<Vector3> PlayerPositions
         {
             get
             {
-                return playerViews;
+                List<Vector3> playerPositions = new List<Vector3>();
+                foreach(PlayerFacade playerFacade in playerFacades.Values)
+                {
+                    playerPositions.Add(playerFacade.GroundingPosition);
+                }
+
+                return playerPositions;
             }
         }
 
@@ -27,7 +32,6 @@ namespace MistRidge
         public void Initialize()
         {
             playerFacades = new Dictionary<Input, PlayerFacade>();
-            playerViews = new List<PlayerView>();
         }
 
         public void Tick()
@@ -44,7 +48,6 @@ namespace MistRidge
             {
                 PlayerFacade playerFacade = playerFacadeFactory.Create(input);
                 playerFacades[input] = playerFacade;
-                playerViews.Add(playerFacade.PlayerView);
             }
         }
     }

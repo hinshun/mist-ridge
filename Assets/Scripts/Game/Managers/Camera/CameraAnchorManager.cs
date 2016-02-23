@@ -26,7 +26,7 @@ namespace MistRidge
 
         public void Tick()
         {
-            Vector3 center = CenterPoint(playerManager.PlayerViews);
+            Vector3 center = CenterPoint(playerManager.PlayerPositions);
 
             cameraAnchorView.transform.position = Vector3.Lerp(
                 cameraAnchorView.transform.position,
@@ -55,24 +55,24 @@ namespace MistRidge
             );
         }
 
-        private Vector3 CenterPoint(List<PlayerView> playerViews)
+        private Vector3 CenterPoint(List<Vector3> playerPositions)
         {
-            if (playerViews.Count == 0)
+            if (playerPositions.Count == 0)
             {
                 return Vector3.zero;
             }
-            else if (playerViews.Count == 1)
+            else if (playerPositions.Count == 1)
             {
-                return playerViews[0].transform.position;
+                return playerPositions[0];
             }
 
             Vector3 localCenter = Vector3.zero;
-            foreach (PlayerView playerView in playerViews)
+            foreach (Vector3 playerPosition in playerPositions)
             {
-                localCenter += playerView.Position;
+                localCenter += playerPosition;
             }
 
-            return localCenter / playerViews.Count;
+            return localCenter / playerPositions.Count;
         }
 
         [Serializable]

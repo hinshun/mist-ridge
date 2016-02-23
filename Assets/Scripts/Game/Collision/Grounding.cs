@@ -47,6 +47,14 @@ namespace MistRidge
             }
         }
 
+        public Vector3 PrimaryPoint
+        {
+            get
+            {
+                return primaryGround.point;
+            }
+        }
+
         public Vector3 Position
         {
             get

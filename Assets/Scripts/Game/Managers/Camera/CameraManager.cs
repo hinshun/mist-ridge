@@ -26,7 +26,7 @@ namespace MistRidge
 
         public void Tick()
         {
-            float zoom = CameraZoomForEncapsulation(playerManager.PlayerViews);
+            float zoom = CameraZoomForEncapsulation(playerManager.PlayerPositions);
             float cappedZoom = Mathf.Max(zoom, settings.minZoom);
             cameraView.LocalPosition = new Vector3(
                 cameraView.LocalPosition.x,
@@ -35,18 +35,18 @@ namespace MistRidge
             );
         }
 
-        private float CameraZoomForEncapsulation(List<PlayerView> playerViews)
+        private float CameraZoomForEncapsulation(List<Vector3> playerPositions)
         {
-            if (playerViews.Count == 0)
+            if (playerPositions.Count == 0)
             {
                 return 0f;
             }
 
             float zoom, xMax, yMax;
             zoom = xMax = yMax = 0f;
-            foreach (PlayerView playerView in playerViews)
+            foreach (Vector3 playerPosition in playerPositions)
             {
-                Vector3 relativePosition = cameraRigView.transform.InverseTransformPoint(playerView.Position);
+                Vector3 relativePosition = cameraRigView.transform.InverseTransformPoint(playerPosition);
 
                 float xBound = Mathf.Abs(relativePosition.x);
                 float yBound = Mathf.Abs(relativePosition.y);
