@@ -2,12 +2,15 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Zenject;
 
 namespace MistRidge
 {
     public class PlayerView : MonoBehaviour
     {
         public event Action DrawGizmos = delegate {};
+
+        private ItemPickupSignal.Trigger itemPickupTrigger;
 
         [SerializeField]
         private List<Collider> colliders;
@@ -19,6 +22,12 @@ namespace MistRidge
         private MeshRenderer meshRenderer;
 
         private ReadOnlyCollection<Collider> readOnlyColliders;
+
+        [PostInject]
+        public void Init(ItemPickupSignal.Trigger itemPickupTrigger)
+        {
+            this.itemPickupTrigger = itemPickupTrigger;
+        }
 
         public Vector3 Position
         {
@@ -83,6 +92,11 @@ namespace MistRidge
         public void OnDrawGizmos()
         {
             DrawGizmos();
+        }
+
+        public void OnItemPickup(ItemType itemType)
+        {
+            itemPickupTrigger.Fire(itemType);
         }
 
         private void Awake()

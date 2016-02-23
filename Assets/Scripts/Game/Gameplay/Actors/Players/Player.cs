@@ -4,13 +4,13 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class PlayerInternalManager : IInitializable
+    public class Player : IInitializable
     {
         private readonly Settings settings;
         private readonly Input input;
         private readonly PlayerView playerView;
 
-        public PlayerInternalManager(
+        public Player(
             Settings settings,
             Input input,
             PlayerView playerView)

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using Zenject;
+using Zenject.Commands;
 
 namespace MistRidge
 {
@@ -32,13 +33,19 @@ namespace MistRidge
             subContainer.BindInstance(input);
             subContainer.Bind<Grounding>().ToSingle();
 
+            subContainer.Bind<Player>().ToSingle();
+            subContainer.BindAllInterfacesToSingle<Player>();
+
             subContainer.Bind<PlayerView>().ToSinglePrefab(settings.Player.Prefab);
 
             subContainer.Bind<PlayerController>().ToSingle();
             subContainer.BindAllInterfacesToSingle<PlayerController>();
 
-            subContainer.Bind<PlayerInternalManager>().ToSingle();
-            subContainer.BindAllInterfacesToSingle<PlayerInternalManager>();
+            subContainer.Bind<PlayerInventory>().ToSingle();
+            subContainer.BindAllInterfacesToSingle<PlayerInventory>();
+
+            subContainer.BindSignal<ItemPickupSignal>();
+            subContainer.BindTrigger<ItemPickupSignal.Trigger>();
 
             subContainer.Bind<PlayerStateMachine>().ToSingle();
         }
@@ -68,9 +75,9 @@ namespace MistRidge
 
         private void InstallSettings()
         {
+            Container.Bind<Player.Settings>().ToSingleInstance(settings.Player.Player);
             Container.Bind<PlayerController.Settings>().ToSingleInstance(settings.Player.Controller);
             Container.Bind<PlayerStateMachine.Settings>().ToSingleInstance(settings.Player.StateMachine);
-            Container.Bind<PlayerInternalManager.Settings>().ToSingleInstance(settings.Player.InternalManager);
 
             Container.Bind<PlayerIdleState.Settings>().ToSingleInstance(settings.Player.IdleState);
             Container.Bind<PlayerWalkState.Settings>().ToSingleInstance(settings.Player.WalkState);
@@ -93,10 +100,10 @@ namespace MistRidge
             public class PlayerSettings
             {
                 public GameObject Prefab;
+                public Player.Settings Player;
                 public CollisionSettings Collision;
                 public PlayerController.Settings Controller;
                 public PlayerStateMachine.Settings StateMachine;
-                public PlayerInternalManager.Settings InternalManager;
                 public PlayerIdleState.Settings IdleState;
                 public PlayerWalkState.Settings WalkState;
                 public PlayerJumpState.Settings JumpState;
