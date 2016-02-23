@@ -4,7 +4,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class TimeMachineView : MonoBehaviour
+    public class TimeMachineView : MonoView
     {
         public event Action GUI = delegate {};
 

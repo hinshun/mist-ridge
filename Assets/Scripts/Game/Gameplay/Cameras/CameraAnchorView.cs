@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace MistRidge
 {
-    public class CameraAnchorView : MonoBehaviour
+    public class CameraAnchorView : MonoView
     {
     }
 }

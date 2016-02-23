@@ -6,7 +6,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class PlayerView : MonoBehaviour
+    public class PlayerView : MonoView
     {
         public event Action DrawGizmos = delegate {};
 
@@ -27,42 +27,6 @@ namespace MistRidge
         public void Init(ItemPickupSignal.Trigger itemPickupTrigger)
         {
             this.itemPickupTrigger = itemPickupTrigger;
-        }
-
-        public Vector3 Position
-        {
-            get
-            {
-                return transform.position;
-            }
-            set
-            {
-                transform.position = value;
-            }
-        }
-
-        public Vector3 Up
-        {
-            get
-            {
-                return transform.up;
-            }
-        }
-
-        public Vector3 Down
-        {
-            get
-            {
-                return -Up;
-            }
-        }
-
-        public Vector3 Forward
-        {
-            get
-            {
-                return transform.forward;
-            }
         }
 
         public ReadOnlyCollection<Collider> Colliders

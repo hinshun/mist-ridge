@@ -4,18 +4,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class ChunkChildView : MonoBehaviour
+    public class ChunkChildView : MonoView
     {
-        public Transform Parent
-        {
-            get
-            {
-                return transform.parent;
-            }
-            set
-            {
-                transform.parent = value;
-            }
-        }
     }
 }

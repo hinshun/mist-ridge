@@ -3,7 +3,7 @@ using System;
 
 namespace MistRidge
 {
-    public class Collidable : MonoBehaviour
+    public class Collidable : MonoView
     {
         [SerializeField]
         private float standAngle = 80f;

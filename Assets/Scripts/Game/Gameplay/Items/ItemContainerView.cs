@@ -4,7 +4,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class ItemContainerView : MonoBehaviour
+    public class ItemContainerView : MonoView
     {
         [SerializeField]
         private ItemType itemType;

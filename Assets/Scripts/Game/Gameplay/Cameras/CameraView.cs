@@ -3,7 +3,7 @@ using UnityEngine;
 namespace MistRidge
 {
     [RequireComponent(typeof(Camera))]
-    public class CameraView : MonoBehaviour
+    public class CameraView : MonoView
     {
         new private Camera camera;
         private AudioListener audioListener;
@@ -13,18 +13,6 @@ namespace MistRidge
             get
             {
                 return camera;
-            }
-        }
-
-        public Vector3 LocalPosition
-        {
-            get
-            {
-                return transform.localPosition;
-            }
-            set
-            {
-                transform.localPosition = value;
             }
         }
 
