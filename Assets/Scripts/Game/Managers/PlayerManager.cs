@@ -7,8 +7,17 @@ namespace MistRidge
 {
     public class PlayerManager : IInitializable, ITickable
     {
+        private readonly SpawnManager spawnManager;
         private readonly PlayerFacade.Factory playerFacadeFactory;
         private Dictionary<Input, PlayerFacade> playerFacades;
+
+        public PlayerManager(
+                SpawnManager spawnManager,
+                PlayerFacade.Factory playerFacadeFactory)
+        {
+            this.spawnManager = spawnManager;
+            this.playerFacadeFactory = playerFacadeFactory;
+        }
 
         public List<Vector3> PlayerPositions
         {
@@ -22,11 +31,6 @@ namespace MistRidge
 
                 return playerPositions;
             }
-        }
-
-        public PlayerManager(PlayerFacade.Factory playerFacadeFactory)
-        {
-            this.playerFacadeFactory = playerFacadeFactory;
         }
 
         public void Initialize()
@@ -47,6 +51,8 @@ namespace MistRidge
             if (!playerFacades.ContainsKey(input))
             {
                 PlayerFacade playerFacade = playerFacadeFactory.Create(input);
+                playerFacade.Position = spawnManager.CurrentSpawn.SpawnPoint(input.DeviceNum);
+
                 playerFacades[input] = playerFacade;
             }
         }

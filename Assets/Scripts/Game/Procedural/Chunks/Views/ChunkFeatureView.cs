@@ -112,8 +112,8 @@ namespace MistRidge
             {
                 Gizmos.DrawWireMesh(
                     chunkReference.PlatformBaseMesh,
-                    transform.position + (transform.rotation * (scaledPosition + (Vector3.down * chunkReference.LocalScale.y))),
-                    transform.rotation,
+                    Position + (Rotation * (scaledPosition + (Down * chunkReference.LocalScale.y))),
+                    Rotation,
                     chunkReference.LocalScale
                 );
             }

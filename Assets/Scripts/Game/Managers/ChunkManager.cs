@@ -12,6 +12,8 @@ namespace MistRidge
         private readonly List<IChunkFeatureContainer> chunkFeatureContainers;
         private readonly IChunkFeatureContainerPickingStrategy chunkFeatureContainerPickingStrategy;
         private readonly ChunkFacadeFactory chunkFacadeFactory;
+        private readonly SpawnManager spawnManager;
+        private readonly Spawn.Factory spawnFactory;
 
         private ReadOnlyCollection<ChunkFacade> chunkFacades;
 
@@ -19,12 +21,16 @@ namespace MistRidge
                 Settings settings,
                 List<IChunkFeatureContainer> chunkFeatureContainers,
                 IChunkFeatureContainerPickingStrategy chunkFeatureContainerPickingStrategy,
-                ChunkFacadeFactory chunkFacadeFactory)
+                ChunkFacadeFactory chunkFacadeFactory,
+                SpawnManager spawnManager,
+                Spawn.Factory spawnFactory)
         {
             this.settings = settings;
             this.chunkFeatureContainers = chunkFeatureContainers;
             this.chunkFeatureContainerPickingStrategy = chunkFeatureContainerPickingStrategy;
             this.chunkFacadeFactory = chunkFacadeFactory;
+            this.spawnManager = spawnManager;
+            this.spawnFactory = spawnFactory;
         }
 
         public ChunkReference ChunkReference
@@ -55,7 +61,7 @@ namespace MistRidge
         {
             List<ChunkFacade> spawnedChunkFacades = new List<ChunkFacade>();
 
-            for (int chunkNum = 0; chunkNum < settings.chunkCount; ++chunkNum)
+            for (int chunkNum = settings.chunkCount - 1; chunkNum >= 0; --chunkNum)
             {
                 ChunkConfig chunkConfig = new ChunkConfig()
                 {
@@ -68,6 +74,10 @@ namespace MistRidge
             }
 
             chunkFacades = new ReadOnlyCollection<ChunkFacade>(spawnedChunkFacades);
+
+            Spawn spawn = spawnFactory.Create();
+            spawn.Position = chunkFacades[0].Position;
+            spawnManager.CurrentSpawn = spawn;
         }
 
         [Serializable]
