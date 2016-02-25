@@ -3,39 +3,11 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class StarItem : IItem
+    public class StarItem : ConsumableItem<StarItemEffect>
     {
-        private readonly StarItemEffect starItemEffect;
-
-        private int uses;
-
-        public StarItem(StarItemEffect starItemEffect)
+        public void Consume()
         {
-            this.starItemEffect = starItemEffect;
-        }
-
-        public void Initialize()
-        {
-            uses = starItemEffect.MaxUses;
-        }
-
-        public void Dispose()
-        {
-        }
-
-        public void Tick()
-        {
-        }
-
-        public void Use()
-        {
-            uses--;
             Debug.Log("Star item used");
-        }
-
-        public bool IsUsable()
-        {
-            return uses > 0;
         }
     }
 }
