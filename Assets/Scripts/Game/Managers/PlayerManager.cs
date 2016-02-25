@@ -26,6 +26,20 @@ namespace MistRidge
                 List<Vector3> playerPositions = new List<Vector3>();
                 foreach(PlayerFacade playerFacade in playerFacades.Values)
                 {
+                    playerPositions.Add(playerFacade.Position);
+                }
+
+                return playerPositions;
+            }
+        }
+
+        public List<Vector3> PlayerGroundingPositions
+        {
+            get
+            {
+                List<Vector3> playerPositions = new List<Vector3>();
+                foreach(PlayerFacade playerFacade in playerFacades.Values)
+                {
                     playerPositions.Add(playerFacade.GroundingPosition);
                 }
 
