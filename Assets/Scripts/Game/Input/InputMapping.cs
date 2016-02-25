@@ -9,5 +9,6 @@ namespace MistRidge
         public InControl.InputControl Submit;
         public InControl.InputControl Cancel;
         public InControl.InputControl Jump;
+        public InControl.InputControl UseItem;
     }
 }

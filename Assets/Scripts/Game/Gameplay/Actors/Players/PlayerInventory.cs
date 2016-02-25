@@ -6,34 +6,42 @@ namespace MistRidge
 {
     public class PlayerInventory : IInitializable, ITickable
     {
+        private readonly Input input;
         private readonly Player player;
+        private readonly PlayerView playerView;
         private readonly ItemManager itemManager;
         private readonly ItemPickupSignal itemPickupSignal;
 
         private Item itemHeld;
-        private bool itemUsed;
 
         public PlayerInventory(
+                Input input,
                 Player player,
+                PlayerView playerView,
                 ItemManager itemManager,
                 ItemPickupSignal itemPickupSignal)
         {
+            this.input = input;
             this.player = player;
+            this.playerView = playerView;
             this.itemManager = itemManager;
             this.itemPickupSignal = itemPickupSignal;
         }
 
         public void Initialize()
         {
-            itemUsed = false;
+            this.playerView.CanPickupItems = true;
             itemPickupSignal.Event += OnItemPickup;
         }
 
         public void Tick()
         {
-            if (itemHeld != null && itemUsed)
+            if (itemHeld != null)
             {
-                itemHeld.Tick();
+                if (input.Mapping.UseItem.WasPressed)
+                {
+                    UseItem();
+                }
             }
         }
 
@@ -46,7 +54,7 @@ namespace MistRidge
 
         private void HoldItem(Item item)
         {
-            itemUsed = false;
+            playerView.CanPickupItems = false;
             itemHeld = item;
         }
 
@@ -54,8 +62,8 @@ namespace MistRidge
         {
             if (itemHeld != null)
             {
-                itemHeld.Use(player);
-                itemUsed = true;
+                Debug.Log("Used: " + itemHeld.ItemType);
+                playerView.CanPickupItems = true;
             }
         }
     }

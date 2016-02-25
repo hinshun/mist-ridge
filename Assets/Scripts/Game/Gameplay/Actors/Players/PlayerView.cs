@@ -22,6 +22,7 @@ namespace MistRidge
         private MeshRenderer meshRenderer;
 
         private ReadOnlyCollection<Collider> readOnlyColliders;
+        private bool canPickupItems;
 
         [PostInject]
         public void Init(ItemPickupSignal.Trigger itemPickupTrigger)
@@ -53,10 +54,23 @@ namespace MistRidge
             }
         }
 
+        public bool CanPickupItems
+        {
+            get
+            {
+                return canPickupItems;
+            }
+            set
+            {
+                canPickupItems = value;
+            }
+        }
+
         public void OnDrawGizmos()
         {
             DrawGizmos();
         }
+
 
         public void OnItemPickup(ItemType itemType)
         {

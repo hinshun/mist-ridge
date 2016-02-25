@@ -3,7 +3,7 @@ using UnityEngine;
 namespace MistRidge
 {
     [CreateAssetMenu(menuName = "Items/Item")]
-    public class Item : ScriptableObject, ITickable
+    public class Item : ScriptableObject
     {
         [SerializeField]
         private ItemType itemType;
@@ -17,21 +17,6 @@ namespace MistRidge
             {
                 return itemType;
             }
-        }
-
-        public ItemEffect GetEffectInstance(Player player)
-        {
-            return itemEffect.GetFactory().Create(Player player);
-        }
-
-        public void Use(Player player)
-        {
-            itemEffect.Use(player);
-        }
-
-        public void Tick()
-        {
-            itemEffect.Tick();
         }
     }
 }

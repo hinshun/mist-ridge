@@ -28,7 +28,7 @@ namespace MistRidge
             {
                 if (item.ItemType == ItemType.Random)
                 {
-                    Debug.LogError("Item " + item.Name + " was not added because it is of type Random.");
+                    Debug.LogError("Item was not added because it is of type Random.");
                     continue;
                 }
 
@@ -38,7 +38,7 @@ namespace MistRidge
                 }
                 else
                 {
-                    Debug.LogError("Item " + item.Name + " was not added because it has a duplicated type of " + item.ItemType);
+                    Debug.LogError("Item " + item.ItemType + " was not added because it has a duplicated type.");
                     continue;
                 }
             }

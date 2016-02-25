@@ -43,6 +43,7 @@ namespace MistRidge
                 Submit = device.Action1,
                 Cancel = device.Action2,
                 Jump = device.Action1,
+                UseItem = device.LeftTrigger,
             };
         }
 
