@@ -20,18 +20,31 @@ namespace MistRidge
             Container.Bind<ItemManager>().ToSingle();
             Container.BindAllInterfacesToSingle<ItemManager>();
 
-            Container.Bind<IItemPickingStrategy>().ToSingle<RandomItemPickingStrategy>();
+            Container.Bind<IItemDropPickingStrategy>().ToSingle<RandomItemDropPickingStrategy>();
+
+            Container.Bind<IItemFactory>().ToSingle();
+
+            Container.Bind<SpeedItemEffect>().ToSingleInstance(settings.itemEffects.speedItemEffect);
+            Container.Bind<StarItemEffect>().ToSingleInstance(settings.itemEffects.starItemEffect);
         }
 
         private void InstallSettings()
         {
-            Container.Bind<ItemManager.Settings>().ToSingleInstance(settings.ItemManager);
+            Container.Bind<ItemManager.Settings>().ToSingleInstance(settings.itemManager);
         }
 
         [Serializable]
         public class Settings
         {
-            public ItemManager.Settings ItemManager;
+            public ItemManager.Settings itemManager;
+            public ItemEffectSettings itemEffects;
+
+            [Serializable]
+            public class ItemEffectSettings
+            {
+                public SpeedItemEffect speedItemEffect;
+                public StarItemEffect starItemEffect;
+            }
         }
     }
 }

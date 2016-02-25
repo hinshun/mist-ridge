@@ -57,7 +57,7 @@ namespace MistRidge
             pickupCollider.enabled = pickable;
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void OnTriggerStay(Collider other)
         {
             if (pickable && other.CompareTag("Player"))
             {

@@ -12,7 +12,7 @@ namespace MistRidge
         private readonly ItemManager itemManager;
         private readonly ItemPickupSignal itemPickupSignal;
 
-        private Item itemHeld;
+        private IItem item;
 
         public PlayerInventory(
                 Input input,
@@ -36,35 +36,31 @@ namespace MistRidge
 
         public void Tick()
         {
-            if (itemHeld != null)
+            if (item != null)
             {
                 if (input.Mapping.UseItem.WasPressed)
                 {
-                    UseItem();
+                    UseItem(item);
+
+                    if (!item.IsUsable())
+                    {
+                        item.Dispose();
+                        item = null;
+                    }
                 }
             }
         }
 
         private void OnItemPickup(ItemType itemType)
         {
-            Item item = itemManager.GetItem(itemType);
-            Debug.Log("Picked up: " + item.ItemType);
-            HoldItem(item);
-        }
-
-        private void HoldItem(Item item)
-        {
             playerView.CanPickupItems = false;
-            itemHeld = item;
+            item = itemManager.NewItem(itemType);
         }
 
-        private void UseItem()
+        private void UseItem(IItem item)
         {
-            if (itemHeld != null)
-            {
-                Debug.Log("Used: " + itemHeld.ItemType);
-                playerView.CanPickupItems = true;
-            }
+            item.Use();
+            playerView.CanPickupItems = true;
         }
     }
 }

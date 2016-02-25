@@ -8,56 +8,66 @@ namespace MistRidge
     public class ItemManager : IInitializable
     {
         private readonly Settings settings;
-        private readonly IItemPickingStrategy itemPickingStrategy;
+        private readonly IItemDropPickingStrategy itemDropPickingStrategy;
+        private readonly IItemFactory itemFactory;
 
-        private Dictionary<ItemType, Item> itemMapping;
+        private Dictionary<ItemType, ItemDrop> itemDropMapping;
 
         public ItemManager(
                 Settings settings,
-                IItemPickingStrategy itemPickingStrategy)
+                IItemDropPickingStrategy itemDropPickingStrategy,
+                IItemFactory itemFactory)
         {
             this.settings = settings;
-            this.itemPickingStrategy = itemPickingStrategy;
+            this.itemDropPickingStrategy = itemDropPickingStrategy;
+            this.itemFactory = itemFactory;
         }
 
         public void Initialize()
         {
-            itemMapping = new Dictionary<ItemType, Item>();
+            itemDropMapping = new Dictionary<ItemType, ItemDrop>();
 
-            foreach(Item item in settings.itemList.Items)
+            foreach(ItemDrop itemDrop in settings.itemDroplist.ItemDrops)
             {
-                if (item.ItemType == ItemType.Random)
+                if (itemDrop.ItemType == ItemType.Random)
                 {
-                    Debug.LogError("Item was not added because it is of type Random.");
+                    Debug.LogError("Item drop was not added because it is of type Random.");
                     continue;
                 }
 
-                if (!itemMapping.ContainsKey(item.ItemType))
+                if (!itemDropMapping.ContainsKey(itemDrop.ItemType))
                 {
-                    itemMapping[item.ItemType] = item;
+                    itemDropMapping[itemDrop.ItemType] = itemDrop;
                 }
                 else
                 {
-                    Debug.LogError("Item " + item.ItemType + " was not added because it has a duplicated type.");
+                    Debug.LogError("Item drop " + itemDrop.ItemType + " was not added because it has a duplicated type.");
                     continue;
                 }
             }
         }
 
-        public Item GetItem(ItemType itemType)
+        public IItem NewItem(ItemType itemType)
+        {
+            ItemDrop itemDrop = PickItemDrop(itemType);
+            Debug.Log("Picked up: " + itemDrop.ItemType);
+            return itemFactory.Create(itemDrop.ItemType);
+        }
+
+        private ItemDrop PickItemDrop(ItemType itemType)
         {
             if (itemType == ItemType.Random)
             {
-                return itemPickingStrategy.Pick(itemMapping);
+                return itemDropPickingStrategy.Pick(itemDropMapping);
             }
 
-            return itemMapping[itemType];
+            return itemDropMapping[itemType];
         }
 
         [Serializable]
         public class Settings
         {
-            public ItemList itemList;
+            public ItemDroplist itemDroplist;
         }
     }
 }
