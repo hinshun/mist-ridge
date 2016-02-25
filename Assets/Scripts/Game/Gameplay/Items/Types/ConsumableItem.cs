@@ -9,7 +9,7 @@ namespace MistRidge
         protected readonly TItemEffect itemEffect;
         protected int uses;
 
-        public ConsumableItem(ItemEffect itemEffect)
+        public ConsumableItem(TItemEffect itemEffect)
         {
             this.itemEffect = itemEffect;
         }
