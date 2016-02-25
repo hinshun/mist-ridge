@@ -34,7 +34,7 @@ namespace MistRidge
 
             planarMoveDirection = Vector3.MoveTowards(
                 planarMoveDirection,
-                stateMachine.LookDirection * settings.moveSpeed,
+                stateMachine.LookDirection * settings.moveSpeed * input.Mapping.Direction.Vector.magnitude,
                 settings.jumpAcceleration * playerController.DeltaTime
             );
 
