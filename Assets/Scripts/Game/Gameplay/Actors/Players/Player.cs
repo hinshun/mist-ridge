@@ -9,6 +9,7 @@ namespace MistRidge
         private readonly Settings settings;
         private readonly Input input;
         private readonly PlayerView playerView;
+        private readonly PlayerStateMachine playerStateMachine;
         private readonly PlayerPhysics playerPhysics;
 
         private float walkSpeed;
@@ -22,19 +23,41 @@ namespace MistRidge
             Settings settings,
             Input input,
             PlayerView playerView,
+            PlayerStateMachine playerStateMachine,
             PlayerPhysics playerPhysics)
         {
             this.settings = settings;
             this.input = input;
             this.playerView = playerView;
+            this.playerStateMachine = playerStateMachine;
             this.playerPhysics = playerPhysics;
+        }
+
+        public Vector3 LookDirection
+        {
+            get
+            {
+                return playerStateMachine.LookDirection;
+            }
+        }
+
+        public Vector3 MoveDirection
+        {
+            get
+            {
+                return playerStateMachine.MoveDirection;
+            }
+            set
+            {
+                playerStateMachine.MoveDirection = value;
+            }
         }
 
         public float WalkSpeed
         {
             get
             {
-                return walkSpeed * playerPhysics.WalkSpeed;
+                return walkSpeed;
             }
             set
             {
@@ -46,7 +69,7 @@ namespace MistRidge
         {
             get
             {
-                return walkAcceleration * playerPhysics.WalkAcceleration;
+                return walkAcceleration;
             }
             set
             {
@@ -58,7 +81,7 @@ namespace MistRidge
         {
             get
             {
-                return jumpSpeed * playerPhysics.JumpSpeed;
+                return jumpSpeed;
             }
             set
             {
@@ -70,7 +93,7 @@ namespace MistRidge
         {
             get
             {
-                return jumpHeight * playerPhysics.JumpHeight;
+                return jumpHeight;
             }
             set
             {
@@ -82,7 +105,7 @@ namespace MistRidge
         {
             get
             {
-                return jumpAcceleration * playerPhysics.JumpAcceleration;
+                return jumpAcceleration;
             }
             set
             {
@@ -91,6 +114,74 @@ namespace MistRidge
         }
 
         public float Gravity
+        {
+            get
+            {
+                return gravity;
+            }
+            set
+            {
+                gravity = value;
+            }
+        }
+
+        public float CurrentWalkSpeed
+        {
+            get
+            {
+                return walkSpeed * playerPhysics.WalkSpeed;
+            }
+        }
+
+        public float CurrentWalkAcceleration
+        {
+            get
+            {
+                return walkAcceleration * playerPhysics.WalkAcceleration;
+            }
+            set
+            {
+                walkAcceleration = value;
+            }
+        }
+
+        public float CurrentJumpSpeed
+        {
+            get
+            {
+                return jumpSpeed * playerPhysics.JumpSpeed;
+            }
+            set
+            {
+                jumpSpeed = value;
+            }
+        }
+
+        public float CurrentJumpHeight
+        {
+            get
+            {
+                return jumpHeight * playerPhysics.JumpHeight;
+            }
+            set
+            {
+                jumpHeight = value;
+            }
+        }
+
+        public float CurrentJumpAcceleration
+        {
+            get
+            {
+                return jumpAcceleration * playerPhysics.JumpAcceleration;
+            }
+            set
+            {
+                jumpAcceleration = value;
+            }
+        }
+
+        public float CurrentGravity
         {
             get
             {

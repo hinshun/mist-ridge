@@ -35,8 +35,8 @@ namespace MistRidge
             if (input.Mapping.Direction.Vector != Vector2.zero) {
                 stateMachine.MoveDirection = Vector3.MoveTowards(
                     stateMachine.MoveDirection,
-                    stateMachine.LookDirection * player.WalkSpeed * input.Mapping.Direction.Vector.magnitude,
-                    player.WalkAcceleration * playerController.DeltaTime
+                    stateMachine.LookDirection * player.CurrentWalkSpeed * input.Mapping.Direction.Vector.magnitude,
+                    player.CurrentWalkAcceleration * playerController.DeltaTime
                 );
             } else {
                 stateMachine.ChangeState(PlayerStateType.Idle);

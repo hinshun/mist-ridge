@@ -5,7 +5,8 @@ namespace MistRidge
 {
     public class SpeedItem : ConsumableItem<SpeedItemEffect>
     {
-        private bool active;
+        private float startTime;
+        private Vector3 moveDirection;
 
         public SpeedItem(
                 Player player,
@@ -14,19 +15,23 @@ namespace MistRidge
         {
         }
 
-        public override void Initialize()
-        {
-            base.Initialize();
-            active = false;
-        }
-
         public override void Tick()
         {
-            if (active)
+            startTime += Time.deltaTime;
+            player.MoveDirection += moveDirection * itemEffect.SpeedBoost * Time.deltaTime;
+
+            if (startTime > itemEffect.Duration)
             {
-                Debug.Log("Speed: " + player.WalkSpeed);
-                player.WalkSpeed = Mathf.Lerp(1f, 5f, Time.deltaTime);
+                Debug.Log("Marked disposed");
+                isActive = false;
+                isDisposable = true;
             }
+        }
+
+        public override void OnUse()
+        {
+            startTime = 0;
+            moveDirection = player.LookDirection;
         }
     }
 }

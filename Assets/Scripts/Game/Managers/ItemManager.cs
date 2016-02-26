@@ -51,9 +51,27 @@ namespace MistRidge
 
         public void Tick()
         {
+            List<IItem> itemsToDispose = new List<IItem>();
+
             foreach(IItem item in items)
             {
-                item.Tick();
+                if (item.IsDisposable())
+                {
+                    itemsToDispose.Add(item);
+                    continue;
+                }
+
+                if (item.IsActive())
+                {
+                    item.Tick();
+                }
+            }
+
+            foreach(IItem item in itemsToDispose)
+            {
+                Debug.Log("Disposed item");
+                item.Dispose();
+                items.Remove(item);
             }
         }
 

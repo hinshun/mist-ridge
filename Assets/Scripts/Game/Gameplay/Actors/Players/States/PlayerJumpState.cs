@@ -34,11 +34,11 @@ namespace MistRidge
 
             planarMoveDirection = Vector3.MoveTowards(
                 planarMoveDirection,
-                planarMoveDirection + (stateMachine.LookDirection * player.JumpSpeed * input.Mapping.Direction.Vector.magnitude),
-                player.JumpAcceleration * playerController.DeltaTime
+                planarMoveDirection + (stateMachine.LookDirection * player.CurrentJumpSpeed * input.Mapping.Direction.Vector.magnitude),
+                player.CurrentJumpAcceleration * playerController.DeltaTime
             );
 
-            verticalMoveDirection -= playerView.Up * player.Gravity * playerController.DeltaTime;
+            verticalMoveDirection -= playerView.Up * player.CurrentGravity * playerController.DeltaTime;
             stateMachine.MoveDirection = planarMoveDirection + verticalMoveDirection;
         }
 
@@ -47,7 +47,7 @@ namespace MistRidge
             playerController.IsClamping = false;
             playerController.IsSlopeLimiting = false;
 
-            stateMachine.MoveDirection += playerView.Up * SuperMath.CalculateJumpSpeed(player.JumpHeight, player.Gravity);
+            stateMachine.MoveDirection += playerView.Up * SuperMath.CalculateJumpSpeed(player.CurrentJumpHeight, player.CurrentGravity);
         }
 
         public override void ExitState()

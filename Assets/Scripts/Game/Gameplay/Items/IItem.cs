@@ -8,5 +8,9 @@ namespace MistRidge
         void Use();
 
         bool IsUsable();
+
+        bool IsActive();
+
+        bool IsDisposable();
     }
 }

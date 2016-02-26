@@ -9,8 +9,9 @@ namespace MistRidge
         protected readonly Player player;
         protected readonly TItemEffect itemEffect;
 
+        protected bool isActive;
+        protected bool isDisposable;
         protected int uses;
-        protected bool active;
 
         public ConsumableItem(
                 Player player,
@@ -22,6 +23,8 @@ namespace MistRidge
 
         public virtual void Initialize()
         {
+            isActive = false;
+            isDisposable = false;
             uses = itemEffect.MaxUses;
         }
 
@@ -38,12 +41,28 @@ namespace MistRidge
         public void Use()
         {
             uses--;
-            active = true;
+            isActive = true;
+            OnUse();
         }
 
         public bool IsUsable()
         {
             return uses > 0;
+        }
+
+        public virtual void OnUse()
+        {
+            // Do Nothing
+        }
+
+        public bool IsActive()
+        {
+            return isActive;
+        }
+
+        public bool IsDisposable()
+        {
+            return isDisposable;
         }
     }
 }

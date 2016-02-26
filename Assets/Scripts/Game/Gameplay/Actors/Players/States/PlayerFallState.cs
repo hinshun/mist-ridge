@@ -28,7 +28,7 @@ namespace MistRidge
                 return;
             }
 
-            stateMachine.MoveDirection -= playerView.Up * player.Gravity * playerController.DeltaTime;
+            stateMachine.MoveDirection -= playerView.Up * player.CurrentGravity * playerController.DeltaTime;
         }
 
         public override void EnterState()
