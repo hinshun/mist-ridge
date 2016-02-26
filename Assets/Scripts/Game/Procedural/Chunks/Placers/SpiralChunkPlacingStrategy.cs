@@ -45,10 +45,10 @@ namespace MistRidge
                 side = 5;
             }
 
-            side = (side + 5) % 6;
+            side = (side + 4) % 6;
 
             chunkView.Rotation *= Quaternion.AngleAxis(
-                -(side * 60),
+                side * 60,
                 chunkView.Up
             );
         }
@@ -62,22 +62,22 @@ namespace MistRidge
             switch (side)
             {
                 case 0:
-                    chunkView.Position = Position(chunkConfig, chunkReference.Northwest, chunkReference.Northeast, sideChunkNum, depth);
+                    chunkView.Position = Position(chunkConfig, chunkReference.Northeast, chunkReference.Northwest, sideChunkNum, depth);
                     return;
                 case 1:
-                    chunkView.Position = Position(chunkConfig, chunkReference.West, chunkReference.Northwest, sideChunkNum, depth);
+                    chunkView.Position = Position(chunkConfig, chunkReference.East, chunkReference.Northeast, sideChunkNum, depth);
                     return;
                 case 2:
-                    chunkView.Position = Position(chunkConfig, chunkReference.Southwest, chunkReference.West, sideChunkNum, depth);
+                    chunkView.Position = Position(chunkConfig, chunkReference.Southeast, chunkReference.East, sideChunkNum, depth);
                     return;
                 case 3:
-                    chunkView.Position = Position(chunkConfig, chunkReference.Southeast, chunkReference.Southwest, sideChunkNum, depth);
+                    chunkView.Position = Position(chunkConfig, chunkReference.Southwest, chunkReference.Southeast, sideChunkNum, depth);
                     return;
                 case 4:
-                    chunkView.Position = Position(chunkConfig, chunkReference.East, chunkReference.Southeast, sideChunkNum, depth);
+                    chunkView.Position = Position(chunkConfig, chunkReference.West, chunkReference.Southwest, sideChunkNum, depth);
                     return;
                 case 5:
-                    chunkView.Position = Position(chunkConfig, chunkReference.Northeast, chunkReference.East, sideChunkNum, depth);
+                    chunkView.Position = Position(chunkConfig, chunkReference.Northwest, chunkReference.West, sideChunkNum, depth);
                     return;
             }
 
