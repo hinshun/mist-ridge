@@ -5,14 +5,28 @@ namespace MistRidge
 {
     public class SpeedItem : ConsumableItem<SpeedItemEffect>
     {
-        public SpeedItem(SpeedItemEffect itemEffect)
-            : base(itemEffect)
+        private bool active;
+
+        public SpeedItem(
+                Player player,
+                SpeedItemEffect itemEffect)
+            : base(player, itemEffect)
         {
         }
 
-        public override void Consume()
+        public override void Initialize()
         {
-            Debug.Log("Speed item used");
+            base.Initialize();
+            active = false;
+        }
+
+        public override void Tick()
+        {
+            if (active)
+            {
+                Debug.Log("Speed: " + player.WalkSpeed);
+                player.WalkSpeed = Mathf.Lerp(1f, 5f, Time.deltaTime);
+            }
         }
     }
 }

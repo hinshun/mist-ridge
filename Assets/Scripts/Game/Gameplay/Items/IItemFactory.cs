@@ -14,17 +14,29 @@ namespace MistRidge
 
         public IItem Create(ItemType itemType, params object[] constructorArgs)
         {
+            IItem item = null;
+
             switch (itemType)
             {
                 case ItemType.Star:
-                    return container.Instantiate<StarItem>(constructorArgs);
+                    item = container.Instantiate<StarItem>(constructorArgs);
+                    break;
 
                 case ItemType.Speed:
-                    return container.Instantiate<SpeedItem>(constructorArgs);
+                    item = container.Instantiate<SpeedItem>(constructorArgs);
+                    break;
             }
 
-            Debug.LogError("Failed to create valid IItem");
-            return null;
+            if (item == null)
+            {
+                Debug.LogError("Failed to create valid IItem");
+            }
+            else
+            {
+                item.Initialize();
+            }
+
+            return item;
         }
     }
 }

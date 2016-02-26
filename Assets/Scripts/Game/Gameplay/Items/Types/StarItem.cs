@@ -5,14 +5,11 @@ namespace MistRidge
 {
     public class StarItem : ConsumableItem<StarItemEffect>
     {
-        public StarItem(StarItemEffect itemEffect)
-            : base(itemEffect)
+        public StarItem(
+                Player player,
+                StarItemEffect itemEffect)
+            : base(player, itemEffect)
         {
-        }
-
-        public override void Consume()
-        {
-            Debug.Log("Star item used");
         }
     }
 }

@@ -6,17 +6,21 @@ namespace MistRidge
     public abstract class ConsumableItem<TItemEffect> : IItem
         where TItemEffect : ItemEffect
     {
+        protected readonly Player player;
         protected readonly TItemEffect itemEffect;
-        protected int uses;
 
-        public ConsumableItem(TItemEffect itemEffect)
+        protected int uses;
+        protected bool active;
+
+        public ConsumableItem(
+                Player player,
+                TItemEffect itemEffect)
         {
+            this.player = player;
             this.itemEffect = itemEffect;
         }
 
-        public abstract void Consume();
-
-        public void Initialize()
+        public virtual void Initialize()
         {
             uses = itemEffect.MaxUses;
         }
@@ -34,7 +38,7 @@ namespace MistRidge
         public void Use()
         {
             uses--;
-            Consume();
+            active = true;
         }
 
         public bool IsUsable()

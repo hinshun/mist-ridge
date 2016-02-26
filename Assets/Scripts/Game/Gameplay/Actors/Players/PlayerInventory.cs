@@ -38,15 +38,9 @@ namespace MistRidge
         {
             if (item != null)
             {
-                if (input.Mapping.UseItem.WasPressed)
+                if (input.Mapping.UseItem.WasPressed && item.IsUsable())
                 {
-                    UseItem(item);
-
-                    if (!item.IsUsable())
-                    {
-                        item.Dispose();
-                        item = null;
-                    }
+                    item.Use();
                 }
             }
         }
@@ -54,13 +48,7 @@ namespace MistRidge
         private void OnItemPickup(ItemType itemType)
         {
             playerView.CanPickupItems = false;
-            item = itemManager.NewItem(itemType);
-        }
-
-        private void UseItem(IItem item)
-        {
-            item.Use();
-            playerView.CanPickupItems = true;
+            item = itemManager.NewItem(itemType, player);
         }
     }
 }

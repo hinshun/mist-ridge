@@ -5,12 +5,13 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class ItemManager : IInitializable
+    public class ItemManager : IInitializable, ITickable
     {
         private readonly Settings settings;
         private readonly IItemDropPickingStrategy itemDropPickingStrategy;
         private readonly IItemFactory itemFactory;
 
+        private List<IItem> items;
         private Dictionary<ItemType, ItemDrop> itemDropMapping;
 
         public ItemManager(
@@ -25,6 +26,7 @@ namespace MistRidge
 
         public void Initialize()
         {
+            items = new List<IItem>();
             itemDropMapping = new Dictionary<ItemType, ItemDrop>();
 
             foreach(ItemDrop itemDrop in settings.itemDroplist.ItemDrops)
@@ -47,11 +49,22 @@ namespace MistRidge
             }
         }
 
-        public IItem NewItem(ItemType itemType)
+        public void Tick()
+        {
+            foreach(IItem item in items)
+            {
+                item.Tick();
+            }
+        }
+
+        public IItem NewItem(ItemType itemType, Player player)
         {
             ItemDrop itemDrop = PickItemDrop(itemType);
             Debug.Log("Picked up: " + itemDrop.ItemType);
-            return itemFactory.Create(itemDrop.ItemType);
+
+            IItem item = itemFactory.Create(itemDrop.ItemType, player);
+            items.Add(item);
+            return item;
         }
 
         private ItemDrop PickItemDrop(ItemType itemType)
