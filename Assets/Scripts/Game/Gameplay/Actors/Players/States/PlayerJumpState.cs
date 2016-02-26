@@ -6,17 +6,17 @@ namespace MistRidge
 {
     public class PlayerJumpState : PlayerBaseState
     {
-        private readonly Settings settings;
+        private readonly Player player;
 
         public PlayerJumpState(
-                Settings settings,
                 Input input,
-                PlayerStateMachine stateMachine,
+                Player player,
                 PlayerView playerView,
+                PlayerStateMachine stateMachine,
                 PlayerController playerController)
             : base(input, stateMachine, playerView, playerController)
         {
-            this.settings = settings;
+            this.player = player;
             stateType = PlayerStateType.Jump;
         }
 
@@ -34,11 +34,11 @@ namespace MistRidge
 
             planarMoveDirection = Vector3.MoveTowards(
                 planarMoveDirection,
-                stateMachine.LookDirection * settings.moveSpeed * input.Mapping.Direction.Vector.magnitude,
-                settings.jumpAcceleration * playerController.DeltaTime
+                planarMoveDirection + (stateMachine.LookDirection * player.JumpSpeed * input.Mapping.Direction.Vector.magnitude),
+                player.JumpAcceleration * playerController.DeltaTime
             );
 
-            verticalMoveDirection -= playerView.Up * settings.gravity * playerController.DeltaTime;
+            verticalMoveDirection -= playerView.Up * player.Gravity * playerController.DeltaTime;
             stateMachine.MoveDirection = planarMoveDirection + verticalMoveDirection;
         }
 
@@ -47,21 +47,12 @@ namespace MistRidge
             playerController.IsClamping = false;
             playerController.IsSlopeLimiting = false;
 
-            stateMachine.MoveDirection += playerView.Up * SuperMath.CalculateJumpSpeed(settings.jumpHeight, settings.gravity);
+            stateMachine.MoveDirection += playerView.Up * SuperMath.CalculateJumpSpeed(player.JumpHeight, player.Gravity);
         }
 
         public override void ExitState()
         {
             // Do Nothing
-        }
-
-        [Serializable]
-        public class Settings
-        {
-            public float moveSpeed;
-            public float jumpHeight;
-            public float jumpAcceleration;
-            public float gravity;
         }
     }
 }

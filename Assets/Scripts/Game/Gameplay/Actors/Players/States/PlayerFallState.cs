@@ -6,17 +6,17 @@ namespace MistRidge
 {
     public class PlayerFallState : PlayerBaseState
     {
-        private readonly Settings settings;
+        private readonly Player player;
 
         public PlayerFallState(
-                Settings settings,
                 Input input,
+                Player player,
                 PlayerStateMachine stateMachine,
                 PlayerView playerView,
                 PlayerController playerController)
             : base(input, stateMachine, playerView, playerController)
         {
-            this.settings = settings;
+            this.player = player;
             stateType = PlayerStateType.Fall;
         }
 
@@ -28,7 +28,7 @@ namespace MistRidge
                 return;
             }
 
-            stateMachine.MoveDirection -= playerView.Up * settings.gravity * playerController.DeltaTime;
+            stateMachine.MoveDirection -= playerView.Up * player.Gravity * playerController.DeltaTime;
         }
 
         public override void EnterState()
@@ -40,12 +40,6 @@ namespace MistRidge
         public override void ExitState()
         {
             // Do Nothing
-        }
-
-        [Serializable]
-        public class Settings
-        {
-            public float gravity;
         }
     }
 }

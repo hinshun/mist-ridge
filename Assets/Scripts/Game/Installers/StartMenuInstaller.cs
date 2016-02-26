@@ -23,13 +23,13 @@ namespace MistRidge
 
         private void InstallSettings()
         {
-            Container.Bind<StartMenuManager.Settings>().ToSingleInstance(settings.StartMenu);
+            Container.Bind<StartMenuManager.Settings>().ToSingleInstance(settings.startMenuSettings);
         }
 
         [Serializable]
         public class Settings
         {
-            public StartMenuManager.Settings StartMenu;
+            public StartMenuManager.Settings startMenuSettings;
         }
     }
 }

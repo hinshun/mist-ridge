@@ -6,17 +6,17 @@ namespace MistRidge
 {
     public class PlayerWalkState : PlayerBaseState
     {
-        private readonly Settings settings;
+        private readonly Player player;
 
         public PlayerWalkState(
-                Settings settings,
                 Input input,
-                PlayerStateMachine stateMachine,
+                Player player,
                 PlayerView playerView,
+                PlayerStateMachine stateMachine,
                 PlayerController playerController)
             : base(input, stateMachine, playerView, playerController)
         {
-            this.settings = settings;
+            this.player = player;
             stateType = PlayerStateType.Walk;
         }
 
@@ -35,8 +35,8 @@ namespace MistRidge
             if (input.Mapping.Direction.Vector != Vector2.zero) {
                 stateMachine.MoveDirection = Vector3.MoveTowards(
                     stateMachine.MoveDirection,
-                    stateMachine.LookDirection * settings.walkSpeed * input.Mapping.Direction.Vector.magnitude,
-                    settings.walkAcceleration * playerController.DeltaTime
+                    stateMachine.LookDirection * player.WalkSpeed * input.Mapping.Direction.Vector.magnitude,
+                    player.WalkAcceleration * playerController.DeltaTime
                 );
             } else {
                 stateMachine.ChangeState(PlayerStateType.Idle);
@@ -51,13 +51,6 @@ namespace MistRidge
         public override void ExitState()
         {
             // Do Nothing
-        }
-
-        [Serializable]
-        public class Settings
-        {
-            public float walkSpeed;
-            public float walkAcceleration;
         }
     }
 }

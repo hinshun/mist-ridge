@@ -36,16 +36,16 @@ namespace MistRidge
 
         public PlayerController(
                 Settings settings,
+                Grounding grounding,
                 PlayerView playerView,
                 Collidable defaultCollidable,
-                CollisionSphere.Factory collisionSphereFactory,
-                Grounding grounding)
+                CollisionSphere.Factory collisionSphereFactory)
         {
             this.settings = settings;
+            this.grounding = grounding;
             this.playerView = playerView;
             this.defaultCollidable = defaultCollidable;
             this.collisionSphereFactory = collisionSphereFactory;
-            this.grounding = grounding;
         }
 
         public float DeltaTime

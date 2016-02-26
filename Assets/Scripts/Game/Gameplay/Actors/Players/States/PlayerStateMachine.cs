@@ -9,6 +9,7 @@ namespace MistRidge
         private readonly Settings settings;
         private readonly Input input;
         private readonly Camera camera;
+        private readonly Grounding grounding;
         private readonly PlayerView playerView;
         private readonly PlayerController playerController;
 
@@ -19,6 +20,7 @@ namespace MistRidge
                 Settings settings,
                 Input input,
                 Camera camera,
+                Grounding grounding,
                 PlayerView playerView,
                 PlayerController playerController,
                 PlayerStateFactory stateFactory)
@@ -27,6 +29,7 @@ namespace MistRidge
             this.settings = settings;
             this.input = input;
             this.camera = camera;
+            this.grounding = grounding;
             this.playerView = playerView;
             this.playerController = playerController;
             this.playerController.playerStateMachine = this;
@@ -57,11 +60,6 @@ namespace MistRidge
         {
             ChangeState(PlayerStateType.Idle);
             lookDirection = playerView.Forward;
-        }
-
-        public void ChangeState(PlayerStateType stateType)
-        {
-            ChangeState(stateType, input, this, playerView, playerController);
         }
 
         protected override void EarlyGlobalUpdate() {
@@ -99,8 +97,23 @@ namespace MistRidge
         }
 
         protected override void LateGlobalUpdate() {
+            ApplyFriction();
+
             playerView.Position += moveDirection * playerController.DeltaTime;
             playerView.MeshTransform.rotation = Quaternion.LookRotation(lookDirection, playerView.Up);
+        }
+
+        private void ApplyFriction()
+        {
+            if (playerController.MaintainingGround() && grounding.Collidable != null)
+            {
+                float friction = grounding.Collidable.Friction;
+                moveDirection = Vector3.MoveTowards(
+                    moveDirection,
+                    Vector3.zero,
+                    friction * playerController.DeltaTime
+                );
+            }
         }
 
         [Serializable]

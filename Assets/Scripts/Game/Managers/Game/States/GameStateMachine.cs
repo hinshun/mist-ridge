@@ -18,11 +18,6 @@ namespace MistRidge
             ChangeState(GameStateType.Start);
         }
 
-        public void ChangeState(GameStateType stateType)
-        {
-            ChangeState(stateType, this);
-        }
-
         protected override void EarlyGlobalUpdate() {
             // Do Nothing
         }

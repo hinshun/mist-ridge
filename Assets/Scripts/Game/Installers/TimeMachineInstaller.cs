@@ -17,21 +17,21 @@ namespace MistRidge
 
         private void InstallTimeMachine()
         {
-            Container.Bind<TimeMachineView>().ToSinglePrefab(settings.Prefab);
+            Container.Bind<TimeMachineView>().ToSinglePrefab(settings.timeMachinePrefab);
             Container.BindAllInterfacesToSingle<TimeMachine>();
         }
 
         private void InstallSettings()
         {
 
-            Container.Bind<TimeMachine.Settings>().ToSingleInstance(settings.TimeMachine);
+            Container.Bind<TimeMachine.Settings>().ToSingleInstance(settings.timeMachineSettings);
         }
 
         [Serializable]
         public class Settings
         {
-            public GameObject Prefab;
-            public TimeMachine.Settings TimeMachine;
+            public GameObject timeMachinePrefab;
+            public TimeMachine.Settings timeMachineSettings;
         }
     }
 }

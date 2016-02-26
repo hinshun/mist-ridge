@@ -16,5 +16,5 @@ public abstract class StateFactory<TStateMachine, TState, TStateType, TStateFact
         this.container = container;
     }
 
-    public abstract TState Create(TStateType stateType, params object[] constructorArgs);
+    public abstract TState Create(TStateType stateType);
 }

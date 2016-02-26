@@ -9,21 +9,21 @@ namespace MistRidge
         public PlayerStateFactory(DiContainer container)
             : base(container) {}
 
-        public override PlayerBaseState Create(PlayerStateType stateType, params object[] constructorArgs)
+        public override PlayerBaseState Create(PlayerStateType stateType)
         {
             switch (stateType)
             {
                 case PlayerStateType.Idle:
-                    return container.Instantiate<PlayerIdleState>(constructorArgs);
+                    return container.Instantiate<PlayerIdleState>();
 
                 case PlayerStateType.Walk:
-                    return container.Instantiate<PlayerWalkState>(constructorArgs);
+                    return container.Instantiate<PlayerWalkState>();
 
                 case PlayerStateType.Jump:
-                    return container.Instantiate<PlayerJumpState>(constructorArgs);
+                    return container.Instantiate<PlayerJumpState>();
 
                 case PlayerStateType.Fall:
-                    return container.Instantiate<PlayerFallState>(constructorArgs);
+                    return container.Instantiate<PlayerFallState>();
             }
 
             Debug.LogError("Failed to create valid player state");

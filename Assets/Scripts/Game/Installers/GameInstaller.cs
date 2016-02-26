@@ -52,7 +52,7 @@ namespace MistRidge
 
         private void InstallInput()
         {
-            Container.Bind<InControl.InControlManager>().ToSinglePrefab(settings.InControlManagerPrefab);
+            Container.Bind<InControl.InControlManager>().ToSinglePrefab(settings.inControlManagerPrefab);
 
             Container.Bind<InputManager>().ToSingle();
             Container.BindAllInterfacesToSingle<InputManager>();
@@ -63,7 +63,7 @@ namespace MistRidge
         private void InstallUtility()
         {
             Container.Bind<SceneLoader>().ToSingle();
-            Container.Bind<UnityFixGI>().ToSinglePrefab(settings.UnityFixGIPrefab);
+            Container.Bind<UnityFixGI>().ToSinglePrefab(settings.unityFixGIPrefab);
 
             Container.Bind<Generator>().ToSingle();
             Container.BindAllInterfacesToSingle<Generator>();
@@ -71,17 +71,17 @@ namespace MistRidge
 
         private void InstallSettings()
         {
-            Container.Bind<SceneLoader.Settings>().ToSingleInstance(settings.SceneLoader);
-            Container.Bind<Generator.Settings>().ToSingleInstance(settings.Generator);
+            Container.Bind<Generator.Settings>().ToSingleInstance(settings.generatorSettings);
+            Container.Bind<SceneLoader.Settings>().ToSingleInstance(settings.sceneLoaderSettings);
         }
 
         [Serializable]
         public class Settings
         {
-            public SceneLoader.Settings SceneLoader;
-            public Generator.Settings Generator;
-            public GameObject InControlManagerPrefab;
-            public GameObject UnityFixGIPrefab;
+            public GameObject inControlManagerPrefab;
+            public GameObject unityFixGIPrefab;
+            public Generator.Settings generatorSettings;
+            public SceneLoader.Settings sceneLoaderSettings;
         }
     }
 }

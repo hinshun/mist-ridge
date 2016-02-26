@@ -21,7 +21,7 @@ public abstract class StateMachine<TStateMachine, TState, TStateType, TStateFact
         this.stateFactory = stateFactory;
     }
 
-    public void ChangeState(TStateType stateType, params object[] constructorArgs)
+    public void ChangeState(TStateType stateType)
     {
         ChangingState();
         if (state != null)
@@ -29,7 +29,7 @@ public abstract class StateMachine<TStateMachine, TState, TStateType, TStateFact
             state.ExitState();
         }
 
-        state = stateFactory.Create(stateType, constructorArgs);
+        state = stateFactory.Create(stateType);
         state.EnterState();
     }
 

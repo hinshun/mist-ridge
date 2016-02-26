@@ -11,6 +11,9 @@ namespace MistRidge
         [SerializeField]
         private float slopeLimit = 80f;
 
+        [SerializeField]
+        private float friction = 10f;
+
         public float StandAngle
         {
             get
@@ -24,6 +27,14 @@ namespace MistRidge
             get
             {
                 return slopeLimit;
+            }
+        }
+
+        public float Friction
+        {
+            get
+            {
+                return friction;
             }
         }
     }

@@ -32,7 +32,7 @@ namespace MistRidge
 
         private void InstallChunks()
         {
-            foreach(Biome biome in settings.Chunk.biomes)
+            foreach(Biome biome in settings.chunk.biomes)
             {
                 Container.Bind<IChunkFeatureContainer>().ToInstance(biome);
             }
@@ -41,7 +41,7 @@ namespace MistRidge
             Container.Bind<IChunkFeaturePickingStrategy>().ToSingle<RandomChunkFeaturePickingStrategy>();
             Container.Bind<IChunkPlacingStrategy>().ToSingle<SpiralChunkPlacingStrategy>();
 
-            Container.BindGameObjectFactory<PlatformView.Factory>(settings.Chunk.PlatformPrefab);
+            Container.BindGameObjectFactory<PlatformView.Factory>(settings.chunk.platformPrefab);
 
             Container.Bind<ChunkManager>().ToSingle();
             Container.BindAllInterfacesToSingle<ChunkManager>();
@@ -53,8 +53,8 @@ namespace MistRidge
         {
             subContainer.BindInstance(chunkConfig);
 
-            subContainer.Bind<ChunkView>().ToSinglePrefab(settings.Chunk.ChunkPrefab);
-            subContainer.Bind<ChunkBaseView>().ToSinglePrefab(settings.Chunk.ChunkBasePrefab);
+            subContainer.Bind<ChunkView>().ToSinglePrefab(settings.chunk.chunkPrefab);
+            subContainer.Bind<ChunkBaseView>().ToSinglePrefab(settings.chunk.chunkBasePrefab);
 
             subContainer.Bind<Chunk>().ToSingle();
             subContainer.BindAllInterfacesToSingle<Chunk>();
@@ -65,24 +65,24 @@ namespace MistRidge
 
         private void InstallSettings()
         {
-            Container.Bind<ChunkManager.Settings>().ToSingleInstance(settings.Chunk.ChunkManager);
-            Container.Bind<Checkpoint.Settings>().ToSingleInstance(settings.Checkpoint);
+            Container.Bind<Checkpoint.Settings>().ToSingleInstance(settings.checkpointSettings);
+            Container.Bind<ChunkManager.Settings>().ToSingleInstance(settings.chunk.chunkManagerSettings);
         }
 
         [Serializable]
         public class Settings
         {
-            public ChunkSettings Chunk;
-            public Checkpoint.Settings Checkpoint;
+            public ChunkSettings chunk;
+            public Checkpoint.Settings checkpointSettings;
 
             [Serializable]
             public class ChunkSettings
             {
-                public GameObject ChunkPrefab;
-                public GameObject ChunkBasePrefab;
-                public GameObject PlatformPrefab;
-                public ChunkManager.Settings ChunkManager;
+                public GameObject chunkPrefab;
+                public GameObject chunkBasePrefab;
+                public GameObject platformPrefab;
                 public List<Biome> biomes;
+                public ChunkManager.Settings chunkManagerSettings;
             }
         }
     }

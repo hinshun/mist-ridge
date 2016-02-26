@@ -30,14 +30,14 @@ namespace MistRidge
 
         private void InstallSettings()
         {
-            Container.Bind<ItemManager.Settings>().ToSingleInstance(settings.itemManager);
+            Container.Bind<ItemManager.Settings>().ToSingleInstance(settings.itemManagerSettings);
         }
 
         [Serializable]
         public class Settings
         {
-            public ItemManager.Settings itemManager;
             public ItemEffectSettings itemEffects;
+            public ItemManager.Settings itemManagerSettings;
 
             [Serializable]
             public class ItemEffectSettings
