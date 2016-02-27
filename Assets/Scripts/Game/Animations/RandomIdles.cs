@@ -38,7 +38,7 @@ namespace MistRidge
         }
 
         override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-            Array idleStates = Enum.GetValues(typeof(IdleState));
+            idleStates = Enum.GetValues(typeof(IdleState));
             random = new System.Random();
 
             timer = Time.time;
