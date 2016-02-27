@@ -26,6 +26,7 @@ namespace MistRidge
         public void Initialize()
         {
             this.random = new System.Random(settings.seed);
+            UnityEngine.Random.seed = settings.seed;
         }
 
         [Serializable]

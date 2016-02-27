@@ -10,8 +10,6 @@ namespace MistRidge
     {
         public event Action DrawGizmos = delegate {};
 
-        private ItemPickupSignal.Trigger itemPickupTrigger;
-
         [SerializeField]
         private List<Collider> colliders;
 
@@ -21,8 +19,10 @@ namespace MistRidge
         [SerializeField]
         private MeshRenderer meshRenderer;
 
-        private ReadOnlyCollection<Collider> readOnlyColliders;
         private bool canPickupItems;
+        private Animator animator;
+        private ItemPickupSignal.Trigger itemPickupTrigger;
+        private ReadOnlyCollection<Collider> readOnlyColliders;
 
         [PostInject]
         public void Init(ItemPickupSignal.Trigger itemPickupTrigger)
@@ -35,6 +35,14 @@ namespace MistRidge
             get
             {
                 return readOnlyColliders;
+            }
+        }
+
+        public Animator Animator
+        {
+            get
+            {
+                return animator;
             }
         }
 
@@ -79,6 +87,7 @@ namespace MistRidge
 
         private void Awake()
         {
+            animator = GetComponent<Animator>();
             readOnlyColliders = new ReadOnlyCollection<Collider>(colliders);
         }
     }

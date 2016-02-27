@@ -32,13 +32,18 @@ namespace MistRidge
                 return;
             }
 
-            if (input.Mapping.Direction.Vector != Vector2.zero) {
+            if (input.Mapping.Direction.Vector != Vector2.zero)
+            {
+                playerView.Animator.SetFloat("Walk Blend", input.Mapping.Direction.Vector.magnitude);
+
                 stateMachine.MoveDirection = Vector3.MoveTowards(
                     stateMachine.MoveDirection,
                     stateMachine.LookDirection * player.CurrentWalkSpeed * input.Mapping.Direction.Vector.magnitude,
                     player.CurrentWalkAcceleration * playerController.DeltaTime
                 );
-            } else {
+            }
+            else
+            {
                 stateMachine.ChangeState(PlayerStateType.Idle);
             }
         }
@@ -50,7 +55,7 @@ namespace MistRidge
 
         public override void ExitState()
         {
-            // Do Nothing
+            playerView.Animator.SetFloat("Walk Blend", 0);
         }
     }
 }
