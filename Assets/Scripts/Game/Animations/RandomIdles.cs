@@ -27,11 +27,11 @@ namespace MistRidge
                 switch (idleState)
                 {
                     case IdleState.Bored:
-                        animator.SetTrigger("BeBored");
+                        animator.SetTrigger("Enter Bored");
                         break;
 
                     case IdleState.Bashful:
-                        animator.SetTrigger("BeBashful");
+                        animator.SetTrigger("Enter Bashful");
                         break;
                 }
             }
