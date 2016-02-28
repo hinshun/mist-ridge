@@ -7,10 +7,30 @@ namespace MistRidge
     public class ChunkFacade : Facade
     {
         private readonly ChunkView chunkView;
+        private readonly ChunkFeatureView chunkFeatureView;
 
-        public ChunkFacade(ChunkView chunkView)
+        public ChunkFacade(
+                ChunkView chunkView,
+                ChunkFeatureView chunkFeatureView)
         {
             this.chunkView = chunkView;
+            this.chunkFeatureView = chunkFeatureView;
+        }
+
+        public ChunkView ChunkView
+        {
+            get
+            {
+                return chunkView;
+            }
+        }
+
+        public ChunkFeatureView ChunkFeatureView
+        {
+            get
+            {
+                return chunkFeatureView;
+            }
         }
 
         public Vector3 Position

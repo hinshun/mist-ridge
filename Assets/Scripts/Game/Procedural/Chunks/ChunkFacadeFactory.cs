@@ -7,10 +7,14 @@ namespace MistRidge
 {
     public class ChunkFacadeFactory : FacadeFactory<ChunkConfig, ChunkFacade>
     {
+        private readonly Bounds.Settings boundsSettings;
         private readonly IChunkFeaturePickingStrategy chunkFeaturePickingStrategy;
 
-        public ChunkFacadeFactory(IChunkFeaturePickingStrategy chunkFeaturePickingStrategy)
+        public ChunkFacadeFactory(
+                Bounds.Settings boundsSettings,
+                IChunkFeaturePickingStrategy chunkFeaturePickingStrategy)
         {
+            this.boundsSettings = boundsSettings;
             this.chunkFeaturePickingStrategy = chunkFeaturePickingStrategy;
         }
 
@@ -19,17 +23,20 @@ namespace MistRidge
             DiContainer subContainer = CreateSubContainer(chunkConfig);
 
             ChunkFeature chunkFeature = chunkFeaturePickingStrategy.Pick(chunkConfig.chunkFeatureContainer);
+
             GameObject prefab = chunkFeature.ChunkFeatureView.gameObject;
-
-            foreach(MeshRenderer meshRenderer in prefab.GetComponentsInChildren<MeshRenderer>())
-            {
-                meshRenderer.enabled = false;
-            }
-
             subContainer.Bind<ChunkFeatureView>().ToSinglePrefab(prefab);
 
             ChunkFacade chunkFacade = subContainer.Resolve<ChunkFacade>();
             chunkFacade.Initialize();
+
+            if (boundsSettings.enabled)
+            {
+                foreach(MeshRenderer meshRenderer in chunkFacade.ChunkFeatureView.GetComponentsInChildren<MeshRenderer>())
+                {
+                    meshRenderer.enabled = false;
+                }
+            }
 
             return chunkFacade;
         }

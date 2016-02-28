@@ -1,36 +1,27 @@
 using UnityEngine;
 using System;
+using Zenject;
 
 namespace MistRidge
 {
     public class BoundsView : MonoView
     {
+        private CollisionSignal.Trigger collisionTrigger;
+
+        [PostInject]
+        public void Init(CollisionSignal.Trigger collisionTrigger)
+        {
+            this.collisionTrigger = collisionTrigger;
+        }
+
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log("entered " + other.gameObject.name);
-            ChunkFeatureView chunkFeatureView = other.GetComponent<ChunkFeatureView>();
-
-            if (chunkFeatureView != null)
-            {
-                foreach(MeshRenderer meshRenderer in chunkFeatureView.GetComponentsInChildren<MeshRenderer>())
-                {
-                    meshRenderer.enabled = true;
-                }
-            }
+            collisionTrigger.Fire(CollisionType.TriggerEnter, other);
         }
 
         private void OnTriggerExit(Collider other)
         {
-            Debug.Log("exited" + other.gameObject.name);
-            ChunkFeatureView chunkFeatureView = other.GetComponent<ChunkFeatureView>();
-
-            if (chunkFeatureView != null)
-            {
-                foreach(MeshRenderer meshRenderer in chunkFeatureView.GetComponentsInChildren<MeshRenderer>())
-                {
-                    meshRenderer.enabled = false;
-                }
-            }
+            collisionTrigger.Fire(CollisionType.TriggerExit, other);
         }
     }
 }

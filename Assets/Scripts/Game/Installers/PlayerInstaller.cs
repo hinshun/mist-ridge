@@ -15,6 +15,7 @@ namespace MistRidge
             InstallPlayer();
             InstallCollision();
             InstallCamera();
+            InstallPerformance();
             InstallSpawn();
             InstallSettings();
         }
@@ -75,6 +76,16 @@ namespace MistRidge
             Container.BindAllInterfacesToSingle<CameraManager>();
         }
 
+        private void InstallPerformance()
+        {
+            Container.Bind<BoundsView>().ToSinglePrefab(settings.camera.cameraPrefab);
+            Container.Bind<Bounds>().ToSingle();
+            Container.BindAllInterfacesToSingle<Bounds>();
+
+            Container.BindSignal<CollisionSignal>();
+            Container.BindTrigger<CollisionSignal.Trigger>();
+        }
+
         private void InstallSpawn()
         {
             Container.Bind<SpawnView>().ToTransientPrefab(settings.spawn.spawnPrefab);
@@ -84,10 +95,11 @@ namespace MistRidge
 
         private void InstallSettings()
         {
+            Container.Bind<Bounds.Settings>().ToSingleInstance(settings.boundsSettings);
+
             Container.Bind<Player.Settings>().ToSingleInstance(settings.player.playerSettings);
             Container.Bind<PlayerController.Settings>().ToSingleInstance(settings.player.controllerSettings);
             Container.Bind<PlayerStateMachine.Settings>().ToSingleInstance(settings.player.stateMachineSettings);
-
             Container.Bind<Grounding.Settings>().ToSingleInstance(settings.player.collision.groundingSettings);
 
             Container.Bind<CameraAnchorManager.Settings>().ToSingleInstance(settings.camera.anchorSettings);
@@ -97,6 +109,7 @@ namespace MistRidge
         [Serializable]
         public class Settings
         {
+            public Bounds.Settings boundsSettings;
             public PlayerSettings player;
             public CameraSettings camera;
             public SpawnSettings spawn;

@@ -79,7 +79,6 @@ namespace MistRidge
             DrawGizmos();
         }
 
-
         public void OnItemPickup(ItemType itemType)
         {
             itemPickupTrigger.Fire(itemType);
