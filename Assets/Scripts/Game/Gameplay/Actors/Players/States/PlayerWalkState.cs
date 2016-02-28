@@ -22,6 +22,16 @@ namespace MistRidge
 
         public override void Update()
         {
+            playerView.Animator.SetFloat(
+                "Speed",
+                input.Mapping.Direction.Vector.magnitude
+            );
+            playerView.Animator.SetFloat(
+                "Horizontal",
+                0f
+            );
+
+
             if (input.Mapping.Jump.WasPressed) {
                 stateMachine.ChangeState(PlayerStateType.Jump);
                 return;
@@ -34,8 +44,6 @@ namespace MistRidge
 
             if (input.Mapping.Direction.Vector != Vector2.zero)
             {
-                playerView.Animator.SetFloat("Walk Blend", input.Mapping.Direction.Vector.magnitude);
-
                 stateMachine.MoveDirection = Vector3.MoveTowards(
                     stateMachine.MoveDirection,
                     stateMachine.LookDirection * player.CurrentWalkSpeed * input.Mapping.Direction.Vector.magnitude,
@@ -50,12 +58,12 @@ namespace MistRidge
 
         public override void EnterState()
         {
-            // Do Nothing
+            playerView.Animator.SetBool("IsWalking", true);
         }
 
         public override void ExitState()
         {
-            playerView.Animator.SetFloat("Walk Blend", 0);
+            playerView.Animator.SetBool("IsWalking", false);
         }
     }
 }

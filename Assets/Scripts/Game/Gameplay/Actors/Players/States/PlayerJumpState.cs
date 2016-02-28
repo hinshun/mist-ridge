@@ -40,15 +40,11 @@ namespace MistRidge
 
             verticalMoveDirection -= playerView.Up * player.CurrentGravity * playerController.DeltaTime;
 
-            playerView.Animator.SetFloat("Vertical Movement", verticalMoveDirection.y);
-
             stateMachine.MoveDirection = planarMoveDirection + verticalMoveDirection;
         }
 
         public override void EnterState()
         {
-            playerView.Animator.SetTrigger("Jump");
-
             playerController.IsClamping = false;
             playerController.IsSlopeLimiting = false;
 
@@ -57,7 +53,7 @@ namespace MistRidge
 
         public override void ExitState()
         {
-            playerView.Animator.SetTrigger("Grounded");
+            // Do Nothing
         }
     }
 }

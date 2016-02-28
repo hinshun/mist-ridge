@@ -35,13 +35,15 @@ namespace MistRidge
 
         public override void EnterState()
         {
+            playerView.Animator.SetBool("IsIdling", true);
+
             playerController.IsClamping = true;
             playerController.IsSlopeLimiting = true;
         }
 
         public override void ExitState()
         {
-            // Do Nothing
+            playerView.Animator.SetBool("IsIdling", false);
         }
     }
 }
