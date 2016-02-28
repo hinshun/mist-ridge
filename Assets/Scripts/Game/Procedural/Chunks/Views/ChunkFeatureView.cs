@@ -5,7 +5,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class ChunkFeatureView : ChunkChildView
+    public class ChunkFeatureView : MonoView
     {
         [SerializeField]
         private ChunkReference chunkReference;

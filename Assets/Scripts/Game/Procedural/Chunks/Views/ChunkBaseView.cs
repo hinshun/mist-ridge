@@ -4,42 +4,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class ChunkBaseView : ChunkChildView
+    public class ChunkBaseView : MonoView
     {
-        public Vector3 Position
-        {
-            get
-            {
-                return transform.position;
-            }
-            set
-            {
-                transform.position = value;
-            }
-        }
-
-        public Vector3 LocalPosition
-        {
-            get
-            {
-                return transform.localPosition;
-            }
-            set
-            {
-                transform.localPosition = value;
-            }
-        }
-
-        public Vector3 LocalScale
-        {
-            get
-            {
-                return transform.localScale;
-            }
-            set
-            {
-                transform.localScale = value;
-            }
-        }
     }
 }

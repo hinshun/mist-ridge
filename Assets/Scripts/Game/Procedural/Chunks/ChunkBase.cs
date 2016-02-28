@@ -96,6 +96,7 @@ namespace MistRidge
             chunkBaseView.Parent = chunkView.transform;
             SpawnPlatforms();
             chunkBaseView.LocalPosition = Vector3.zero;
+            chunkBaseView.LocalRotation = chunkView.Rotation;
             chunkBaseView.LocalScale = new Vector3(
                 chunkBaseView.LocalScale.x,
                 chunkBaseView.Position.y / 2,

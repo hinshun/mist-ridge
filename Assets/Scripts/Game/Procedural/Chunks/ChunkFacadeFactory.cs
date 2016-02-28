@@ -19,7 +19,14 @@ namespace MistRidge
             DiContainer subContainer = CreateSubContainer(chunkConfig);
 
             ChunkFeature chunkFeature = chunkFeaturePickingStrategy.Pick(chunkConfig.chunkFeatureContainer);
-            subContainer.Bind<ChunkFeatureView>().ToSinglePrefab(chunkFeature.ChunkFeatureView.gameObject);
+            GameObject prefab = chunkFeature.ChunkFeatureView.gameObject;
+
+            foreach(MeshRenderer meshRenderer in prefab.GetComponentsInChildren<MeshRenderer>())
+            {
+                meshRenderer.enabled = false;
+            }
+
+            subContainer.Bind<ChunkFeatureView>().ToSinglePrefab(prefab);
 
             ChunkFacade chunkFacade = subContainer.Resolve<ChunkFacade>();
             chunkFacade.Initialize();

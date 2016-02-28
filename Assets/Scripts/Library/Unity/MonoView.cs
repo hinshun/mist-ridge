@@ -50,6 +50,30 @@ public class MonoView : MonoBehaviour
         }
     }
 
+    public Quaternion LocalRotation
+    {
+        get
+        {
+            return transform.localRotation;
+        }
+        set
+        {
+            transform.rotation = value;
+        }
+    }
+
+    public Vector3 LocalScale
+    {
+        get
+        {
+            return transform.localScale;
+        }
+        set
+        {
+            transform.localScale = value;
+        }
+    }
+
     public Vector3 Up
     {
         get
@@ -72,5 +96,10 @@ public class MonoView : MonoBehaviour
         {
             return transform.forward;
         }
+    }
+
+    public void SetActive(bool active)
+    {
+        gameObject.SetActive(active);
     }
 }
