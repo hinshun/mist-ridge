@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 51961f9abdf8f4cf3b0981f368f25a65
-timeCreated: 1456606570
+guid: 08e115f617760406d9a905b0300463bb
+timeCreated: 1456685438
 licenseType: Pro
 ModelImporter:
   serializedVersion: 19
@@ -137,7 +137,7 @@ ModelImporter:
     400126: mixamorig:Spine
     400128: mixamorig:Spine1
     400130: mixamorig:Spine2
-    7400000: bashful
+    7400000: sitting_tough
     9500000: //RootNode
   materials:
     importMaterials: 1
@@ -164,18 +164,18 @@ ModelImporter:
     extraExposedTransformPaths: []
     clipAnimations:
     - serializedVersion: 16
-      name: bashful
+      name: sitting_tough
       takeName: mixamo.com
       firstFrame: 0
-      lastFrame: 330
+      lastFrame: 326
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
+      loopTime: 1
+      loopBlend: 1
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1

@@ -91,11 +91,7 @@ namespace MistRidge
         {
             get
             {
-                if (right == Vector3.zero)
-                {
-                    right = ScaledPosition(new Vector2(1.5f, -1f));
-                }
-                return right;
+				return -Left;
             }
         }
 
@@ -103,11 +99,7 @@ namespace MistRidge
         {
             get
             {
-                if (backwardLeft == Vector3.zero)
-                {
-                    backwardLeft = ScaledPosition(new Vector2(-1.5f, -1f));
-                }
-                return backwardLeft;
+				return -ForwardRight;
             }
         }
 
@@ -115,11 +107,7 @@ namespace MistRidge
         {
             get
             {
-                if (backwardRight == Vector3.zero)
-                {
-                    backwardRight = ScaledPosition(new Vector2(0, -2f));
-                }
-                return backwardRight;
+				return -ForwardLeft;
             }
         }
 
@@ -163,7 +151,7 @@ namespace MistRidge
         {
             get
             {
-                return -west;
+                return -West;
             }
         }
 
@@ -171,7 +159,7 @@ namespace MistRidge
         {
             get
             {
-                return -northeast;
+                return -Northeast;
             }
         }
 
@@ -179,7 +167,7 @@ namespace MistRidge
         {
             get
             {
-                return -northwest;
+                return -Northwest;
             }
         }
 

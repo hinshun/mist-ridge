@@ -19,7 +19,6 @@ namespace MistRidge
 
         public void Load(string sceneName)
         {
-            SceneManager.LoadScene(settings.loadingSceneName);
             SceneManager.LoadSceneAsync(sceneName);
         }
 

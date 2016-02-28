@@ -100,7 +100,7 @@ namespace MistRidge
 
         private void NewGame()
         {
-            sceneLoader.Load(settings.newGameSceneName);
+            sceneLoader.Load(settings.loadingSceneName);
         }
 
         private void Quit()
@@ -111,7 +111,7 @@ namespace MistRidge
         [Serializable]
         public class Settings
         {
-            public string newGameSceneName;
+            public string loadingSceneName;
             public StartMenuItem startMenuItem;
             public MenuItem[] menuItems;
         }
