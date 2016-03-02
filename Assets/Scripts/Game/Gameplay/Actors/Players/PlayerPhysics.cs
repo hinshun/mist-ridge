@@ -21,6 +21,18 @@ namespace MistRidge
         private float jumpAcceleration;
 
         [SerializeField]
+        private float freefallSpeed;
+
+        [SerializeField]
+        private float freefallAcceleration;
+
+        [SerializeField]
+        private float freefallDrag;
+
+        [SerializeField]
+        private float freefallTilt;
+
+        [SerializeField]
         private float gravity;
 
         public float WalkSpeed
@@ -60,6 +72,38 @@ namespace MistRidge
             get
             {
                 return jumpAcceleration;
+            }
+        }
+
+        public float FreefallSpeed
+        {
+            get
+            {
+                return freefallSpeed;
+            }
+        }
+
+        public float FreefallAcceleration
+        {
+            get
+            {
+                return freefallAcceleration;
+            }
+        }
+
+        public float FreefallDrag
+        {
+            get
+            {
+                return freefallDrag;
+            }
+        }
+
+        public float FreefallTilt
+        {
+            get
+            {
+                return freefallTilt;
             }
         }
 

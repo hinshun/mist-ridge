@@ -22,6 +22,8 @@ namespace MistRidge
 
         public override void Update()
         {
+            base.Update();
+
             Vector3 planarMoveDirection = Math3d.ProjectVectorOnPlane(playerView.Up, stateMachine.MoveDirection);
             Vector3 verticalMoveDirection = stateMachine.MoveDirection - planarMoveDirection;
 

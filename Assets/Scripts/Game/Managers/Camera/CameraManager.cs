@@ -5,27 +5,54 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class CameraManager : ITickable
+    public class CameraManager : IInitializable, ITickable
     {
         private readonly Settings settings;
+        private readonly Camera camera;
         private readonly CameraView cameraView;
         private readonly CameraRigView cameraRigView;
         private readonly PlayerManager playerManager;
 
+        private Camera currentCamera;
+
         public CameraManager(
                 Settings settings,
+                Camera camera,
                 CameraView cameraView,
                 CameraRigView cameraRigView,
                 PlayerManager playerManager)
         {
             this.settings = settings;
+            this.camera = camera;
             this.cameraView = cameraView;
             this.cameraRigView = cameraRigView;
             this.playerManager = playerManager;
         }
 
+        public Camera CurrentCamera
+        {
+            get
+            {
+                return currentCamera;
+            }
+            set
+            {
+                currentCamera = value;
+            }
+        }
+
+        public void Initialize()
+        {
+            ResetCamera();
+        }
+
         public void Tick()
         {
+            if (!cameraView.IsActive)
+            {
+                return;
+            }
+
             float zoom = CameraZoomForEncapsulation(playerManager.PlayerPositions);
             float cappedZoom = Mathf.Max(zoom, settings.minZoom);
             cameraView.LocalPosition = new Vector3(
@@ -33,6 +60,11 @@ namespace MistRidge
                 cameraView.LocalPosition.y,
                 -cappedZoom
             );
+        }
+
+        public void ResetCamera()
+        {
+            CurrentCamera = camera;
         }
 
         private float CameraZoomForEncapsulation(List<Vector3> playerPositions)

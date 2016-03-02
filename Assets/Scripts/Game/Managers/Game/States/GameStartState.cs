@@ -47,12 +47,12 @@ namespace MistRidge
 
         public override void EnterState()
         {
-            cameraView.AudioListener.enabled = false;
+            cameraView.IsActive = false;
         }
 
         public override void ExitState()
         {
-            cameraView.AudioListener.enabled = true;
+            cameraView.IsActive = true;
         }
     }
 }

@@ -38,6 +38,7 @@ namespace MistRidge
         {
             mapping = new InputMapping()
             {
+                AnyButton = device.AnyButton,
                 Direction = device.Direction,
                 MenuWasPressed = device.MenuWasPressed,
                 Submit = device.Action1,

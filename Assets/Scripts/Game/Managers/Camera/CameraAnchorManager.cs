@@ -8,17 +8,20 @@ namespace MistRidge
     public class CameraAnchorManager : ITickable
     {
         private readonly Settings settings;
+        private readonly CameraView cameraView;
         private readonly CameraAnchorView cameraAnchorView;
         private readonly CameraOriginView cameraOriginView;
         private readonly PlayerManager playerManager;
 
         public CameraAnchorManager(
                 Settings settings,
+                CameraView cameraView,
                 CameraAnchorView cameraAnchorView,
                 CameraOriginView cameraOriginView,
                 PlayerManager playerManager)
         {
             this.settings = settings;
+            this.cameraView = cameraView;
             this.cameraAnchorView = cameraAnchorView;
             this.cameraOriginView = cameraOriginView;
             this.playerManager = playerManager;
@@ -26,6 +29,11 @@ namespace MistRidge
 
         public void Tick()
         {
+            if (!cameraView.IsActive)
+            {
+                return;
+            }
+
             Vector3 center = CenterPoint(playerManager.PlayerPositions);
 
             cameraAnchorView.transform.position = Vector3.Lerp(

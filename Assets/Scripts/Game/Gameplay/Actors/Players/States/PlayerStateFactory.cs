@@ -24,6 +24,9 @@ namespace MistRidge
 
                 case PlayerStateType.Fall:
                     return container.Instantiate<PlayerFallState>();
+
+                case PlayerStateType.Freefall:
+                    return container.Instantiate<PlayerFreefallState>();
             }
 
             Debug.LogError("Failed to create valid player state");

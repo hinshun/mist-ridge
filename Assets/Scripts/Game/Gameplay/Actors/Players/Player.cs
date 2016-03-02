@@ -17,6 +17,10 @@ namespace MistRidge
         private float jumpSpeed;
         private float jumpHeight;
         private float jumpAcceleration;
+        private float freefallSpeed;
+        private float freefallAcceleration;
+        private float freefallDrag;
+        private float freefallTilt;
         private float gravity;
 
         public Player(
@@ -113,6 +117,54 @@ namespace MistRidge
             }
         }
 
+        public float FreefallSpeed
+        {
+            get
+            {
+                return freefallSpeed;
+            }
+            set
+            {
+                freefallSpeed = value;
+            }
+        }
+
+        public float FreefallAcceleration
+        {
+            get
+            {
+                return freefallAcceleration;
+            }
+            set
+            {
+                freefallAcceleration = value;
+            }
+        }
+
+        public float FreefallDrag
+        {
+            get
+            {
+                return freefallDrag;
+            }
+            set
+            {
+                freefallDrag = value;
+            }
+        }
+
+        public float FreefallTilt
+        {
+            get
+            {
+                return freefallTilt;
+            }
+            set
+            {
+                freefallTilt = value;
+            }
+        }
+
         public float Gravity
         {
             get
@@ -139,10 +191,6 @@ namespace MistRidge
             {
                 return walkAcceleration * playerPhysics.WalkAcceleration;
             }
-            set
-            {
-                walkAcceleration = value;
-            }
         }
 
         public float CurrentJumpSpeed
@@ -150,10 +198,6 @@ namespace MistRidge
             get
             {
                 return jumpSpeed * playerPhysics.JumpSpeed;
-            }
-            set
-            {
-                jumpSpeed = value;
             }
         }
 
@@ -163,10 +207,6 @@ namespace MistRidge
             {
                 return jumpHeight * playerPhysics.JumpHeight;
             }
-            set
-            {
-                jumpHeight = value;
-            }
         }
 
         public float CurrentJumpAcceleration
@@ -175,9 +215,37 @@ namespace MistRidge
             {
                 return jumpAcceleration * playerPhysics.JumpAcceleration;
             }
-            set
+        }
+
+        public float CurrentFreefallSpeed
+        {
+            get
             {
-                jumpAcceleration = value;
+                return freefallSpeed * playerPhysics.FreefallSpeed;
+            }
+        }
+
+        public float CurrentFreefallAcceleration
+        {
+            get
+            {
+                return freefallAcceleration * playerPhysics.FreefallAcceleration;
+            }
+        }
+
+        public float CurrentFreefallDrag
+        {
+            get
+            {
+                return freefallDrag * playerPhysics.FreefallDrag;
+            }
+        }
+
+        public float CurrentFreefallTilt
+        {
+            get
+            {
+                return freefallTilt * playerPhysics.FreefallTilt;
             }
         }
 
@@ -187,29 +255,29 @@ namespace MistRidge
             {
                 return gravity * playerPhysics.Gravity;
             }
-            set
-            {
-                gravity = value;
-            }
         }
 
         public void Initialize()
         {
-            SetupPlayerProperties();
-            SetupPlayerMaterials(input.DeviceNum);
+            ResetPlayerProperties();
+            ResetPlayerMaterials(input.DeviceNum);
         }
 
-        private void SetupPlayerProperties()
+        private void ResetPlayerProperties()
         {
             walkSpeed = 1f;
             walkAcceleration = 1f;
             jumpSpeed = 1f;
             jumpHeight = 1f;
             jumpAcceleration = 1f;
+            freefallSpeed = 1f;
+            freefallAcceleration = 1f;
+            freefallDrag = 1f;
+            freefallTilt = 1f;
             gravity = 1f;
         }
 
-        private void SetupPlayerMaterials(int deviceNum)
+        private void ResetPlayerMaterials(int deviceNum)
         {
             if (playerView.MeshRenderer != null)
             {

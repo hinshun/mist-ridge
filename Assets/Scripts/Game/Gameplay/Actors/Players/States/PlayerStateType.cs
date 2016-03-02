@@ -6,5 +6,6 @@ namespace MistRidge
         Walk,
         Jump,
         Fall,
+        Freefall,
     }
 }

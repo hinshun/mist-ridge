@@ -22,6 +22,8 @@ namespace MistRidge
 
         public override void Update()
         {
+            base.Update();
+
             if (playerController.AcquiringGround()) {
                 stateMachine.MoveDirection = Math3d.ProjectVectorOnPlane(playerView.Up, stateMachine.MoveDirection);
                 stateMachine.ChangeState(PlayerStateType.Idle);

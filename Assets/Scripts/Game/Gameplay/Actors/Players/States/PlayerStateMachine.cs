@@ -8,7 +8,7 @@ namespace MistRidge
     {
         private readonly Settings settings;
         private readonly Input input;
-        private readonly Camera camera;
+        private readonly CameraManager cameraManager;
         private readonly Grounding grounding;
         private readonly PlayerView playerView;
         private readonly PlayerController playerController;
@@ -19,7 +19,7 @@ namespace MistRidge
         public PlayerStateMachine(
                 Settings settings,
                 Input input,
-                Camera camera,
+                CameraManager camaraManager,
                 Grounding grounding,
                 PlayerView playerView,
                 PlayerController playerController,
@@ -28,7 +28,7 @@ namespace MistRidge
         {
             this.settings = settings;
             this.input = input;
-            this.camera = camera;
+            this.cameraManager = cameraManager;
             this.grounding = grounding;
             this.playerView = playerView;
             this.playerController = playerController;
@@ -67,6 +67,8 @@ namespace MistRidge
                 return;
             }
 
+            Camera camera = cameraManager.CurrentCamera;
+
             Vector3 viewportOrigin = camera.WorldToViewportPoint(playerView.Position);
             viewportOrigin.z = camera.nearClipPlane;
 
@@ -98,9 +100,7 @@ namespace MistRidge
 
         protected override void LateGlobalUpdate() {
             ApplyFriction();
-
             playerView.Position += moveDirection * playerController.DeltaTime;
-            playerView.MeshTransform.rotation = Quaternion.LookRotation(lookDirection, playerView.Up);
         }
 
         private void ApplyFriction()

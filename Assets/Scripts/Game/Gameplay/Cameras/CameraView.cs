@@ -8,6 +8,8 @@ namespace MistRidge
         new private Camera camera;
         private AudioListener audioListener;
 
+        private bool isActive;
+
         public Camera Camera
         {
             get
@@ -37,6 +39,20 @@ namespace MistRidge
             get
             {
                 return Mathf.Tan(Mathf.Deg2Rad * camera.fieldOfView / 2f);;
+            }
+        }
+
+        public bool IsActive
+        {
+            get
+            {
+                return isActive;
+            }
+            set
+            {
+                isActive = value;
+                /* Camera.enabled = value; */
+                /* AudioListener.enabled = value; */
             }
         }
 

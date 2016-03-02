@@ -47,6 +47,11 @@ namespace MistRidge
             }
         }
 
+        public PlayerFacade PlayerFacade(Input input)
+        {
+            return playerFacades[input];
+        }
+
         public void Initialize()
         {
             playerFacades = new Dictionary<Input, PlayerFacade>();
@@ -60,7 +65,7 @@ namespace MistRidge
             }
         }
 
-        public void SpawnPlayer(Input input)
+        public PlayerFacade SpawnPlayer(Input input)
         {
             if (!playerFacades.ContainsKey(input))
             {
@@ -68,7 +73,10 @@ namespace MistRidge
                 playerFacade.Position = spawnManager.CurrentSpawn.SpawnPoint(input.DeviceNum);
 
                 playerFacades[input] = playerFacade;
+                return playerFacade;
             }
+
+            return null;
         }
     }
 }

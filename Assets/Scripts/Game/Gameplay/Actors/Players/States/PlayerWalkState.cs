@@ -22,6 +22,8 @@ namespace MistRidge
 
         public override void Update()
         {
+            base.Update();
+
             playerView.Animator.SetFloat(
                 "Speed",
                 input.Mapping.Direction.Vector.magnitude

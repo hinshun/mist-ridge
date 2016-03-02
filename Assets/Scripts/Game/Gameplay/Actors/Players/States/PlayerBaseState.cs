@@ -21,5 +21,10 @@ namespace MistRidge
             this.playerView = playerView;
             this.playerController = playerController;
         }
+
+        public override void Update()
+        {
+            playerView.MeshTransform.rotation = Quaternion.LookRotation(stateMachine.LookDirection, playerView.Up);
+        }
     }
 }

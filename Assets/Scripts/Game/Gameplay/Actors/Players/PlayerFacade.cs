@@ -7,14 +7,16 @@ namespace MistRidge
     {
         private readonly Grounding grounding;
         private readonly PlayerView playerView;
+        private readonly PlayerStateMachine playerStateMachine;
 
         public PlayerFacade(
             Grounding grounding,
             PlayerView playerView,
             PlayerStateMachine playerStateMachine)
         {
-            this.playerView = playerView;
             this.grounding = grounding;
+            this.playerView = playerView;
+            this.playerStateMachine = playerStateMachine;
         }
 
         public Vector3 Position
@@ -35,6 +37,11 @@ namespace MistRidge
             {
                 return grounding.PrimaryPoint;
             }
+        }
+
+        public void Freefall()
+        {
+            playerStateMachine.ChangeState(PlayerStateType.Freefall);
         }
 
         public class Factory : FacadeFactory<Input, PlayerFacade>
