@@ -7,25 +7,13 @@ namespace MistRidge
 {
     public class SceneLoader
     {
-        [SerializeField]
-        private readonly Settings settings;
-
-        public SceneLoader(
-                Settings settings,
-                UnityFixGI unityFixGI)
+        public SceneLoader(UnityFixGI unityFixGI)
         {
-            this.settings = settings;
         }
 
         public void Load(string sceneName)
         {
             SceneManager.LoadSceneAsync(sceneName);
-        }
-
-        [Serializable]
-        public class Settings
-        {
-            public string loadingSceneName;
         }
     }
 }

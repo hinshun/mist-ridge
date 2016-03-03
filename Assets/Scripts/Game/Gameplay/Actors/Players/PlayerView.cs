@@ -22,12 +22,17 @@ namespace MistRidge
         private bool canPickupItems;
         private Animator animator;
         private ItemPickupSignal.Trigger itemPickupTrigger;
+        private CheckpointSignal.Trigger checkpointTrigger;
         private ReadOnlyCollection<Collider> readOnlyColliders;
+        private Dictionary<CheckpointView, bool> checkpointsVisited;
 
         [PostInject]
-        public void Init(ItemPickupSignal.Trigger itemPickupTrigger)
+        public void Init(
+                ItemPickupSignal.Trigger itemPickupTrigger,
+                CheckpointSignal.Trigger checkpointTrigger)
         {
             this.itemPickupTrigger = itemPickupTrigger;
+            this.checkpointTrigger = checkpointTrigger;
         }
 
         public ReadOnlyCollection<Collider> Colliders
@@ -84,10 +89,21 @@ namespace MistRidge
             itemPickupTrigger.Fire(itemType);
         }
 
+        public void OnCheckpoint(CheckpointView checkpointView)
+        {
+            if (!checkpointsVisited.ContainsKey(checkpointView))
+            {
+                checkpointsVisited[checkpointView] = true;
+                Debug.Log("arrive");
+                checkpointTrigger.Fire(this, checkpointView);
+            }
+        }
+
         private void Awake()
         {
             animator = GetComponent<Animator>();
             readOnlyColliders = new ReadOnlyCollection<Collider>(colliders);
+            checkpointsVisited = new Dictionary<CheckpointView, bool>();
         }
     }
 }

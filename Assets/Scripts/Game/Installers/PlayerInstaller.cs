@@ -15,7 +15,6 @@ namespace MistRidge
             InstallPlayer();
             InstallCollision();
             InstallCamera();
-            InstallPerformance();
             InstallSpawn();
             InstallSettings();
         }
@@ -78,16 +77,6 @@ namespace MistRidge
             Container.BindAllInterfacesToSingle<CameraManager>();
         }
 
-        private void InstallPerformance()
-        {
-            Container.Bind<BoundsView>().ToSinglePrefab(settings.camera.cameraPrefab);
-            Container.Bind<Bounds>().ToSingle();
-            Container.BindAllInterfacesToSingle<Bounds>();
-
-            Container.BindSignal<CollisionSignal>();
-            Container.BindTrigger<CollisionSignal.Trigger>();
-        }
-
         private void InstallSpawn()
         {
             Container.Bind<SpawnView>().ToTransientPrefab(settings.spawn.spawnPrefab);
@@ -97,8 +86,6 @@ namespace MistRidge
 
         private void InstallSettings()
         {
-            Container.Bind<Bounds.Settings>().ToSingleInstance(settings.boundsSettings);
-
             Container.Bind<Player.Settings>().ToSingleInstance(settings.player.playerSettings);
             Container.Bind<PlayerController.Settings>().ToSingleInstance(settings.player.controllerSettings);
             Container.Bind<PlayerStateMachine.Settings>().ToSingleInstance(settings.player.stateMachineSettings);
@@ -111,7 +98,6 @@ namespace MistRidge
         [Serializable]
         public class Settings
         {
-            public Bounds.Settings boundsSettings;
             public PlayerSettings player;
             public CameraSettings camera;
             public SpawnSettings spawn;
@@ -119,11 +105,10 @@ namespace MistRidge
             [Serializable]
             public class PlayerSettings
             {
-                public CollisionSettings collision;
-
                 public GameObject playerPrefab;
                 public GameObject playerContainerPrefab;
                 public PlayerPhysics playerPhysics;
+                public CollisionSettings collision;
                 public Player.Settings playerSettings;
                 public PlayerController.Settings controllerSettings;
                 public PlayerStateMachine.Settings stateMachineSettings;

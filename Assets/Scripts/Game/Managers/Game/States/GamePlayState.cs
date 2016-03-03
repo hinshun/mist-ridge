@@ -26,7 +26,13 @@ namespace MistRidge
 
         public override void Update()
         {
-            // Do Nothing
+            foreach(Input input in inputManager.Inputs)
+            {
+                if (input.Mapping.AnyButton.WasPressed)
+                {
+                    playerManager.SpawnPlayer(input);
+                }
+            }
         }
 
         public override void EnterState()

@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using Zenject;
+using Zenject.Commands;
 
 namespace MistRidge
 {
@@ -14,8 +15,9 @@ namespace MistRidge
         {
             InitExecutionOrder();
             InstallLevel();
-            InstallCheckpoints();
             InstallChunks();
+            InstallCheckpoints();
+            InstallSprints();
             InstallSettings();
         }
 
@@ -36,19 +38,8 @@ namespace MistRidge
             Container.BindAllInterfacesToSingle<LevelManager>();
         }
 
-        private void InstallCheckpoints()
-        {
-            /* Container.Bind<Checkpoint.Factory>().ToSingle(); */
-            /* Container.Bind<CheckpointView>().ToTransientPrefab(settings.Checkpoint.Prefab); */
-        }
-
         private void InstallChunks()
         {
-            foreach(Biome biome in settings.chunk.biomes)
-            {
-                Container.Bind<IChunkFeatureContainer>().ToInstance(biome);
-            }
-
             Container.Bind<IChunkFeatureContainerPickingStrategy>().ToSingle<BiomePickingStrategy>();
             Container.Bind<IChunkFeaturePickingStrategy>().ToSingle<RandomChunkFeaturePickingStrategy>();
             Container.Bind<IChunkPlacingStrategy>().ToSingle<SpiralChunkPlacingStrategy>();
@@ -58,12 +49,12 @@ namespace MistRidge
             Container.Bind<ChunkManager>().ToSingle();
             Container.BindAllInterfacesToSingle<ChunkManager>();
 
-            Container.BindFacadeFactory<ChunkConfig, ChunkFacade, ChunkFacadeFactory>(InstallChunkFacade);
+            Container.BindFacadeFactory<ChunkRequest, ChunkFacade, ChunkFacadeFactory>(InstallChunkFacade);
         }
 
-        private void InstallChunkFacade(DiContainer subContainer, ChunkConfig chunkConfig)
+        private void InstallChunkFacade(DiContainer subContainer, ChunkRequest chunkRequest)
         {
-            subContainer.BindInstance(chunkConfig);
+            subContainer.BindInstance(chunkRequest);
 
             subContainer.Bind<ChunkView>().ToSinglePrefab(settings.chunk.chunkPrefab);
             subContainer.Bind<ChunkBaseView>().ToSinglePrefab(settings.chunk.chunkBasePrefab);
@@ -75,9 +66,33 @@ namespace MistRidge
             subContainer.BindAllInterfacesToSingle<ChunkBase>();
         }
 
+        private void InstallCheckpoints()
+        {
+            foreach(Biome checkpointBiome in settings.chunk.checkpointBiomes)
+            {
+                Container.Bind<IChunkFeatureContainer>().ToInstance(checkpointBiome).WhenInjectedInto<CheckpointFactory>();
+            }
+
+            Container.Bind<CheckpointFactory>().ToSingle();
+
+            Container.BindSignal<CheckpointSignal>();
+            Container.BindTrigger<CheckpointSignal.Trigger>();
+        }
+
+        private void InstallSprints()
+        {
+            foreach(Biome biome in settings.chunk.biomes)
+            {
+                Container.Bind<IChunkFeatureContainer>().ToInstance(biome).WhenInjectedInto<SprintFactory>();
+            }
+
+            Container.Bind<SprintFactory>().ToSingle();
+            Container.Bind<SprintView>().ToTransientPrefab(settings.chunk.sprintPrefab);
+        }
+
         private void InstallSettings()
         {
-            Container.Bind<Checkpoint.Settings>().ToSingleInstance(settings.checkpointSettings);
+            Container.Bind<Chunk.Settings>().ToSingleInstance(settings.chunk.chunkSettings);
             Container.Bind<ChunkManager.Settings>().ToSingleInstance(settings.chunk.chunkManagerSettings);
         }
 
@@ -85,7 +100,6 @@ namespace MistRidge
         public class Settings
         {
             public ChunkSettings chunk;
-            public Checkpoint.Settings checkpointSettings;
 
             [Serializable]
             public class ChunkSettings
@@ -93,7 +107,10 @@ namespace MistRidge
                 public GameObject chunkPrefab;
                 public GameObject chunkBasePrefab;
                 public GameObject platformPrefab;
+                public GameObject sprintPrefab;
                 public List<Biome> biomes;
+                public List<Biome> checkpointBiomes;
+                public Chunk.Settings chunkSettings;
                 public ChunkManager.Settings chunkManagerSettings;
             }
         }

@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Zenject;
 
 namespace MistRidge
@@ -9,28 +8,17 @@ namespace MistRidge
     public class ChunkManager : IInitializable
     {
         private readonly Settings settings;
-        private readonly List<IChunkFeatureContainer> chunkFeatureContainers;
-        private readonly IChunkFeatureContainerPickingStrategy chunkFeatureContainerPickingStrategy;
-        private readonly ChunkFacadeFactory chunkFacadeFactory;
-        private readonly SpawnManager spawnManager;
-        private readonly Spawn.Factory spawnFactory;
+        private readonly SprintFactory sprintFactory;
 
-        private ReadOnlyCollection<ChunkFacade> chunkFacades;
+        private List<Sprint> sprints;
+        private int chunkCount;
 
         public ChunkManager(
                 Settings settings,
-                List<IChunkFeatureContainer> chunkFeatureContainers,
-                IChunkFeatureContainerPickingStrategy chunkFeatureContainerPickingStrategy,
-                ChunkFacadeFactory chunkFacadeFactory,
-                SpawnManager spawnManager,
-                Spawn.Factory spawnFactory)
+                SprintFactory sprintFactory)
         {
             this.settings = settings;
-            this.chunkFeatureContainers = chunkFeatureContainers;
-            this.chunkFeatureContainerPickingStrategy = chunkFeatureContainerPickingStrategy;
-            this.chunkFacadeFactory = chunkFacadeFactory;
-            this.spawnManager = spawnManager;
-            this.spawnFactory = spawnFactory;
+            this.sprintFactory = sprintFactory;
         }
 
         public ChunkReference ChunkReference
@@ -45,46 +33,64 @@ namespace MistRidge
         {
             get
             {
-                return settings.chunkCount;
+                return chunkCount;
             }
         }
 
-        public ReadOnlyCollection<ChunkFacade> ChunkFacades
+        public List<Sprint> Sprints
         {
             get
             {
-                return chunkFacades;
+                return sprints;
             }
         }
 
         public void Initialize()
         {
-            List<ChunkFacade> spawnedChunkFacades = new List<ChunkFacade>();
+            chunkCount = CountChunks();
+            sprints = SpawnSprints();
+        }
 
-            for (int chunkNum = settings.chunkCount - 1; chunkNum >= 0; --chunkNum)
+        private int CountChunks()
+        {
+            int chunkSum = 0;
+
+            foreach(SprintRequest sprintRequest in settings.sprintRequests)
             {
-                ChunkConfig chunkConfig = new ChunkConfig()
-                {
-                    chunkNum = chunkNum,
-                    chunkFeatureContainer = chunkFeatureContainerPickingStrategy.Pick(chunkFeatureContainers)
-                };
-
-                ChunkFacade chunkFacade = chunkFacadeFactory.Create(chunkConfig);
-                spawnedChunkFacades.Add(chunkFacade);
+                chunkSum += sprintRequest.chunkCount;
             }
 
-            chunkFacades = new ReadOnlyCollection<ChunkFacade>(spawnedChunkFacades);
+            return chunkSum;
+        }
 
-            Spawn spawn = spawnFactory.Create();
-            spawn.Position = chunkFacades[0].Position;
-            spawnManager.CurrentSpawn = spawn;
+        private List<Sprint> SpawnSprints()
+        {
+            List<Sprint> sprints = new List<Sprint>();
+
+            int currentChunkNum = chunkCount - 1;
+
+            foreach(SprintRequest sprintRequest in settings.sprintRequests)
+            {
+                SprintRequest currentSprintRequest = new SprintRequest()
+                {
+                    chunkCount = sprintRequest.chunkCount,
+                    startChunkNum = currentChunkNum,
+                };
+
+                currentChunkNum -= sprintRequest.chunkCount;
+
+                Sprint sprint = sprintFactory.Create(currentSprintRequest);
+                sprints.Add(sprint);
+            }
+
+            return sprints;
         }
 
         [Serializable]
         public class Settings
         {
-            public int chunkCount;
             public ChunkReference chunkReference;
+            public List<SprintRequest> sprintRequests;
         }
     }
 }

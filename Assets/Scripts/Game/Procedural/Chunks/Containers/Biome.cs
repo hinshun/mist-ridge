@@ -8,7 +8,7 @@ namespace MistRidge
     public class Biome : ScriptableObject, IChunkFeatureContainer
     {
         [SerializeField]
-        private string name;
+        new private string name;
 
         [SerializeField]
         private float startAltitude;

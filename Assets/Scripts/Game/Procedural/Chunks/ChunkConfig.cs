@@ -1,6 +1,6 @@
 namespace MistRidge
 {
-    public struct ChunkConfig
+    public struct ChunkRequest
     {
         public int chunkNum;
         public IChunkFeatureContainer chunkFeatureContainer;

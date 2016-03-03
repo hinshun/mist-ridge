@@ -7,29 +7,33 @@ namespace MistRidge
     public class ChunkFacade : Facade
     {
         private readonly ChunkView chunkView;
-        private readonly ChunkFeatureView chunkFeatureView;
 
-        public ChunkFacade(
-                ChunkView chunkView,
-                ChunkFeatureView chunkFeatureView)
+        public ChunkFacade(ChunkView chunkView)
         {
             this.chunkView = chunkView;
-            this.chunkFeatureView = chunkFeatureView;
         }
 
-        public ChunkView ChunkView
+        public Transform Parent
         {
             get
             {
-                return chunkView;
+                return chunkView.Parent;
+            }
+            set
+            {
+                chunkView.Parent = value;
             }
         }
 
-        public ChunkFeatureView ChunkFeatureView
+        public string Name
         {
             get
             {
-                return chunkFeatureView;
+                return chunkView.Name;
+            }
+            set
+            {
+                chunkView.Name = value;
             }
         }
 

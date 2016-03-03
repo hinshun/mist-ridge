@@ -1,10 +1,9 @@
-using UnityEngine;
 using Zenject;
 using Zenject.Commands;
 
 namespace MistRidge
 {
-    public class CollisionSignal : Signal<CollisionType, Collider>
+    public class CheckpointSignal : Signal<PlayerView, CheckpointView>
     {
         public class Trigger : TriggerBase
         {

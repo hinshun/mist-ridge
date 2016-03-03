@@ -84,7 +84,6 @@ namespace MistRidge
         private void InstallSettings()
         {
             Container.Bind<Generator.Settings>().ToSingleInstance(settings.generatorSettings);
-            Container.Bind<SceneLoader.Settings>().ToSingleInstance(settings.sceneLoaderSettings);
             Container.Bind<PoolManager.Settings>().ToSingleInstance(settings.poolManagerSettings);
 
             Container.Bind<GameReadyState.Settings>().ToSingleInstance(settings.game.gameReadyStateSettings);
@@ -96,7 +95,6 @@ namespace MistRidge
             public GameObject inControlManagerPrefab;
             public GameObject unityFixGIPrefab;
             public Generator.Settings generatorSettings;
-            public SceneLoader.Settings sceneLoaderSettings;
             public PoolManager.Settings poolManagerSettings;
             public GameSettings game;
 

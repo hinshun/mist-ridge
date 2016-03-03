@@ -8,18 +8,15 @@ namespace MistRidge
     public class PoolManager : IInitializable
     {
         private readonly Settings settings;
-        private readonly ObjectPoolView objectPoolView;
         private readonly Pool.Factory poolFactory;
 
         private Dictionary<int, Pool> pools;
 
         public PoolManager(
                 Settings settings,
-                ObjectPoolView objectPoolView,
                 Pool.Factory poolFactory)
         {
             this.settings = settings;
-            this.objectPoolView = objectPoolView;
             this.poolFactory = poolFactory;
         }
 

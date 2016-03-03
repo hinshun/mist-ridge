@@ -4,23 +4,30 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class Checkpoint
+    public class Checkpoint : IInitializable
     {
-        private readonly Settings settings;
+        private readonly ChunkFacade chunkFacade;
 
-        public Checkpoint(Settings settings)
+        public Checkpoint(ChunkFacade chunkFacade)
         {
-            this.settings = settings;
+            this.chunkFacade = chunkFacade;
         }
 
-        public class Factory : Factory<Checkpoint>
+        public Transform Parent
         {
+            get
+            {
+                return chunkFacade.Parent;
+            }
+            set
+            {
+                chunkFacade.Parent = value;
+            }
         }
 
-        [Serializable]
-        public class Settings
+        public void Initialize()
         {
-            public GameObject Prefab;
+            chunkFacade.Name = "Checkpoint";
         }
     }
 }

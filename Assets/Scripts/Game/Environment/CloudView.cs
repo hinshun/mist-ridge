@@ -8,12 +8,13 @@ namespace MistRidge
         [SerializeField]
         private float moveSpeed;
 
-        private EllipsoidParticleEmitter cloudEmitter;
+        new private ParticleSystem particleSystem;
 
         public override void OnPoolInstanceReuse()
         {
-            cloudEmitter.emit = false;
-            cloudEmitter.emit = true;
+            ParticleSystem.EmissionModule emission = particleSystem.emission;
+            emission.enabled = false;
+            emission.enabled = true;
         }
 
         private void Update()
@@ -23,7 +24,7 @@ namespace MistRidge
 
         private void Awake()
         {
-            cloudEmitter = GetComponent<EllipsoidParticleEmitter>();
+            particleSystem = GetComponent<ParticleSystem>();
         }
     }
 }
