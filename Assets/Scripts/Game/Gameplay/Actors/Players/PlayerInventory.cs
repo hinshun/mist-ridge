@@ -40,7 +40,6 @@ namespace MistRidge
             {
                 if (item.IsDisposable())
                 {
-                    Debug.Log("Removed held item");
                     item = null;
                     playerView.CanPickupItems = true;
                     return;
@@ -48,7 +47,6 @@ namespace MistRidge
 
                 if (input.Mapping.UseItem.WasPressed && item.IsUsable())
                 {
-                    Debug.Log("Used held item");
                     item.Use();
                 }
             }

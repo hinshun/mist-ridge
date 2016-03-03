@@ -7,14 +7,17 @@ namespace MistRidge
 {
     public class PlayerManager : IInitializable, ITickable
     {
+        private readonly PlayerContainerView playerContainerView;
         private readonly SpawnManager spawnManager;
         private readonly PlayerFacade.Factory playerFacadeFactory;
         private Dictionary<Input, PlayerFacade> playerFacades;
 
         public PlayerManager(
+                PlayerContainerView playerContainerView,
                 SpawnManager spawnManager,
                 PlayerFacade.Factory playerFacadeFactory)
         {
+            this.playerContainerView = playerContainerView;
             this.spawnManager = spawnManager;
             this.playerFacadeFactory = playerFacadeFactory;
         }
@@ -52,6 +55,11 @@ namespace MistRidge
             return playerFacades[input];
         }
 
+        public bool HasPlayerFacade(Input input)
+        {
+            return playerFacades.ContainsKey(input);
+        }
+
         public void Initialize()
         {
             playerFacades = new Dictionary<Input, PlayerFacade>();
@@ -71,6 +79,7 @@ namespace MistRidge
             {
                 PlayerFacade playerFacade = playerFacadeFactory.Create(input);
                 playerFacade.Position = spawnManager.CurrentSpawn.SpawnPoint(input.DeviceNum);
+                playerFacade.Parent = playerContainerView.transform;
 
                 playerFacades[input] = playerFacade;
                 return playerFacade;

@@ -11,20 +11,31 @@ namespace MistRidge
 
         public override GameBaseState Create(GameStateType stateType)
         {
+            GameBaseState gameState = null;
+
             switch (stateType)
             {
                 case GameStateType.Start:
-                    return container.Instantiate<GameStartState>();
+                    gameState = container.Instantiate<GameStartState>();
+                    break;
 
                 case GameStateType.Ready:
-                    return container.Instantiate<GameReadyState>();
+                    gameState = container.Instantiate<GameReadyState>();
+                    break;
 
                 case GameStateType.Play:
-                    return container.Instantiate<GamePlayState>();
+                    gameState = container.Instantiate<GamePlayState>();
+                    break;
             }
 
-            Debug.LogError("Failed to create valid game state");
-            return null;
+            if (gameState == null)
+            {
+                Debug.LogError("Failed to create valid game state");
+                return null;
+            }
+
+            gameState.Initialize();
+            return gameState;
         }
     }
 }

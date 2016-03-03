@@ -10,7 +10,7 @@ namespace MistRidge
             // Do Nothing
         }
 
-        protected void Destroy()
+        public void Destroy()
         {
             gameObject.SetActive(false);
         }

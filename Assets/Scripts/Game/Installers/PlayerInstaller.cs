@@ -22,6 +22,8 @@ namespace MistRidge
 
         private void InstallPlayer()
         {
+            Container.Bind<PlayerContainerView>().ToSinglePrefab(settings.player.playerContainerPrefab);
+
             Container.BindFacadeFactory<Input, PlayerFacade, PlayerFacade.Factory>(InstallPlayerFacade);
 
             Container.Bind<PlayerManager>().ToSingle();
@@ -120,6 +122,7 @@ namespace MistRidge
                 public CollisionSettings collision;
 
                 public GameObject playerPrefab;
+                public GameObject playerContainerPrefab;
                 public PlayerPhysics playerPhysics;
                 public Player.Settings playerSettings;
                 public PlayerController.Settings controllerSettings;

@@ -5,7 +5,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class ReadyManager : IInitializable, ITickable
+    public class ReadyManager : IInitializable, IDisposable, ITickable
     {
         private readonly Settings settings;
         private readonly Spawn spawn;
@@ -34,11 +34,16 @@ namespace MistRidge
 
         public void Initialize()
         {
-            gameStateTrigger.Fire(GameStateType.Ready);
+            timer = Time.time;
             spawnManager.CurrentSpawn = spawn;
             cameraManager.CurrentCamera = settings.camera;
 
-            timer = Time.time;
+            gameStateTrigger.Fire(GameStateType.Ready);
+        }
+
+        public void Dispose()
+        {
+            poolManager.ClearPool(settings.cloudView);
         }
 
         public void Tick()

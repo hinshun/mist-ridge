@@ -30,17 +30,17 @@ namespace MistRidge
             {
                 if (input.Mapping.Submit.WasPressed)
                 {
-                    menuSignalTrigger.Fire(MenuSignalType.Submit);
+                    menuSignalTrigger.Fire(input, MenuSignalType.Submit);
                     return;
                 }
 
                 if (input.Mapping.Direction.Up.WasPressed)
                 {
-                    menuSignalTrigger.Fire(MenuSignalType.Up);
+                    menuSignalTrigger.Fire(input, MenuSignalType.Up);
                 }
                 else if (input.Mapping.Direction.Down.WasPressed)
                 {
-                    menuSignalTrigger.Fire(MenuSignalType.Down);
+                    menuSignalTrigger.Fire(input, MenuSignalType.Down);
                 }
             }
         }

@@ -31,6 +31,18 @@ namespace MistRidge
             }
         }
 
+        public Transform Parent
+        {
+            get
+            {
+                return playerView.Parent;
+            }
+            set
+            {
+                playerView.Parent = value;
+            }
+        }
+
         public Vector3 GroundingPosition
         {
             get

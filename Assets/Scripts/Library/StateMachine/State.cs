@@ -25,9 +25,23 @@ public abstract class State<TStateMachine, TState, TStateType, TStateFactory>
         }
     }
 
-    public abstract void Update();
+    public virtual void Initialize()
+    {
+        // Do Nothing
+    }
 
-    public abstract void EnterState();
+    public virtual void Update()
+    {
+        // Do Nothing
+    }
 
-    public abstract void ExitState();
+    public virtual void EnterState()
+    {
+        // Do Nothing
+    }
+
+    public virtual void ExitState()
+    {
+        // Do Nothing
+    }
 }

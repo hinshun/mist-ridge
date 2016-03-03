@@ -12,10 +12,22 @@ namespace MistRidge
 
         public override void InstallBindings()
         {
+            InitExecutionOrder();
             InstallLevel();
             InstallCheckpoints();
             InstallChunks();
             InstallSettings();
+        }
+
+        private void InitExecutionOrder()
+        {
+            Container.Install<ExecutionOrderInstaller>(
+                new List<Type>()
+                {
+                    typeof(ChunkManager),
+                    typeof(LevelManager),
+                }
+            );
         }
 
         private void InstallLevel()

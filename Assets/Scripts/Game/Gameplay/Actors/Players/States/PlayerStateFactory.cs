@@ -11,26 +11,39 @@ namespace MistRidge
 
         public override PlayerBaseState Create(PlayerStateType stateType)
         {
+            PlayerBaseState playerState = null;
+
             switch (stateType)
             {
                 case PlayerStateType.Idle:
-                    return container.Instantiate<PlayerIdleState>();
+                    playerState = container.Instantiate<PlayerIdleState>();
+                    break;
 
                 case PlayerStateType.Walk:
-                    return container.Instantiate<PlayerWalkState>();
+                    playerState = container.Instantiate<PlayerWalkState>();
+                    break;
 
                 case PlayerStateType.Jump:
-                    return container.Instantiate<PlayerJumpState>();
+                    playerState = container.Instantiate<PlayerJumpState>();
+                    break;
 
                 case PlayerStateType.Fall:
-                    return container.Instantiate<PlayerFallState>();
+                    playerState = container.Instantiate<PlayerFallState>();
+                    break;
 
                 case PlayerStateType.Freefall:
-                    return container.Instantiate<PlayerFreefallState>();
+                    playerState = container.Instantiate<PlayerFreefallState>();
+                    break;
             }
 
-            Debug.LogError("Failed to create valid player state");
-            return null;
+            if (playerState == null)
+            {
+                Debug.LogError("Failed to create valid player state");
+                return null;
+            }
+
+            playerState.Initialize();
+            return playerState;
         }
     }
 }

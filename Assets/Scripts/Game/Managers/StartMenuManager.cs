@@ -9,6 +9,7 @@ namespace MistRidge
     public class StartMenuManager : IInitializable, IDisposable
     {
         private readonly Settings settings;
+        private readonly GameManager gameManager;
         private readonly MenuSignal menuSignal;
         private readonly SceneLoader sceneLoader;
 
@@ -16,10 +17,12 @@ namespace MistRidge
 
         public StartMenuManager(
             Settings settings,
+            GameManager gameManager,
             MenuSignal menuSignal,
             SceneLoader sceneLoader)
         {
             this.settings = settings;
+            this.gameManager = gameManager;
             this.menuSignal = menuSignal;
             this.sceneLoader = sceneLoader;
         }
@@ -49,12 +52,12 @@ namespace MistRidge
             menuSignal.Event -= OnMenuActionReceived;
         }
 
-        private void OnMenuActionReceived(MenuSignalType menuSignalType)
+        private void OnMenuActionReceived(Input input, MenuSignalType menuSignalType)
         {
             switch (menuSignalType)
             {
                 case MenuSignalType.Submit:
-                    Select();
+                    Select(input);
                     break;
                 case MenuSignalType.Up:
                     MoveSelection(1);
@@ -65,14 +68,14 @@ namespace MistRidge
             }
         }
 
-        private void Select()
+        private void Select(Input input)
         {
             StartMenuItem item = settings.menuItems[selectionIndex].item;
 
             switch(item)
             {
                 case(StartMenuItem.NewGame):
-                    NewGame();
+                    NewGame(input);
                     break;
                 case(StartMenuItem.Quit):
                     Quit();
@@ -98,8 +101,9 @@ namespace MistRidge
             }
         }
 
-        private void NewGame()
+        private void NewGame(Input input)
         {
+            gameManager.LastInput = input;
             sceneLoader.Load(settings.loadingSceneName);
         }
 

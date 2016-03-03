@@ -69,7 +69,6 @@ namespace MistRidge
 
             foreach(IItem item in itemsToDispose)
             {
-                Debug.Log("Disposed item");
                 item.Dispose();
                 items.Remove(item);
             }
@@ -78,7 +77,6 @@ namespace MistRidge
         public IItem NewItem(ItemType itemType, Player player)
         {
             ItemDrop itemDrop = PickItemDrop(itemType);
-            Debug.Log("Picked up: " + itemDrop.ItemType);
 
             IItem item = itemFactory.Create(itemDrop.ItemType, player);
             items.Add(item);

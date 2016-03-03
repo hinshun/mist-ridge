@@ -9,12 +9,26 @@ namespace MistRidge
         private readonly GameStateSignal gameStateSignal;
         private readonly GameStateMachine stateMachine;
 
+        private Input lastInput;
+
         public GameManager(
                 GameStateSignal gameStateSignal,
                 GameStateMachine stateMachine)
         {
             this.gameStateSignal = gameStateSignal;
             this.stateMachine = stateMachine;
+        }
+
+        public Input LastInput
+        {
+            get
+            {
+                return lastInput;
+            }
+            set
+            {
+                lastInput = value;
+            }
         }
 
         public void Initialize()

@@ -39,6 +39,16 @@ namespace MistRidge
             }
         }
 
+        public void ClearPool(PoolInstanceView poolInstanceView)
+        {
+            int poolKey = poolInstanceView.gameObject.GetInstanceID();
+
+            if (pools.ContainsKey(poolKey))
+            {
+                pools[poolKey].Clear();
+            }
+        }
+
         private void CreatePools()
         {
             foreach (PoolRequest poolRequest in settings.poolRequests)

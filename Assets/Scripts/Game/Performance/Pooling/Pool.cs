@@ -61,6 +61,14 @@ namespace MistRidge
             Enqueue(poolInstanceView);
         }
 
+        public void Clear()
+        {
+            foreach (PoolInstanceView poolInstanceView in poolInstanceViews)
+            {
+                poolInstanceView.Destroy();
+            }
+        }
+
         public void Enqueue(PoolInstanceView poolInstanceView)
         {
             poolInstanceViews.Enqueue(poolInstanceView);

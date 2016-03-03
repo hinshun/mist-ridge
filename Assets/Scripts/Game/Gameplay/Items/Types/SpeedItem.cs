@@ -22,7 +22,6 @@ namespace MistRidge
 
             if (startTime > itemEffect.Duration)
             {
-                Debug.Log("Marked disposed");
                 isActive = false;
                 isDisposable = true;
             }

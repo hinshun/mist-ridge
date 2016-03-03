@@ -86,6 +86,8 @@ namespace MistRidge
             Container.Bind<Generator.Settings>().ToSingleInstance(settings.generatorSettings);
             Container.Bind<SceneLoader.Settings>().ToSingleInstance(settings.sceneLoaderSettings);
             Container.Bind<PoolManager.Settings>().ToSingleInstance(settings.poolManagerSettings);
+
+            Container.Bind<GameReadyState.Settings>().ToSingleInstance(settings.game.gameReadyStateSettings);
         }
 
         [Serializable]
@@ -96,6 +98,13 @@ namespace MistRidge
             public Generator.Settings generatorSettings;
             public SceneLoader.Settings sceneLoaderSettings;
             public PoolManager.Settings poolManagerSettings;
+            public GameSettings game;
+
+            [Serializable]
+            public class GameSettings
+            {
+                public GameReadyState.Settings gameReadyStateSettings;
+            }
         }
     }
 }
