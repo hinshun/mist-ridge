@@ -2,6 +2,18 @@ using UnityEngine;
 
 public class MonoView : MonoBehaviour
 {
+    public string Name
+    {
+        get
+        {
+            return gameObject.name;
+        }
+        set
+        {
+            gameObject.name = value;
+        }
+    }
+
     public Transform Parent
     {
         get

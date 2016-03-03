@@ -54,15 +54,14 @@ namespace MistRidge
                 new InputControlMapping
                 {
                     Handle = "Jump",
-                    Target = InputControlType.Action4,
+                    Target = InputControlType.Action1,
                     Source = KeyCodeButton( KeyCode.Space )
                 },
                 new InputControlMapping
                 {
-                    Handle = "Combo",
-                    Target = InputControlType.LeftBumper,
-                    // KeyCodeComboButton requires that all KeyCode params are down simultaneously.
-                    Source = KeyCodeComboButton( KeyCode.LeftAlt, KeyCode.Alpha1 )
+                    Handle = "Pause",
+                    Target = InputControlType.Pause,
+                    Source = KeyCodeButton( KeyCode.P )
                 },
             };
 

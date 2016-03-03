@@ -17,6 +17,7 @@ namespace MistRidge
             InstallGame();
             InstallSignals();
             InstallInput();
+            InstallObjectPool();
             InstallUtility();
             InstallSettings();
         }
@@ -60,6 +61,17 @@ namespace MistRidge
             Container.Bind<Input.Factory>().ToSingle();
         }
 
+        private void InstallObjectPool()
+        {
+            Container.Bind<PoolManager>().ToSingle();
+            Container.BindAllInterfacesToSingle<PoolManager>();
+
+            Container.Bind<Pool.Factory>().ToSingle();
+
+            Container.Bind<ObjectPoolView>().ToSinglePrefab(settings.poolManagerSettings.objectPoolPrefab);
+            Container.Bind<PoolView>().ToTransientPrefab(settings.poolManagerSettings.poolPrefab);
+        }
+
         private void InstallUtility()
         {
             Container.Bind<SceneLoader>().ToSingle();
@@ -73,6 +85,7 @@ namespace MistRidge
         {
             Container.Bind<Generator.Settings>().ToSingleInstance(settings.generatorSettings);
             Container.Bind<SceneLoader.Settings>().ToSingleInstance(settings.sceneLoaderSettings);
+            Container.Bind<PoolManager.Settings>().ToSingleInstance(settings.poolManagerSettings);
         }
 
         [Serializable]
@@ -82,6 +95,7 @@ namespace MistRidge
             public GameObject unityFixGIPrefab;
             public Generator.Settings generatorSettings;
             public SceneLoader.Settings sceneLoaderSettings;
+            public PoolManager.Settings poolManagerSettings;
         }
     }
 }
