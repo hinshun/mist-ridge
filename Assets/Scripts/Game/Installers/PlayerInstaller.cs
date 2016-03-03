@@ -29,6 +29,9 @@ namespace MistRidge
             Container.BindAllInterfacesToSingle<PlayerManager>();
 
             Container.Bind<PlayerPhysics>().ToSingleInstance(settings.player.playerPhysics);
+
+            Container.BindSignal<CheckpointSignal>();
+            Container.BindTrigger<CheckpointSignal.Trigger>();
         }
 
         private void InstallPlayerFacade(DiContainer subContainer, Input input)
@@ -79,9 +82,7 @@ namespace MistRidge
 
         private void InstallSpawn()
         {
-            Container.Bind<SpawnView>().ToTransientPrefab(settings.spawn.spawnPrefab);
             Container.Bind<SpawnManager>().ToSingle();
-            Container.Bind<Spawn.Factory>().ToSingle();
         }
 
         private void InstallSettings()
@@ -100,7 +101,6 @@ namespace MistRidge
         {
             public PlayerSettings player;
             public CameraSettings camera;
-            public SpawnSettings spawn;
 
             [Serializable]
             public class PlayerSettings
@@ -127,12 +127,6 @@ namespace MistRidge
                 public GameObject cameraPrefab;
                 public CameraAnchorManager.Settings anchorSettings;
                 public CameraManager.Settings cameraSettings;
-            }
-
-            [Serializable]
-            public class SpawnSettings
-            {
-                public GameObject spawnPrefab;
             }
         }
     }

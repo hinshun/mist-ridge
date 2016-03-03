@@ -9,24 +9,20 @@ namespace MistRidge
     {
         private readonly Settings settings;
         private readonly SprintFactory sprintFactory;
+        private readonly ChunkFacadeFactory chunkFacadeFactory;
 
-        private List<Sprint> sprints;
         private int chunkCount;
+        private List<Sprint> sprints;
+        private ChunkFacade startingChunkFacade;
 
         public ChunkManager(
                 Settings settings,
-                SprintFactory sprintFactory)
+                SprintFactory sprintFactory,
+                ChunkFacadeFactory chunkFacadeFactory)
         {
             this.settings = settings;
             this.sprintFactory = sprintFactory;
-        }
-
-        public ChunkReference ChunkReference
-        {
-            get
-            {
-                return settings.chunkReference;
-            }
+            this.chunkFacadeFactory = chunkFacadeFactory;
         }
 
         public int ChunkCount
@@ -45,10 +41,19 @@ namespace MistRidge
             }
         }
 
+        public ChunkFacade StartingChunkFacade
+        {
+            get
+            {
+                return startingChunkFacade;
+            }
+        }
+
         public void Initialize()
         {
             chunkCount = CountChunks();
             sprints = SpawnSprints();
+            startingChunkFacade = SpawnStartingChunkFacade();
         }
 
         private int CountChunks()
@@ -75,6 +80,7 @@ namespace MistRidge
                 {
                     chunkCount = sprintRequest.chunkCount,
                     startChunkNum = currentChunkNum,
+                    totalChunkCount = chunkCount,
                 };
 
                 currentChunkNum -= sprintRequest.chunkCount;
@@ -86,10 +92,25 @@ namespace MistRidge
             return sprints;
         }
 
+        private ChunkFacade SpawnStartingChunkFacade()
+        {
+            ChunkRequest chunkRequest = new ChunkRequest()
+            {
+                chunkNum = chunkCount,
+                chunkCount = chunkCount,
+                chunkFeatureContainer = settings.startingZoneFeatureContainer,
+            };
+
+            ChunkFacade chunkFacade = chunkFacadeFactory.Create(chunkRequest);
+            chunkFacade.Name = "Starting Zone";
+
+            return chunkFacade;
+        }
+
         [Serializable]
         public class Settings
         {
-            public ChunkReference chunkReference;
+            public GenericChunkFeatureContainer startingZoneFeatureContainer;
             public List<SprintRequest> sprintRequests;
         }
     }

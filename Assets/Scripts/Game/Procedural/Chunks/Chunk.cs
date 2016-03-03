@@ -31,34 +31,26 @@ namespace MistRidge
         {
             chunkFeatureView.Parent = chunkView.transform;
             PlaceChunk();
-            SpawnItemContainers();
-            SpawnCheckpoints();
+            Spawn<ItemContainerSpawnView, ItemContainerView>(settings.itemContainerPrefab);
+            Spawn<CheckpointSpawnView, CheckpointView>(settings.checkpointPrefab);
+            Spawn<SpawnSpawnView, SpawnView>(settings.spawnPrefab);
         }
 
         private void PlaceChunk()
         {
-            chunkPlacingStrategy.Placement(chunkView, chunkRequest);
+            chunkPlacingStrategy.Place(chunkView, chunkRequest);
         }
 
-        private void SpawnItemContainers()
+        private void Spawn<TSpawner, TComponent>(GameObject prefab)
+            where TSpawner : MonoBehaviour
+            where TComponent : MonoView
         {
-            ItemContainerSpawnView[] itemContainerSpawnViews = chunkView.GetComponentsInChildren<ItemContainerSpawnView>();
-            foreach(ItemContainerSpawnView itemContainerSpawnView in itemContainerSpawnViews)
+            TSpawner[] spawners = chunkView.GetComponentsInChildren<TSpawner>();
+            foreach(TSpawner spawner in spawners)
             {
-                ItemContainerView itemContainerView = GameObject.Instantiate(settings.itemContainerPrefab).GetComponent<ItemContainerView>();
-                itemContainerView.Parent = itemContainerSpawnView.transform;
-                itemContainerView.LocalPosition = Vector3.zero;
-            }
-        }
-
-        private void SpawnCheckpoints()
-        {
-            CheckpointSpawnView[] checkpointSpawnViews = chunkView.GetComponentsInChildren<CheckpointSpawnView>();
-            foreach(CheckpointSpawnView checkpointSpawnView in checkpointSpawnViews)
-            {
-                CheckpointView checkpointView = GameObject.Instantiate(settings.checkpointPrefab).GetComponent<CheckpointView>();
-                checkpointView.Parent = checkpointSpawnView.transform;
-                checkpointView.LocalPosition = Vector3.zero;
+                TComponent component = GameObject.Instantiate(prefab).GetComponent<TComponent>();
+                component.Parent = spawner.transform;
+                component.LocalPosition = Vector3.zero;
             }
         }
 
@@ -67,6 +59,7 @@ namespace MistRidge
         {
             public GameObject itemContainerPrefab;
             public GameObject checkpointPrefab;
+            public GameObject spawnPrefab;
         }
     }
 }

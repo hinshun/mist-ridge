@@ -21,7 +21,6 @@ namespace MistRidge
             Container.BindAllInterfacesToSingle<ReadyManager>();
 
             Container.BindInstance(settings.spawnView);
-            Container.Bind<Spawn>().ToSingle();
         }
 
         private void InstallSettings()

@@ -8,12 +8,9 @@ namespace MistRidge
         [SerializeField]
         private List<SpawnPointView> spawnPointViews;
 
-        public List<SpawnPointView> SpawnPointViews
+        public Vector3 SpawnPoint(int index)
         {
-            get
-            {
-                return spawnPointViews;
-            }
+            return spawnPointViews[index].Position;
         }
     }
 }

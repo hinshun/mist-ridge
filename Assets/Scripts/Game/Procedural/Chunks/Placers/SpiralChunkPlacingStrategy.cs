@@ -7,16 +7,13 @@ namespace MistRidge
     public class SpiralChunkPlacingStrategy : IChunkPlacingStrategy
     {
         private readonly ChunkReference chunkReference;
-        private readonly int chunkCount;
 
-        public SpiralChunkPlacingStrategy(
-                ChunkManager chunkManager)
+        public SpiralChunkPlacingStrategy(ChunkReference chunkReference)
         {
-            this.chunkReference = chunkManager.ChunkReference;
-            this.chunkCount = chunkManager.ChunkCount;
+            this.chunkReference = chunkReference;
         }
 
-        public void Placement(ChunkView chunkView, ChunkRequest chunkRequest)
+        public void Place(ChunkView chunkView, ChunkRequest chunkRequest)
         {
             if (chunkRequest.chunkNum == 0)
             {
@@ -86,7 +83,7 @@ namespace MistRidge
 
         private Vector3 Altitude(ChunkRequest chunkRequest)
         {
-            return 2 * Vector3.up * (chunkCount - chunkRequest.chunkNum);
+            return 2 * Vector3.up * (chunkRequest.chunkCount - chunkRequest.chunkNum) + (20 * Vector3.up);
         }
     }
 }

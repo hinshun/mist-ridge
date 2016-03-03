@@ -22,13 +22,13 @@ namespace MistRidge
         private PlatformView backwardRightPlatformView;
 
         public ChunkBase(
-                ChunkManager chunkManager,
+                ChunkReference chunkReference,
                 ChunkView chunkView,
                 ChunkBaseView chunkBaseView,
                 ChunkFeatureView chunkFeatureView,
                 PlatformView.Factory platformViewFactory)
         {
-            this.chunkReference = chunkManager.ChunkReference;
+            this.chunkReference = chunkReference;
             this.chunkView = chunkView;
             this.chunkBaseView = chunkBaseView;
             this.chunkFeatureView = chunkFeatureView;

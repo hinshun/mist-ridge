@@ -8,7 +8,7 @@ namespace MistRidge
     public class ReadyManager : IInitializable, IDisposable, ITickable
     {
         private readonly Settings settings;
-        private readonly Spawn spawn;
+        private readonly SpawnView spawnView;
         private readonly SpawnManager spawnManager;
         private readonly CameraManager cameraManager;
         private readonly PoolManager poolManager;
@@ -18,14 +18,14 @@ namespace MistRidge
 
         public ReadyManager(
                 Settings settings,
-                Spawn spawn,
+                SpawnView spawnView,
                 SpawnManager spawnManager,
                 CameraManager cameraManager,
                 PoolManager poolManager,
                 GameStateSignal.Trigger gameStateTrigger)
         {
             this.settings = settings;
-            this.spawn = spawn;
+            this.spawnView = spawnView;
             this.spawnManager = spawnManager;
             this.cameraManager = cameraManager;
             this.poolManager = poolManager;
@@ -35,7 +35,7 @@ namespace MistRidge
         public void Initialize()
         {
             timer = Time.time;
-            spawnManager.CurrentSpawn = spawn;
+            spawnManager.CurrentSpawnView = spawnView;
             cameraManager.CurrentCamera = settings.camera;
 
             gameStateTrigger.Fire(GameStateType.Ready);

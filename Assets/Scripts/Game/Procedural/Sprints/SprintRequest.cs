@@ -10,5 +10,8 @@ namespace MistRidge
 
         [HideInInspector]
         public int startChunkNum;
+
+        [HideInInspector]
+        public int totalChunkCount;
     }
 }

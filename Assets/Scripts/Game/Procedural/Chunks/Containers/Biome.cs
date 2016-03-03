@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace MistRidge
 {
     [CreateAssetMenu(menuName = "Chunks/Biome")]
-    public class Biome : ScriptableObject, IChunkFeatureContainer
+    public class Biome : GenericChunkFeatureContainer
     {
         [SerializeField]
         new private string name;
@@ -15,13 +15,5 @@ namespace MistRidge
 
         [SerializeField]
         private float endAltitude;
-
-        [SerializeField]
-        private List<ChunkFeature> chunkFeatures;
-
-        public List<ChunkFeature> ChunkFeatures()
-        {
-            return chunkFeatures;
-        }
     }
 }

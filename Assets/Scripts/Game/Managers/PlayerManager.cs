@@ -78,7 +78,7 @@ namespace MistRidge
             if (!playerFacades.ContainsKey(input))
             {
                 PlayerFacade playerFacade = playerFacadeFactory.Create(input);
-                playerFacade.Position = spawnManager.CurrentSpawn.SpawnPoint(input.DeviceNum);
+                playerFacade.Position = spawnManager.CurrentSpawnView.SpawnPoint(input.DeviceNum);
                 playerFacade.Parent = playerContainerView.transform;
 
                 playerFacades[input] = playerFacade;

@@ -21,6 +21,14 @@ namespace MistRidge
             this.checkpoint = checkpoint;
         }
 
+        public List<ChunkFacade> ChunkFacades
+        {
+            get
+            {
+                return chunkFacades;
+            }
+        }
+
         public void Initialize()
         {
             foreach (ChunkFacade chunkFacade in chunkFacades)

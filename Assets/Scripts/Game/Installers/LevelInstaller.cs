@@ -49,6 +49,8 @@ namespace MistRidge
             Container.Bind<ChunkManager>().ToSingle();
             Container.BindAllInterfacesToSingle<ChunkManager>();
 
+            Container.Bind<ChunkReference>().ToInstance(settings.chunk.chunkReference);
+
             Container.BindFacadeFactory<ChunkRequest, ChunkFacade, ChunkFacadeFactory>(InstallChunkFacade);
         }
 
@@ -74,9 +76,6 @@ namespace MistRidge
             }
 
             Container.Bind<CheckpointFactory>().ToSingle();
-
-            Container.BindSignal<CheckpointSignal>();
-            Container.BindTrigger<CheckpointSignal.Trigger>();
         }
 
         private void InstallSprints()
@@ -108,6 +107,7 @@ namespace MistRidge
                 public GameObject chunkBasePrefab;
                 public GameObject platformPrefab;
                 public GameObject sprintPrefab;
+                public ChunkReference chunkReference;
                 public List<Biome> biomes;
                 public List<Biome> checkpointBiomes;
                 public Chunk.Settings chunkSettings;

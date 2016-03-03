@@ -5,9 +5,9 @@ namespace MistRidge
 {
     public class SpawnManager
     {
-        private Spawn currentSpawn;
+        private SpawnView currentSpawn;
 
-        public Spawn CurrentSpawn
+        public SpawnView CurrentSpawnView
         {
             get
             {

@@ -29,6 +29,7 @@ namespace MistRidge
             ChunkRequest checkpointRequest = new ChunkRequest()
             {
                 chunkNum = chunkRequest.chunkNum,
+                chunkCount = chunkRequest.chunkCount,
                 chunkFeatureContainer = chunkFeatureContainerPickingStrategy.Pick(chunkFeatureContainers)
             };
 

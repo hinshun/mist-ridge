@@ -43,6 +43,30 @@ namespace MistRidge
             {
                 return chunkView.Position;
             }
+            set
+            {
+                chunkView.Position = value;
+            }
+        }
+
+        public Quaternion Rotation
+        {
+            get
+            {
+                return chunkView.Rotation;
+            }
+            set
+            {
+                chunkView.Rotation = value;
+            }
+        }
+
+        public SpawnView SpawnView
+        {
+            get
+            {
+                return chunkView.GetComponentInChildren<SpawnView>();
+            }
         }
     }
 }
