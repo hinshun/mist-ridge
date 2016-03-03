@@ -4,7 +4,7 @@ using System;
 namespace MistRidge
 {
     [Serializable]
-    public struct CollisionSphereBlueprint
+    public struct CollisionSphereRequest
     {
         public float radius;
         public float offset;

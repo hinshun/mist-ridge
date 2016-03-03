@@ -401,19 +401,19 @@ namespace MistRidge
         {
             List<CollisionSphere> newCollisionSpheres = new List<CollisionSphere>();
 
-            foreach(CollisionSphereBlueprint blueprint in settings.collisionSphereBlueprints)
+            foreach(CollisionSphereRequest request in settings.collisionSphereRequests)
             {
-                maxCollisionSphereRadius = Mathf.Max(maxCollisionSphereRadius, blueprint.radius);
+                maxCollisionSphereRadius = Mathf.Max(maxCollisionSphereRadius, request.radius);
 
-                CollisionSphere collisionSphere = collisionSphereFactory.Create(playerView, blueprint);
+                CollisionSphere collisionSphere = collisionSphereFactory.Create(playerView, request);
                 newCollisionSpheres.Add(collisionSphere);
             }
 
             if (newCollisionSpheres.Count == 0)
             {
-                maxCollisionSphereRadius = settings.defaultCollisionSphereBlueprint.radius;
+                maxCollisionSphereRadius = settings.defaultCollisionSphereRequest.radius;
 
-                CollisionSphere collisionSphere = collisionSphereFactory.Create(playerView, settings.defaultCollisionSphereBlueprint);
+                CollisionSphere collisionSphere = collisionSphereFactory.Create(playerView, settings.defaultCollisionSphereRequest);
                 newCollisionSpheres.Add(collisionSphere);
             }
 
@@ -440,8 +440,8 @@ namespace MistRidge
             public DebugSettings Debug;
             public LayerMask walkableLayerMask;
             public string ignoreCollisionLayerName;
-            public CollisionSphereBlueprint defaultCollisionSphereBlueprint;
-            public List<CollisionSphereBlueprint> collisionSphereBlueprints;
+            public CollisionSphereRequest defaultCollisionSphereRequest;
+            public List<CollisionSphereRequest> collisionSphereRequests;
 
             public float epsilon;
 

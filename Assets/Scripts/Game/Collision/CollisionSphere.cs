@@ -12,11 +12,11 @@ namespace MistRidge
 
         public CollisionSphere(
                 PlayerView playerView,
-                CollisionSphereBlueprint blueprint)
+                CollisionSphereRequest request)
         {
             this.playerView = playerView;
-            radius = blueprint.radius;
-            offset = blueprint.offset;
+            radius = request.radius;
+            offset = request.offset;
         }
 
         public Vector3 Position
@@ -35,7 +35,7 @@ namespace MistRidge
             }
         }
 
-        public class Factory : Factory<PlayerView, CollisionSphereBlueprint, CollisionSphere>
+        public class Factory : Factory<PlayerView, CollisionSphereRequest, CollisionSphere>
         {
         }
     }
