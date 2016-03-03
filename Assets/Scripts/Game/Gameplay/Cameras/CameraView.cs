@@ -51,8 +51,8 @@ namespace MistRidge
             set
             {
                 isActive = value;
-                /* Camera.enabled = value; */
-                /* AudioListener.enabled = value; */
+                Camera.enabled = value;
+                AudioListener.enabled = value;
             }
         }
 

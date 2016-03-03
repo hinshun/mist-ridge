@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Zenject;
+using InControl;
 
 namespace MistRidge
 {
@@ -37,6 +38,18 @@ namespace MistRidge
                 if (device != null)
                 {
                     Input input = inputFactory.Create(deviceNum, device);
+                    viableInputs.Add(input);
+                }
+            }
+
+            if (viableInputs.Count == 0)
+            {
+                InControl.InputDevice device = new UnityInputDevice(new KeyboardAndMouseProfile());
+                InControl.InputManager.AttachDevice(device);
+
+                if (device != null)
+                {
+                    Input input = inputFactory.Create(0, device);
                     viableInputs.Add(input);
                 }
             }

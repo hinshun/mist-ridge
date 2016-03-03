@@ -68,10 +68,10 @@ namespace MistRidge
 
         private void UpdateTilt()
         {
-            playerView.LocalRotation = Quaternion.Euler(
-                stateMachine.MoveDirection.x * -player.CurrentFreefallTilt,
+            playerView.MeshTransform.rotation = Quaternion.Euler(
+                stateMachine.MoveDirection.z * -player.CurrentFreefallTilt,
                 0,
-                stateMachine.MoveDirection.z * -player.CurrentFreefallTilt
+                stateMachine.MoveDirection.x * -player.CurrentFreefallTilt
             );
         }
     }

@@ -19,7 +19,7 @@ namespace MistRidge
         public PlayerStateMachine(
                 Settings settings,
                 Input input,
-                CameraManager camaraManager,
+                CameraManager cameraManager,
                 Grounding grounding,
                 PlayerView playerView,
                 PlayerController playerController,
