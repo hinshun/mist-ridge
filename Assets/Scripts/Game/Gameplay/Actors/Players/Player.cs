@@ -12,6 +12,8 @@ namespace MistRidge
         private readonly PlayerStateMachine playerStateMachine;
         private readonly PlayerPhysics playerPhysics;
 
+        private bool isAlive;
+
         private float walkSpeed;
         private float walkAcceleration;
         private float jumpSpeed;
@@ -35,6 +37,19 @@ namespace MistRidge
             this.playerView = playerView;
             this.playerStateMachine = playerStateMachine;
             this.playerPhysics = playerPhysics;
+        }
+
+        public bool IsAlive
+        {
+            get
+            {
+                return isAlive;
+            }
+            set
+            {
+                isAlive = value;
+                playerView.SetActive(value);
+            }
         }
 
         public Vector3 LookDirection
@@ -265,6 +280,7 @@ namespace MistRidge
 
         private void ResetPlayerProperties()
         {
+            isAlive = true;
             walkSpeed = 1f;
             walkAcceleration = 1f;
             jumpSpeed = 1f;

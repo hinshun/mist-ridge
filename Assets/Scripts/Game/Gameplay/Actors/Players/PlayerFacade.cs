@@ -6,17 +6,20 @@ namespace MistRidge
     public class PlayerFacade : Facade
     {
         private readonly Grounding grounding;
+        private readonly Player player;
         private readonly PlayerView playerView;
         private readonly PlayerController playerController;
         private readonly PlayerStateMachine playerStateMachine;
 
         public PlayerFacade(
             Grounding grounding,
+            Player player,
             PlayerView playerView,
             PlayerController playerController,
             PlayerStateMachine playerStateMachine)
         {
             this.grounding = grounding;
+            this.player = player;
             this.playerView = playerView;
             this.playerController = playerController;
             this.playerStateMachine = playerStateMachine;
@@ -71,6 +74,18 @@ namespace MistRidge
             }
         }
 
+        public bool IsAlive
+        {
+            get
+            {
+                return player.IsAlive;
+            }
+            set
+            {
+                player.IsAlive = value;
+            }
+        }
+
         public void Freefall()
         {
             playerStateMachine.ChangeState(PlayerStateType.Freefall);
@@ -78,7 +93,7 @@ namespace MistRidge
 
         public void Die()
         {
-            Debug.Log("I'm dead");
+            IsAlive = false;
         }
 
         public class Factory : FacadeFactory<Input, PlayerFacade>

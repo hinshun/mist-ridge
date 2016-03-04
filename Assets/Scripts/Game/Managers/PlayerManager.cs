@@ -48,7 +48,10 @@ namespace MistRidge
         {
             foreach (PlayerFacade playerFacade in playerFacades.Values)
             {
-                playerFacade.Tick();
+                if (playerFacade.IsAlive)
+                {
+                    playerFacade.Tick();
+                }
             }
         }
 
