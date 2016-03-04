@@ -30,6 +30,7 @@ namespace MistRidge
             {
                 chunkNum = chunkRequest.chunkNum,
                 chunkCount = chunkRequest.chunkCount,
+                heightChunkNum = chunkRequest.chunkNum,
                 chunkFeatureContainer = chunkFeatureContainerPickingStrategy.Pick(chunkFeatureContainers)
             };
 

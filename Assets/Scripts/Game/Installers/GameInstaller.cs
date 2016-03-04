@@ -40,6 +40,9 @@ namespace MistRidge
 
             Container.Bind<GameStateMachine>().ToSingle();
             Container.Bind<GameStateFactory>().ToSingle();
+
+            Container.Bind<AetherManager>().ToSingle();
+            Container.BindAllInterfacesToSingle<AetherManager>();
         }
 
         private void InstallSignals()

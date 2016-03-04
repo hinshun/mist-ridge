@@ -6,5 +6,6 @@ namespace MistRidge
         Start,
         Ready,
         Play,
+        End,
     }
 }

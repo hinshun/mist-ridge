@@ -4,6 +4,7 @@ namespace MistRidge
     {
         public int chunkNum;
         public int chunkCount;
+        public int heightChunkNum;
         public IChunkFeatureContainer chunkFeatureContainer;
     }
 }

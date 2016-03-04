@@ -8,6 +8,7 @@ namespace MistRidge
     public class SprintFactory
     {
         private readonly DiContainer container;
+        private readonly CheckpointManager checkpointManager;
         private readonly List<IChunkFeatureContainer> chunkFeatureContainers;
         private readonly IChunkFeatureContainerPickingStrategy chunkFeatureContainerPickingStrategy;
         private readonly ChunkFacadeFactory chunkFacadeFactory;
@@ -15,12 +16,14 @@ namespace MistRidge
 
         public SprintFactory(
                 DiContainer container,
+                CheckpointManager checkpointManager,
                 List<IChunkFeatureContainer> chunkFeatureContainers,
                 IChunkFeatureContainerPickingStrategy chunkFeatureContainerPickingStrategy,
                 ChunkFacadeFactory chunkFacadeFactory,
                 CheckpointFactory checkpointFactory)
         {
             this.container = container;
+            this.checkpointManager = checkpointManager;
             this.chunkFeatureContainers = chunkFeatureContainers;
             this.chunkFeatureContainerPickingStrategy = chunkFeatureContainerPickingStrategy;
             this.chunkFacadeFactory = chunkFacadeFactory;
@@ -50,6 +53,7 @@ namespace MistRidge
                 {
                     chunkNum = chunkNum,
                     chunkCount = sprintRequest.totalChunkCount,
+                    heightChunkNum = chunkNum,
                     chunkFeatureContainer = chunkFeatureContainerPickingStrategy.Pick(chunkFeatureContainers),
                 };
 
@@ -68,7 +72,10 @@ namespace MistRidge
                 chunkCount = sprintRequest.totalChunkCount,
             };
 
-            return checkpointFactory.Create(checkpointRequest);
+            Checkpoint checkpoint = checkpointFactory.Create(checkpointRequest);
+            checkpointManager.AddCheckpoint(checkpoint);
+
+            return checkpoint;
         }
     }
 }

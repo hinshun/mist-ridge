@@ -14,6 +14,7 @@ namespace MistRidge
         private int chunkCount;
         private List<Sprint> sprints;
         private ChunkFacade startingChunkFacade;
+        private List<ChunkFacade> peakChunkFacades;
 
         public ChunkManager(
                 Settings settings,
@@ -51,9 +52,10 @@ namespace MistRidge
 
         public void Initialize()
         {
-            chunkCount = CountChunks();
+            chunkCount = CountChunks() + settings.peakChunkCount;
             sprints = SpawnSprints();
             startingChunkFacade = SpawnStartingChunkFacade();
+            peakChunkFacades = SpawnPeakChunkFacades();
         }
 
         private int CountChunks()
@@ -98,6 +100,7 @@ namespace MistRidge
             {
                 chunkNum = chunkCount,
                 chunkCount = chunkCount,
+                heightChunkNum = chunkCount,
                 chunkFeatureContainer = settings.startingZoneFeatureContainer,
             };
 
@@ -107,9 +110,34 @@ namespace MistRidge
             return chunkFacade;
         }
 
+        private List<ChunkFacade> SpawnPeakChunkFacades()
+        {
+            List<ChunkFacade> peakChunkFacades = new List<ChunkFacade>();
+
+            for (int chunkNum = settings.peakChunkCount - 1; chunkNum >= 0; --chunkNum)
+            {
+                ChunkRequest chunkRequest = new ChunkRequest()
+                {
+                    chunkNum = chunkNum,
+                    chunkCount = chunkCount,
+                    heightChunkNum = settings.peakChunkCount - 1,
+                    chunkFeatureContainer = settings.peakFeatureContainer,
+                };
+
+                ChunkFacade chunkFacade = chunkFacadeFactory.Create(chunkRequest);
+                chunkFacade.Name = "Peak";
+
+                peakChunkFacades.Add(chunkFacade);
+            }
+
+            return peakChunkFacades;
+        }
+
         [Serializable]
         public class Settings
         {
+            public int peakChunkCount;
+            public GenericChunkFeatureContainer peakFeatureContainer;
             public GenericChunkFeatureContainer startingZoneFeatureContainer;
             public List<SprintRequest> sprintRequests;
         }

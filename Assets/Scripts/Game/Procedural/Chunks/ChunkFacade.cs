@@ -6,10 +6,14 @@ namespace MistRidge
 {
     public class ChunkFacade : Facade
     {
+        private readonly Chunk chunk;
         private readonly ChunkView chunkView;
 
-        public ChunkFacade(ChunkView chunkView)
+        public ChunkFacade(
+                Chunk chunk,
+                ChunkView chunkView)
         {
+            this.chunk = chunk;
             this.chunkView = chunkView;
         }
 
@@ -61,11 +65,27 @@ namespace MistRidge
             }
         }
 
+        public CheckpointWallView CheckpointWallView
+        {
+            get
+            {
+                return chunk.CheckpointWallView;
+            }
+        }
+
+        public CheckpointView CheckpointView
+        {
+            get
+            {
+                return chunk.CheckpointView;
+            }
+        }
+
         public SpawnView SpawnView
         {
             get
             {
-                return chunkView.GetComponentInChildren<SpawnView>();
+                return chunk.SpawnView;
             }
         }
     }

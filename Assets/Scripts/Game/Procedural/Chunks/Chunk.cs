@@ -13,6 +13,11 @@ namespace MistRidge
         private readonly ChunkFeatureView chunkFeatureView;
         private readonly IChunkPlacingStrategy chunkPlacingStrategy;
 
+        private List<ItemContainerView> itemContainerViews;
+        private CheckpointWallView checkpointWallView;
+        private CheckpointView checkpointView;
+        private SpawnView spawnView;
+
         public Chunk(
                 Settings settings,
                 ChunkRequest chunkRequest,
@@ -27,13 +32,38 @@ namespace MistRidge
             this.chunkPlacingStrategy = chunkPlacingStrategy;
         }
 
+        public CheckpointWallView CheckpointWallView
+        {
+            get
+            {
+                return checkpointWallView;
+            }
+        }
+
+        public CheckpointView CheckpointView
+        {
+            get
+            {
+                return checkpointView;
+            }
+        }
+
+        public SpawnView SpawnView
+        {
+            get
+            {
+                return spawnView;
+            }
+        }
+
         public void Initialize()
         {
             chunkFeatureView.Parent = chunkView.transform;
             PlaceChunk();
-            Spawn<ItemContainerSpawnView, ItemContainerView>(settings.itemContainerPrefab);
-            Spawn<CheckpointSpawnView, CheckpointView>(settings.checkpointPrefab);
-            Spawn<SpawnSpawnView, SpawnView>(settings.spawnPrefab);
+            itemContainerViews = SpawnItemContainers();
+            checkpointWallView = chunkView.GetComponentInChildren<CheckpointWallView>();
+            checkpointView = Spawn<CheckpointSpawnView, CheckpointView>(settings.checkpointPrefab);
+            spawnView = Spawn<SpawnSpawnView, SpawnView>(settings.spawnPrefab);
         }
 
         private void PlaceChunk()
@@ -41,17 +71,40 @@ namespace MistRidge
             chunkPlacingStrategy.Place(chunkView, chunkRequest);
         }
 
-        private void Spawn<TSpawner, TComponent>(GameObject prefab)
+        private List<ItemContainerView> SpawnItemContainers()
+        {
+            List<ItemContainerView> itemContainerViews = new List<ItemContainerView>();
+            ItemContainerSpawnView[] itemContainerSpawnViews = chunkView.GetComponentsInChildren<ItemContainerSpawnView>();
+
+            foreach(ItemContainerSpawnView itemContainerSpawnView in itemContainerSpawnViews)
+            {
+                ItemContainerView itemContainerView = GameObject.Instantiate(settings.itemContainerPrefab).GetComponent<ItemContainerView>();
+
+                itemContainerView.Parent = itemContainerSpawnView.transform;
+                itemContainerView.LocalPosition = Vector3.zero;
+
+                itemContainerViews.Add(itemContainerView);
+            }
+
+            return itemContainerViews;
+        }
+
+        private TComponent Spawn<TSpawner, TComponent>(GameObject prefab)
             where TSpawner : MonoBehaviour
             where TComponent : MonoView
         {
-            TSpawner[] spawners = chunkView.GetComponentsInChildren<TSpawner>();
-            foreach(TSpawner spawner in spawners)
+            TSpawner spawner = chunkView.GetComponentInChildren<TSpawner>();
+            if (spawner == null)
             {
-                TComponent component = GameObject.Instantiate(prefab).GetComponent<TComponent>();
-                component.Parent = spawner.transform;
-                component.LocalPosition = Vector3.zero;
+                return null;
             }
+
+            TComponent component = GameObject.Instantiate(prefab).GetComponent<TComponent>();
+
+            component.Parent = spawner.transform;
+            component.LocalPosition = Vector3.zero;
+
+            return component;
         }
 
         [Serializable]

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Collections.Generic;
 using Zenject;
 
@@ -83,7 +84,7 @@ namespace MistRidge
 
         private Vector3 Altitude(ChunkRequest chunkRequest)
         {
-            return 2 * Vector3.up * (chunkRequest.chunkCount - chunkRequest.chunkNum) + (20 * Vector3.up);
+            return 2 * Vector3.up * (chunkRequest.chunkCount - chunkRequest.heightChunkNum) + (20 * Vector3.up);
         }
     }
 }

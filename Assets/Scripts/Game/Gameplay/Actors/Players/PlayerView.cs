@@ -94,8 +94,7 @@ namespace MistRidge
             if (!checkpointsVisited.ContainsKey(checkpointView))
             {
                 checkpointsVisited[checkpointView] = true;
-                Debug.Log("arrive");
-                checkpointTrigger.Fire(this, checkpointView);
+                checkpointTrigger.Fire(checkpointView, this);
             }
         }
 

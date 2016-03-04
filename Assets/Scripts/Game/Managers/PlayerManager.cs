@@ -2,8 +2,8 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using Zenject;
-
 namespace MistRidge
+
 {
     public class PlayerManager : IInitializable, ITickable
     {
@@ -11,6 +11,7 @@ namespace MistRidge
         private readonly SpawnManager spawnManager;
         private readonly PlayerFacade.Factory playerFacadeFactory;
         private Dictionary<Input, PlayerFacade> playerFacades;
+        private Dictionary<PlayerView, Input> playerViewMapping;
 
         public PlayerManager(
                 PlayerContainerView playerContainerView,
@@ -27,7 +28,7 @@ namespace MistRidge
             get
             {
                 List<Vector3> playerPositions = new List<Vector3>();
-                foreach(PlayerFacade playerFacade in playerFacades.Values)
+                foreach (PlayerFacade playerFacade in playerFacades.Values)
                 {
                     playerPositions.Add(playerFacade.Position);
                 }
@@ -41,7 +42,7 @@ namespace MistRidge
             get
             {
                 List<Vector3> playerPositions = new List<Vector3>();
-                foreach(PlayerFacade playerFacade in playerFacades.Values)
+                foreach (PlayerFacade playerFacade in playerFacades.Values)
                 {
                     playerPositions.Add(playerFacade.GroundingPosition);
                 }
@@ -50,9 +51,22 @@ namespace MistRidge
             }
         }
 
+        public int PlayerCount
+        {
+            get
+            {
+                return playerFacades.Values.Count;
+            }
+        }
+
         public PlayerFacade PlayerFacade(Input input)
         {
             return playerFacades[input];
+        }
+
+        public Input Input(PlayerView playerView)
+        {
+            return playerViewMapping[playerView];
         }
 
         public bool HasPlayerFacade(Input input)
@@ -63,6 +77,7 @@ namespace MistRidge
         public void Initialize()
         {
             playerFacades = new Dictionary<Input, PlayerFacade>();
+            playerViewMapping = new Dictionary<PlayerView, Input>();
         }
 
         public void Tick()
@@ -82,6 +97,8 @@ namespace MistRidge
                 playerFacade.Parent = playerContainerView.transform;
 
                 playerFacades[input] = playerFacade;
+                playerViewMapping[playerFacade.PlayerView] = input;
+
                 return playerFacade;
             }
 

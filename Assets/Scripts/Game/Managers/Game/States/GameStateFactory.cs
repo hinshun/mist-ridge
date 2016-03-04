@@ -26,6 +26,10 @@ namespace MistRidge
                 case GameStateType.Play:
                     gameState = container.Instantiate<GamePlayState>();
                     break;
+
+                case GameStateType.End:
+                    gameState = container.Instantiate<GameEndState>();
+                    break;
             }
 
             if (gameState == null)

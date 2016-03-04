@@ -19,6 +19,14 @@ namespace MistRidge
             this.playerStateMachine = playerStateMachine;
         }
 
+        public PlayerView PlayerView
+        {
+            get
+            {
+                return playerView;
+            }
+        }
+
         public Vector3 Position
         {
             get

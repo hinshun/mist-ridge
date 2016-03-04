@@ -26,6 +26,7 @@ namespace MistRidge
             Container.Install<ExecutionOrderInstaller>(
                 new List<Type>()
                 {
+                    typeof(CheckpointManager),
                     typeof(ChunkManager),
                     typeof(LevelManager),
                 }
@@ -76,6 +77,9 @@ namespace MistRidge
             }
 
             Container.Bind<CheckpointFactory>().ToSingle();
+
+            Container.Bind<CheckpointManager>().ToSingle();
+            Container.BindAllInterfacesToSingle<CheckpointManager>();
         }
 
         private void InstallSprints()
