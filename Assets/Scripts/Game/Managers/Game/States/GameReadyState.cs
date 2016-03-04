@@ -11,6 +11,7 @@ namespace MistRidge
         private readonly CameraView cameraView;
         private readonly InputManager inputManager;
         private readonly PlayerManager playerManager;
+        private readonly DisplayManager displayManager;
         private readonly GameManager gameManager;
 
         public GameReadyState(
@@ -19,6 +20,7 @@ namespace MistRidge
                 CameraView cameraView,
                 InputManager inputManager,
                 PlayerManager playerManager,
+                DisplayManager displayManager,
                 GameManager gameManager,
                 GameStateMachine stateMachine)
             : base(stateMachine)
@@ -28,6 +30,7 @@ namespace MistRidge
             this.cameraView = cameraView;
             this.inputManager = inputManager;
             this.playerManager = playerManager;
+            this.displayManager = displayManager;
             this.gameManager = gameManager;
 
             stateType = GameStateType.Ready;
@@ -75,6 +78,7 @@ namespace MistRidge
             if (playerFacade != null)
             {
                 playerFacade.Freefall();
+                displayManager.Display(input);
             }
         }
 

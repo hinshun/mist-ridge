@@ -23,7 +23,6 @@ namespace MistRidge
 
         private void InstallSettings()
         {
-
             Container.Bind<TimeMachine.Settings>().ToSingleInstance(settings.timeMachineSettings);
         }
 

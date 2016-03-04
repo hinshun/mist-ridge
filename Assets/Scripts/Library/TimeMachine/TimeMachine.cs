@@ -27,6 +27,11 @@ namespace MistRidge
 
         private void OnGUI()
         {
+            if (!settings.enableTimeMachine)
+            {
+                return;
+            }
+
             GUI.Box(
                 new Rect(10, 10, 200, 50),
                 "Time Machine"
@@ -46,6 +51,7 @@ namespace MistRidge
         [Serializable]
         public class Settings
         {
+            public bool enableTimeMachine;
             public float initialTimeScale;
         }
     }

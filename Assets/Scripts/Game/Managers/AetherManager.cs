@@ -7,7 +7,18 @@ namespace MistRidge
 {
     public class AetherManager : IInitializable
     {
+        private readonly PlayerManager playerManager;
+        private readonly DisplayManager displayManager;
+
         private Dictionary<PlayerView, int> playerAethers;
+
+        public AetherManager(
+                PlayerManager playerManager,
+                DisplayManager displayManager)
+        {
+            this.playerManager = playerManager;
+            this.displayManager = displayManager;
+        }
 
         public void Initialize()
         {
@@ -48,7 +59,8 @@ namespace MistRidge
 
             playerAethers[playerView] += aetherCount;
 
-            Debug.Log("player has " + playerAethers[playerView] + " aethers now");
+            Input input = playerManager.Input(playerView);
+            displayManager.UpdateAether(input, playerAethers[playerView]);
         }
     }
 }
