@@ -57,6 +57,24 @@ namespace MistRidge
             }
         }
 
+        public List<PlayerFacade> DeadPlayerFacades
+        {
+            get
+            {
+                List<PlayerFacade> deadPlayerFacades = new List<PlayerFacade>();
+
+                foreach (KeyValuePair<PlayerFacade, bool> entry in playerDeaths)
+                {
+                    if (entry.Value)
+                    {
+                        deadPlayerFacades.Add(entry.Key);
+                    }
+                }
+
+                return deadPlayerFacades;
+            }
+        }
+
         public int AlivePlayerCount
         {
             get
@@ -97,6 +115,11 @@ namespace MistRidge
         {
             foreach (Input input in inputManager.Inputs)
             {
+                if (!playerManager.HasPlayerFacade(input))
+                {
+                    continue;
+                }
+
                 PlayerFacade playerFacade = playerManager.PlayerFacade(input);
 
                 if (playerFacade == null)
@@ -122,6 +145,11 @@ namespace MistRidge
 
             foreach (Input input in inputManager.Inputs)
             {
+                if (!playerManager.HasPlayerFacade(input))
+                {
+                    continue;
+                }
+
                 PlayerFacade playerFacade = playerManager.PlayerFacade(input);
 
                 if (playerFacade == null || !playerDeaths.ContainsKey(playerFacade) || playerDeaths[playerFacade])
@@ -131,20 +159,31 @@ namespace MistRidge
 
                 if (!GeometryUtility.TestPlanesAABB(planes, playerFacade.Bounds))
                 {
-                    playerDeaths[playerFacade] = true;
-                    playerFacade.Die();
+                    Kill(playerFacade);
                 }
             }
         }
 
-        private void SortRankedPositions(List<Vector3> positions)
+        public void Kill(PlayerFacade playerFacade)
         {
-            positions.Sort((a, b) => a.y.CompareTo(b.y));
+            playerDeaths[playerFacade] = true;
+            playerFacade.Die();
+        }
+
+        public void Respawn(PlayerFacade playerFacade)
+        {
+            playerDeaths[playerFacade] = false;
+            playerFacade.Respawn();
         }
 
         private List<Vector3> RelevantPositions(List<Vector3> positions)
         {
-            SortRankedPositions(positions);
+            if (positions.Count == 0)
+            {
+                return positions;
+            }
+
+            positions.Sort((a, b) => a.y.CompareTo(b.y));
 
             Vector3 firstPlayerPosition = positions[positions.Count - 1];
             Vector3 lastPlayerPosition = positions[0];

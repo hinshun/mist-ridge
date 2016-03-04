@@ -6,6 +6,7 @@ namespace MistRidge
     public class PlayerFacade : Facade
     {
         private readonly Grounding grounding;
+        private readonly Input input;
         private readonly Player player;
         private readonly PlayerView playerView;
         private readonly PlayerController playerController;
@@ -13,16 +14,26 @@ namespace MistRidge
 
         public PlayerFacade(
             Grounding grounding,
+            Input input,
             Player player,
             PlayerView playerView,
             PlayerController playerController,
             PlayerStateMachine playerStateMachine)
         {
             this.grounding = grounding;
+            this.input = input;
             this.player = player;
             this.playerView = playerView;
             this.playerController = playerController;
             this.playerStateMachine = playerStateMachine;
+        }
+
+        public Input Input
+        {
+            get
+            {
+                return input;
+            }
         }
 
         public PlayerView PlayerView
@@ -42,7 +53,6 @@ namespace MistRidge
             set
             {
                 playerView.Position = value;
-                playerController.ProbeGround();
             }
         }
 
@@ -86,9 +96,19 @@ namespace MistRidge
             }
         }
 
+        public void ProbeGround()
+        {
+            playerController.ProbeGround();
+        }
+
         public void Freefall()
         {
             playerStateMachine.ChangeState(PlayerStateType.Freefall);
+        }
+
+        public void Respawn()
+        {
+            IsAlive = true;
         }
 
         public void Die()

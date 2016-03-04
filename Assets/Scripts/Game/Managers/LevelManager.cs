@@ -51,6 +51,7 @@ namespace MistRidge
                 {
                     PlayerFacade playerFacade = playerManager.PlayerFacade(input);
                     playerFacade.Position = spawnManager.CurrentSpawnView.SpawnPoint(input.DeviceNum);
+                    playerFacade.ProbeGround();
                 }
             }
 

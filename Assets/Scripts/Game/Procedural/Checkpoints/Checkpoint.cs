@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using Zenject;
 
 namespace MistRidge
@@ -7,6 +8,7 @@ namespace MistRidge
     public class Checkpoint : IInitializable
     {
         private readonly ChunkFacade chunkFacade;
+        private readonly SpawnManager spawnManager;
         private readonly CheckpointManager checkpointManager;
         private readonly AetherManager aetherManager;
         private readonly DeathManager deathManager;
@@ -15,11 +17,13 @@ namespace MistRidge
 
         public Checkpoint(
                 ChunkFacade chunkFacade,
+                SpawnManager spawnManager,
                 CheckpointManager checkpointManager,
                 AetherManager aetherManager,
                 DeathManager deathManager)
         {
             this.chunkFacade = chunkFacade;
+            this.spawnManager = spawnManager;
             this.checkpointManager = checkpointManager;
             this.aetherManager = aetherManager;
             this.deathManager = deathManager;
@@ -81,6 +85,16 @@ namespace MistRidge
 
         public void Open()
         {
+            CheckpointView.SetActive(false);
+            spawnManager.CurrentSpawnView = SpawnView;
+
+            List<PlayerFacade> deadPlayerFacades = deathManager.DeadPlayerFacades;
+            foreach (PlayerFacade playerFacade in deadPlayerFacades)
+            {
+                playerFacade.Position = spawnManager.CurrentSpawnView.SpawnPoint(playerFacade.Input.DeviceNum);
+                deathManager.Respawn(playerFacade);
+            }
+
             chunkFacade.CheckpointWallView.Open();
         }
 
