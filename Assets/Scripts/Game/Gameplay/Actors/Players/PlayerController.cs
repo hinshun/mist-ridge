@@ -102,7 +102,7 @@ namespace MistRidge
 
             ignoreCollisionLayer = LayerMask.NameToLayer(settings.ignoreCollisionLayerName);
             ignoredColliders = new List<Collider>();
-            ignoredColliders.AddRange(playerView.Colliders);
+            ignoredColliders.Add(playerView.Collider);
             ignoredColliderStack = new Stack<ColliderInfo>();
 
             collisions = new List<Collision>();
@@ -148,6 +148,13 @@ namespace MistRidge
             return grounding.IsGrounded(feetSphere, true, 0.5f);
         }
 
+        public void ProbeGround()
+        {
+            PushIgnoredColliders();
+            grounding.ProbeGround(feetSphere);
+            PopIgnoredColliders();
+        }
+
         private void Step()
         {
             Vector3 groundingDifference = grounding.Position - lastGroundPosition;
@@ -183,13 +190,6 @@ namespace MistRidge
             }
 
             grounding.DebugGround();
-        }
-
-        private void ProbeGround()
-        {
-            PushIgnoredColliders();
-            grounding.ProbeGround(feetSphere);
-            PopIgnoredColliders();
         }
 
         private void SlopeLimit(Vector3 initialPosition)

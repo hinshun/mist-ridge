@@ -6,18 +6,15 @@ namespace MistRidge
 {
     public class GamePlayState : GameBaseState
     {
-        private readonly CameraManager cameraManager;
         private readonly PlayerManager playerManager;
         private readonly InputManager inputManager;
 
         public GamePlayState(
-                CameraManager cameraManager,
                 PlayerManager playerManager,
                 InputManager inputManager,
                 GameStateMachine stateMachine)
             : base(stateMachine)
         {
-            this.cameraManager = cameraManager;
             this.playerManager = playerManager;
             this.inputManager = inputManager;
 
@@ -37,7 +34,7 @@ namespace MistRidge
 
         public override void EnterState()
         {
-            cameraManager.ResetCamera();
+            // Do Nothing
         }
 
         public override void ExitState()

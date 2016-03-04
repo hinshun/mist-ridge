@@ -11,7 +11,7 @@ namespace MistRidge
         private readonly Camera camera;
         private readonly CameraView cameraView;
         private readonly CameraRigView cameraRigView;
-        private readonly PlayerManager playerManager;
+        private readonly DeathManager deathManager;
 
         private Camera currentCamera;
 
@@ -20,13 +20,13 @@ namespace MistRidge
                 Camera camera,
                 CameraView cameraView,
                 CameraRigView cameraRigView,
-                PlayerManager playerManager)
+                DeathManager deathManager)
         {
             this.settings = settings;
             this.camera = camera;
             this.cameraView = cameraView;
             this.cameraRigView = cameraRigView;
-            this.playerManager = playerManager;
+            this.deathManager = deathManager;
         }
 
         public Camera CurrentCamera
@@ -43,7 +43,7 @@ namespace MistRidge
 
         public void Initialize()
         {
-            ResetCamera();
+            CurrentCamera = camera;
         }
 
         public void Tick()
@@ -53,18 +53,29 @@ namespace MistRidge
                 return;
             }
 
-            float zoom = CameraZoomForEncapsulation(playerManager.PlayerPositions);
-            float cappedZoom = Mathf.Max(zoom, settings.minZoom);
-            cameraView.LocalPosition = new Vector3(
-                cameraView.LocalPosition.x,
-                cameraView.LocalPosition.y,
-                -cappedZoom
+            cameraView.LocalPosition = Vector3.Lerp(
+                cameraView.LocalPosition,
+                ZoomPosition(),
+                settings.zoomSpeed * Time.deltaTime
             );
         }
 
         public void ResetCamera()
         {
             CurrentCamera = camera;
+            cameraView.LocalPosition = ZoomPosition();
+        }
+
+        private Vector3 ZoomPosition()
+        {
+            float zoom = CameraZoomForEncapsulation(deathManager.AliveRelevantPlayerGroundingPositions);
+            float cappedZoom = Mathf.Max(zoom, settings.minZoom);
+
+            return new Vector3(
+                cameraView.LocalPosition.x,
+                cameraView.LocalPosition.y,
+                -cappedZoom
+            );
         }
 
         private float CameraZoomForEncapsulation(List<Vector3> playerPositions)
@@ -120,6 +131,7 @@ namespace MistRidge
         public class Settings
         {
             public DebugSettings Debug;
+            public float zoomSpeed;
             public float minZoom;
             public float verticalPercentage;
             public float horizontalPercentage;

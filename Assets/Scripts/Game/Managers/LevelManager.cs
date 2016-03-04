@@ -11,19 +11,31 @@ namespace MistRidge
         private readonly ChunkManager chunkManager;
         private readonly InputManager inputManager;
         private readonly PlayerManager playerManager;
+        private readonly DeathManager deathManager;
+        private readonly CameraView cameraView;
+        private readonly CameraManager cameraManager;
+        private readonly CameraAnchorManager cameraAnchorManager;
 
         public LevelManager(
                 GameStateSignal.Trigger gameStateTrigger,
                 SpawnManager spawnManager,
                 ChunkManager chunkManager,
                 InputManager inputManager,
-                PlayerManager playerManager)
+                PlayerManager playerManager,
+                DeathManager deathManager,
+                CameraView cameraView,
+                CameraManager cameraManager,
+                CameraAnchorManager cameraAnchorManager)
         {
             this.gameStateTrigger = gameStateTrigger;
             this.spawnManager = spawnManager;
             this.chunkManager = chunkManager;
             this.inputManager = inputManager;
             this.playerManager = playerManager;
+            this.deathManager = deathManager;
+            this.cameraView = cameraView;
+            this.cameraManager = cameraManager;
+            this.cameraAnchorManager = cameraAnchorManager;
         }
 
         public void Initialize()
@@ -41,6 +53,11 @@ namespace MistRidge
                     playerFacade.Position = spawnManager.CurrentSpawnView.SpawnPoint(input.DeviceNum);
                 }
             }
+
+            cameraView.IsActive = true;
+            cameraAnchorManager.ResetAnchor();
+            cameraManager.ResetCamera();
+            deathManager.IsActive = true;
         }
     }
 }

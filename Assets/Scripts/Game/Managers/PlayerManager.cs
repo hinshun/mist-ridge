@@ -2,8 +2,8 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using Zenject;
-namespace MistRidge
 
+namespace MistRidge
 {
     public class PlayerManager : IInitializable, ITickable
     {
@@ -21,42 +21,6 @@ namespace MistRidge
             this.playerContainerView = playerContainerView;
             this.spawnManager = spawnManager;
             this.playerFacadeFactory = playerFacadeFactory;
-        }
-
-        public List<Vector3> PlayerPositions
-        {
-            get
-            {
-                List<Vector3> playerPositions = new List<Vector3>();
-                foreach (PlayerFacade playerFacade in playerFacades.Values)
-                {
-                    playerPositions.Add(playerFacade.Position);
-                }
-
-                return playerPositions;
-            }
-        }
-
-        public List<Vector3> PlayerGroundingPositions
-        {
-            get
-            {
-                List<Vector3> playerPositions = new List<Vector3>();
-                foreach (PlayerFacade playerFacade in playerFacades.Values)
-                {
-                    playerPositions.Add(playerFacade.GroundingPosition);
-                }
-
-                return playerPositions;
-            }
-        }
-
-        public int PlayerCount
-        {
-            get
-            {
-                return playerFacades.Values.Count;
-            }
         }
 
         public PlayerFacade PlayerFacade(Input input)

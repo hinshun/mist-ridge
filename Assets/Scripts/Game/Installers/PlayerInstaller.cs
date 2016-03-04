@@ -16,6 +16,7 @@ namespace MistRidge
             InstallCollision();
             InstallCamera();
             InstallSpawn();
+            InstallDeath();
             InstallSettings();
         }
 
@@ -85,11 +86,20 @@ namespace MistRidge
             Container.Bind<SpawnManager>().ToSingle();
         }
 
+        private void InstallDeath()
+        {
+            Container.Bind<DeathManager>().ToSingle();
+            Container.BindAllInterfacesToSingle<DeathManager>();
+        }
+
         private void InstallSettings()
         {
+            Container.Bind<DeathManager.Settings>().ToSingleInstance(settings.deathManagerSettings);
+
             Container.Bind<Player.Settings>().ToSingleInstance(settings.player.playerSettings);
             Container.Bind<PlayerController.Settings>().ToSingleInstance(settings.player.controllerSettings);
             Container.Bind<PlayerStateMachine.Settings>().ToSingleInstance(settings.player.stateMachineSettings);
+
             Container.Bind<Grounding.Settings>().ToSingleInstance(settings.player.collision.groundingSettings);
 
             Container.Bind<CameraAnchorManager.Settings>().ToSingleInstance(settings.camera.anchorSettings);
@@ -101,6 +111,7 @@ namespace MistRidge
         {
             public PlayerSettings player;
             public CameraSettings camera;
+            public DeathManager.Settings deathManagerSettings;
 
             [Serializable]
             public class PlayerSettings

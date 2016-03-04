@@ -9,7 +9,7 @@ namespace MistRidge
         private readonly ChunkFacade chunkFacade;
         private readonly CheckpointManager checkpointManager;
         private readonly AetherManager aetherManager;
-        private readonly PlayerManager playerManager;
+        private readonly DeathManager deathManager;
 
         private int aetherPosition;
 
@@ -17,12 +17,12 @@ namespace MistRidge
                 ChunkFacade chunkFacade,
                 CheckpointManager checkpointManager,
                 AetherManager aetherManager,
-                PlayerManager playerManager)
+                DeathManager deathManager)
         {
             this.chunkFacade = chunkFacade;
             this.checkpointManager = checkpointManager;
             this.aetherManager = aetherManager;
-            this.playerManager = playerManager;
+            this.deathManager = deathManager;
         }
 
         public Transform Parent
@@ -89,7 +89,7 @@ namespace MistRidge
             aetherManager.AddAether(playerView, AetherAward);
             aetherPosition += 1;
 
-            if (aetherPosition == playerManager.PlayerCount)
+            if (aetherPosition == deathManager.AlivePlayerCount)
             {
                 checkpointManager.FinishCheckpoint(this);
             }

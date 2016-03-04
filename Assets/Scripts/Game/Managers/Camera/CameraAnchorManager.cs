@@ -11,20 +11,20 @@ namespace MistRidge
         private readonly CameraView cameraView;
         private readonly CameraAnchorView cameraAnchorView;
         private readonly CameraOriginView cameraOriginView;
-        private readonly PlayerManager playerManager;
+        private readonly DeathManager deathManager;
 
         public CameraAnchorManager(
                 Settings settings,
                 CameraView cameraView,
                 CameraAnchorView cameraAnchorView,
                 CameraOriginView cameraOriginView,
-                PlayerManager playerManager)
+                DeathManager deathManager)
         {
             this.settings = settings;
             this.cameraView = cameraView;
             this.cameraAnchorView = cameraAnchorView;
             this.cameraOriginView = cameraOriginView;
-            this.playerManager = playerManager;
+            this.deathManager = deathManager;
         }
 
         public void Tick()
@@ -34,33 +34,48 @@ namespace MistRidge
                 return;
             }
 
-            Vector3 center = CenterPoint(playerManager.PlayerPositions);
+            Vector3 anchorPosition = AnchorPosition();
 
-            cameraAnchorView.transform.position = Vector3.Lerp(
-                cameraAnchorView.transform.position,
-                center,
+            cameraAnchorView.Position = Vector3.Lerp(
+                cameraAnchorView.Position,
+                anchorPosition,
                 settings.centeringSpeed * Time.deltaTime
             );
 
-            Vector3 originProjection = new Vector3(
-                cameraOriginView.transform.position.x,
-                cameraAnchorView.transform.position.y,
-                cameraOriginView.transform.position.z
-            );
-
-            Vector3 lookDirection = originProjection - center;
-            if (lookDirection == Vector3.zero)
-            {
-                return;
-            }
-
-            Quaternion rotation = Quaternion.LookRotation(originProjection - center);
-
-            cameraAnchorView.transform.rotation = Quaternion.Lerp(
-                cameraAnchorView.transform.rotation,
-                rotation,
+            cameraAnchorView.Rotation = Quaternion.Lerp(
+                cameraAnchorView.Rotation,
+                AnchorRotation(anchorPosition),
                 settings.rotationSpeed * Time.deltaTime
             );
+        }
+
+        public void ResetAnchor()
+        {
+            Vector3 anchorPosition = AnchorPosition();
+            cameraAnchorView.Position = anchorPosition;
+            cameraAnchorView.Rotation = AnchorRotation(anchorPosition);
+        }
+
+        private Vector3 AnchorPosition()
+        {
+            return CenterPoint(deathManager.AliveRelevantPlayerGroundingPositions);
+        }
+
+        private Quaternion AnchorRotation(Vector3 anchorPosition)
+        {
+            Vector3 originProjection = new Vector3(
+                cameraOriginView.Position.x,
+                cameraAnchorView.Position.y,
+                cameraOriginView.Position.z
+            );
+
+            Vector3 lookDirection = originProjection - anchorPosition;
+            if (lookDirection == Vector3.zero)
+            {
+                return Quaternion.identity;
+            }
+
+            return Quaternion.LookRotation(originProjection - anchorPosition);
         }
 
         private Vector3 CenterPoint(List<Vector3> playerPositions)

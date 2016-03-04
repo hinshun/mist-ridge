@@ -11,7 +11,7 @@ namespace MistRidge
         public event Action DrawGizmos = delegate {};
 
         [SerializeField]
-        private List<Collider> colliders;
+        private Collider collider;
 
         [SerializeField]
         private Transform meshTransform;
@@ -23,7 +23,6 @@ namespace MistRidge
         private Animator animator;
         private ItemPickupSignal.Trigger itemPickupTrigger;
         private CheckpointSignal.Trigger checkpointTrigger;
-        private ReadOnlyCollection<Collider> readOnlyColliders;
         private Dictionary<CheckpointView, bool> checkpointsVisited;
 
         [PostInject]
@@ -35,11 +34,11 @@ namespace MistRidge
             this.checkpointTrigger = checkpointTrigger;
         }
 
-        public ReadOnlyCollection<Collider> Colliders
+        public Collider Collider
         {
             get
             {
-                return readOnlyColliders;
+                return collider;
             }
         }
 
@@ -101,7 +100,6 @@ namespace MistRidge
         private void Awake()
         {
             animator = GetComponent<Animator>();
-            readOnlyColliders = new ReadOnlyCollection<Collider>(colliders);
             checkpointsVisited = new Dictionary<CheckpointView, bool>();
         }
     }

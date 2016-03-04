@@ -11,6 +11,7 @@ namespace MistRidge
         private readonly CameraView cameraView;
         private readonly InputManager inputManager;
         private readonly PlayerManager playerManager;
+        private readonly DeathManager deathManager;
         private readonly DisplayManager displayManager;
         private readonly GameManager gameManager;
 
@@ -20,6 +21,7 @@ namespace MistRidge
                 CameraView cameraView,
                 InputManager inputManager,
                 PlayerManager playerManager,
+                DeathManager deathManager,
                 DisplayManager displayManager,
                 GameManager gameManager,
                 GameStateMachine stateMachine)
@@ -30,6 +32,7 @@ namespace MistRidge
             this.cameraView = cameraView;
             this.inputManager = inputManager;
             this.playerManager = playerManager;
+            this.deathManager = deathManager;
             this.displayManager = displayManager;
             this.gameManager = gameManager;
 
@@ -68,7 +71,7 @@ namespace MistRidge
 
         public override void ExitState()
         {
-            cameraView.IsActive = true;
+            deathManager.PopulatePlayerDeaths();
         }
 
         private void SpawnPlayer(Input input)

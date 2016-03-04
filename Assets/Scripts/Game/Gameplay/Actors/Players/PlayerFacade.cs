@@ -7,15 +7,18 @@ namespace MistRidge
     {
         private readonly Grounding grounding;
         private readonly PlayerView playerView;
+        private readonly PlayerController playerController;
         private readonly PlayerStateMachine playerStateMachine;
 
         public PlayerFacade(
             Grounding grounding,
             PlayerView playerView,
+            PlayerController playerController,
             PlayerStateMachine playerStateMachine)
         {
             this.grounding = grounding;
             this.playerView = playerView;
+            this.playerController = playerController;
             this.playerStateMachine = playerStateMachine;
         }
 
@@ -36,6 +39,7 @@ namespace MistRidge
             set
             {
                 playerView.Position = value;
+                playerController.ProbeGround();
             }
         }
 
@@ -59,9 +63,22 @@ namespace MistRidge
             }
         }
 
+        public Bounds Bounds
+        {
+            get
+            {
+                return playerView.Collider.bounds;
+            }
+        }
+
         public void Freefall()
         {
             playerStateMachine.ChangeState(PlayerStateType.Freefall);
+        }
+
+        public void Die()
+        {
+            Debug.Log("I'm dead");
         }
 
         public class Factory : FacadeFactory<Input, PlayerFacade>
