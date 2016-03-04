@@ -74,16 +74,15 @@ namespace MistRidge
             }
         }
 
-        public IItem NewItem(ItemType itemType, Player player)
+        public IItem NewItem(ItemDrop itemDrop, Player player)
         {
-            ItemDrop itemDrop = PickItemDrop(itemType);
-
             IItem item = itemFactory.Create(itemDrop.ItemType, player);
             items.Add(item);
+
             return item;
         }
 
-        private ItemDrop PickItemDrop(ItemType itemType)
+        public ItemDrop PickItemDrop(ItemType itemType)
         {
             if (itemType == ItemType.Random)
             {

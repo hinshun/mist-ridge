@@ -11,6 +11,9 @@ namespace MistRidge
         private Image portrait;
 
         [SerializeField]
+        private Image itemImage;
+
+        [SerializeField]
         private Text aetherText;
 
         public Image Portrait
@@ -18,6 +21,14 @@ namespace MistRidge
             get
             {
                 return portrait;
+            }
+        }
+
+        public Image ItemImage
+        {
+            get
+            {
+                return itemImage;
             }
         }
 

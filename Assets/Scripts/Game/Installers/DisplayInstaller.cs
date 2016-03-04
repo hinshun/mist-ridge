@@ -25,12 +25,14 @@ namespace MistRidge
 
         private void InstallSettings()
         {
+            Container.Bind<DisplayManager.Settings>().ToSingleInstance(settings.displayManagerSettings);
         }
 
         [Serializable]
         public class Settings
         {
             public GameObject gameDisplayPrefab;
+            public DisplayManager.Settings displayManagerSettings;
         }
     }
 }

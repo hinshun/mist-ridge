@@ -10,6 +10,7 @@ namespace MistRidge
         private readonly Player player;
         private readonly PlayerView playerView;
         private readonly ItemManager itemManager;
+        private readonly DisplayManager displayManager;
         private readonly ItemPickupSignal itemPickupSignal;
 
         private IItem item;
@@ -19,12 +20,14 @@ namespace MistRidge
                 Player player,
                 PlayerView playerView,
                 ItemManager itemManager,
+                DisplayManager displayManager,
                 ItemPickupSignal itemPickupSignal)
         {
             this.input = input;
             this.player = player;
             this.playerView = playerView;
             this.itemManager = itemManager;
+            this.displayManager = displayManager;
             this.itemPickupSignal = itemPickupSignal;
         }
 
@@ -42,6 +45,7 @@ namespace MistRidge
                 {
                     item = null;
                     playerView.CanPickupItems = true;
+                    displayManager.UpdateItem(input, null);
                     return;
                 }
 
@@ -55,7 +59,11 @@ namespace MistRidge
         private void OnItemPickup(ItemType itemType)
         {
             playerView.CanPickupItems = false;
-            item = itemManager.NewItem(itemType, player);
+
+            ItemDrop itemDrop = itemManager.PickItemDrop(itemType);
+            displayManager.UpdateItem(input, itemDrop);
+
+            item = itemManager.NewItem(itemDrop, player);
         }
     }
 }
