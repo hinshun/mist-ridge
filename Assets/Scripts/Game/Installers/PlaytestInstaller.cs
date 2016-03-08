@@ -6,6 +6,9 @@ namespace MistRidge
 {
     public class PlaytestInstaller : MonoInstaller
     {
+        [SerializeField]
+        private Settings settings;
+
         public override void InstallBindings()
         {
             InstallPlaytest();
@@ -16,10 +19,18 @@ namespace MistRidge
         {
             Container.Bind<PlaytestManager>().ToSingle();
             Container.BindAllInterfacesToSingle<PlaytestManager>();
+
+            Container.BindInstance(settings.playtestSpawn);
         }
 
         private void InstallSettings()
         {
+        }
+
+        [Serializable]
+        public class Settings
+        {
+            public SpawnView playtestSpawn;
         }
     }
 }

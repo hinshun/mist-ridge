@@ -7,15 +7,18 @@ namespace MistRidge
     public class GamePlayState : GameBaseState
     {
         private readonly PlayerManager playerManager;
+        private readonly DeathManager deathManager;
         private readonly InputManager inputManager;
 
         public GamePlayState(
                 PlayerManager playerManager,
+                DeathManager deathManager,
                 InputManager inputManager,
                 GameStateMachine stateMachine)
             : base(stateMachine)
         {
             this.playerManager = playerManager;
+            this.deathManager = deathManager;
             this.inputManager = inputManager;
 
             stateType = GameStateType.Play;
@@ -28,6 +31,7 @@ namespace MistRidge
                 if (input.Mapping.AnyButton.WasPressed)
                 {
                     playerManager.SpawnPlayer(input);
+                    deathManager.AddPlayer(input);
                 }
             }
         }

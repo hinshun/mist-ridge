@@ -14,8 +14,10 @@ namespace MistRidge
 
         private bool isAlive;
 
+        private float rotationSpeed;
         private float walkSpeed;
         private float walkAcceleration;
+        private float walkThreshold;
         private float jumpSpeed;
         private float jumpHeight;
         private float jumpAcceleration;
@@ -72,6 +74,18 @@ namespace MistRidge
             }
         }
 
+        public float RotationSpeed
+        {
+            get
+            {
+                return rotationSpeed;
+            }
+            set
+            {
+                rotationSpeed = value;
+            }
+        }
+
         public float WalkSpeed
         {
             get
@@ -93,6 +107,18 @@ namespace MistRidge
             set
             {
                 walkAcceleration = value;
+            }
+        }
+
+        public float WalkThreshold
+        {
+            get
+            {
+                return walkThreshold;
+            }
+            set
+            {
+                walkThreshold = value;
             }
         }
 
@@ -192,6 +218,14 @@ namespace MistRidge
             }
         }
 
+        public float CurrentRotationSpeed
+        {
+            get
+            {
+                return rotationSpeed * playerPhysics.RotationSpeed;
+            }
+        }
+
         public float CurrentWalkSpeed
         {
             get
@@ -205,6 +239,14 @@ namespace MistRidge
             get
             {
                 return walkAcceleration * playerPhysics.WalkAcceleration;
+            }
+        }
+
+        public float CurrentWalkThreshold
+        {
+            get
+            {
+                return walkThreshold * playerPhysics.WalkThreshold;
             }
         }
 
@@ -281,8 +323,10 @@ namespace MistRidge
         private void ResetPlayerProperties()
         {
             isAlive = true;
+            rotationSpeed = 1f;
             walkSpeed = 1f;
             walkAcceleration = 1f;
+            walkThreshold = 1f;
             jumpSpeed = 1f;
             jumpHeight = 1f;
             jumpAcceleration = 1f;

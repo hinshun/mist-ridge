@@ -8,18 +8,17 @@ namespace MistRidge
     {
         public PlayerIdleState(
                 Input input,
+                Player player,
                 PlayerStateMachine stateMachine,
                 PlayerView playerView,
                 PlayerController playerController)
-            : base(input, stateMachine, playerView, playerController)
+            : base(input, player, stateMachine, playerView, playerController)
         {
             stateType = PlayerStateType.Idle;
         }
 
         public override void Update()
         {
-            base.Update();
-
             if (input.Mapping.Jump.WasPressed) {
                 stateMachine.ChangeState(PlayerStateType.Jump);
                 return;
@@ -30,7 +29,8 @@ namespace MistRidge
                 return;
             }
 
-            if (input.Mapping.Direction.Vector != Vector2.zero) {
+            if (input.Mapping.Direction.Vector.magnitude > player.CurrentWalkThreshold)
+            {
                 stateMachine.ChangeState(PlayerStateType.Walk);
             }
         }

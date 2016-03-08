@@ -111,29 +111,6 @@ namespace MistRidge
             playerDeaths = new Dictionary<PlayerFacade, bool>();
         }
 
-        public void PopulatePlayerDeaths()
-        {
-            foreach (Input input in inputManager.Inputs)
-            {
-                if (!playerManager.HasPlayerFacade(input))
-                {
-                    continue;
-                }
-
-                PlayerFacade playerFacade = playerManager.PlayerFacade(input);
-
-                if (playerFacade == null)
-                {
-                    continue;
-                }
-
-                if (!playerDeaths.ContainsKey(playerFacade))
-                {
-                    playerDeaths.Add(playerFacade, false);
-                }
-            }
-        }
-
         public void Tick()
         {
             if (!isActive)
@@ -161,6 +138,34 @@ namespace MistRidge
                 {
                     Kill(playerFacade);
                 }
+            }
+        }
+
+        public void PopulatePlayerDeaths()
+        {
+            foreach (Input input in inputManager.Inputs)
+            {
+                AddPlayer(input);
+            }
+        }
+
+        public void AddPlayer(Input input)
+        {
+            if (!playerManager.HasPlayerFacade(input))
+            {
+                return;
+            }
+
+            PlayerFacade playerFacade = playerManager.PlayerFacade(input);
+
+            if (playerFacade == null)
+            {
+                return;
+            }
+
+            if (!playerDeaths.ContainsKey(playerFacade))
+            {
+                playerDeaths.Add(playerFacade, false);
             }
         }
 

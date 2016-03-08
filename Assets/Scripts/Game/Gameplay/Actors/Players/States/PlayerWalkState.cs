@@ -6,49 +6,60 @@ namespace MistRidge
 {
     public class PlayerWalkState : PlayerBaseState
     {
-        private readonly Player player;
-
         public PlayerWalkState(
                 Input input,
                 Player player,
                 PlayerView playerView,
                 PlayerStateMachine stateMachine,
                 PlayerController playerController)
-            : base(input, stateMachine, playerView, playerController)
+            : base(input, player, stateMachine, playerView, playerController)
         {
-            this.player = player;
             stateType = PlayerStateType.Walk;
         }
 
         public override void Update()
         {
-            base.Update();
-
-            playerView.Animator.SetFloat(
-                "Speed",
-                input.Mapping.Direction.Vector.magnitude
-            );
-            playerView.Animator.SetFloat(
-                "Horizontal",
-                0f
-            );
-
-
             if (input.Mapping.Jump.WasPressed) {
+                base.Update();
                 stateMachine.ChangeState(PlayerStateType.Jump);
                 return;
             }
 
             if (!playerController.MaintainingGround()) {
+                base.Update();
                 stateMachine.ChangeState(PlayerStateType.Fall);
                 return;
             }
 
-            if (input.Mapping.Direction.Vector != Vector2.zero)
+            if (input.Mapping.Direction.Vector.magnitude > player.CurrentWalkThreshold)
             {
+                Quaternion lookRotation = Quaternion.LookRotation(stateMachine.LookDirection, playerView.Up);
+
+                playerView.MeshTransform.rotation = Quaternion.RotateTowards(
+                    playerView.MeshTransform.rotation,
+                    lookRotation,
+                    playerController.DeltaTime * player.CurrentRotationSpeed
+                );
+
+                float turnAngle = Quaternion.Angle(playerView.MeshTransform.rotation, lookRotation);
+                if (Vector3.Cross(playerView.MeshTransform.forward, stateMachine.LookDirection).y < 0)
+                {
+                    turnAngle = -turnAngle;
+                }
+
+                playerView.Animator.SetFloat(
+                    "Speed",
+                    input.Mapping.Direction.Vector.magnitude
+                );
+
+                playerView.Animator.SetFloat(
+                    "Horizontal",
+                    turnAngle / 180
+                );
+
                 stateMachine.MoveDirection = Vector3.MoveTowards(
                     stateMachine.MoveDirection,
-                    stateMachine.LookDirection * player.CurrentWalkSpeed * input.Mapping.Direction.Vector.magnitude,
+                    playerView.MeshTransform.forward * player.CurrentWalkSpeed * input.Mapping.Direction.Vector.magnitude,
                     player.CurrentWalkAcceleration * playerController.DeltaTime
                 );
             }

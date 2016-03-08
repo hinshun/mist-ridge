@@ -6,10 +6,16 @@ namespace MistRidge
     public class PlayerPhysics : ScriptableObject
     {
         [SerializeField]
+        private float rotationSpeed;
+
+        [SerializeField]
         private float walkSpeed;
 
         [SerializeField]
         private float walkAcceleration;
+
+        [SerializeField]
+        private float walkThreshold;
 
         [SerializeField]
         private float jumpSpeed;
@@ -35,6 +41,14 @@ namespace MistRidge
         [SerializeField]
         private float gravity;
 
+        public float RotationSpeed
+        {
+            get
+            {
+                return rotationSpeed;
+            }
+        }
+
         public float WalkSpeed
         {
             get
@@ -48,6 +62,14 @@ namespace MistRidge
             get
             {
                 return walkAcceleration;
+            }
+        }
+
+        public float WalkThreshold
+        {
+            get
+            {
+                return walkThreshold;
             }
         }
 

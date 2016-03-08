@@ -138,6 +138,11 @@ namespace MistRidge
             }
         }
 
+        public bool EarlyAcquiringGround()
+        {
+            return grounding.IsGrounded(feetSphere, false, 1f);
+        }
+
         public bool AcquiringGround()
         {
             return grounding.IsGrounded(feetSphere, false, 0.01f);

@@ -6,17 +6,14 @@ namespace MistRidge
 {
     public class PlayerJumpState : PlayerBaseState
     {
-        private readonly Player player;
-
         public PlayerJumpState(
                 Input input,
                 Player player,
                 PlayerView playerView,
                 PlayerStateMachine stateMachine,
                 PlayerController playerController)
-            : base(input, stateMachine, playerView, playerController)
+            : base(input, player, stateMachine, playerView, playerController)
         {
-            this.player = player;
             stateType = PlayerStateType.Jump;
         }
 
@@ -27,11 +24,20 @@ namespace MistRidge
             Vector3 planarMoveDirection = Math3d.ProjectVectorOnPlane(playerView.Up, stateMachine.MoveDirection);
             Vector3 verticalMoveDirection = stateMachine.MoveDirection - planarMoveDirection;
 
-            if (Vector3.Angle(verticalMoveDirection, playerView.Up) > 90f
-                    && playerController.AcquiringGround()) {
-                stateMachine.MoveDirection = planarMoveDirection;
-                stateMachine.ChangeState(PlayerStateType.Idle);
-                return;
+            if (Vector3.Angle(verticalMoveDirection, playerView.Up) > 90f)
+            {
+                if (!playerView.Animator.GetBool("IsLanding")
+                        && playerController.EarlyAcquiringGround())
+                {
+                    playerView.Animator.SetBool("IsLanding", true);
+                }
+
+                if (playerController.AcquiringGround())
+                {
+                    stateMachine.MoveDirection = planarMoveDirection;
+                    stateMachine.ChangeState(PlayerStateType.Idle);
+                    return;
+                }
             }
 
             planarMoveDirection = Vector3.MoveTowards(
@@ -47,6 +53,9 @@ namespace MistRidge
 
         public override void EnterState()
         {
+            playerView.Animator.SetBool("IsJumping", true);
+            playerView.Animator.SetBool("IsLanding", false);
+
             playerController.IsClamping = false;
             playerController.IsSlopeLimiting = false;
 
@@ -55,7 +64,8 @@ namespace MistRidge
 
         public override void ExitState()
         {
-            // Do Nothing
+            playerView.Animator.SetBool("IsJumping", false);
+            playerView.Animator.SetBool("IsLanding", true);
         }
     }
 }

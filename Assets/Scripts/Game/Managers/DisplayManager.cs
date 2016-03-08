@@ -37,7 +37,7 @@ namespace MistRidge
         public void UpdateAether(Input input, int aetherCount)
         {
             Text aetherText = PlayerDisplay(input).AetherText;
-            aetherText.text = "Aether x" + aetherCount;
+            aetherText.text = aetherCount.ToString();
         }
 
         public void UpdateItem(Input input, ItemDrop itemDrop)
@@ -46,7 +46,7 @@ namespace MistRidge
 
             if (itemDrop == null)
             {
-                itemImage.sprite = settings.emptyItem;
+                /* itemImage.sprite = settings.emptyItem; */
             }
             else
             {

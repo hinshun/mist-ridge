@@ -85,6 +85,7 @@ namespace MistRidge
             if (feetPlanar.Raycast(ray, out rayDistance)) {
                 lookDirection = (ray.GetPoint(rayDistance) - playerView.Position).normalized;
 
+
                 if (settings.Debug.showLookingDirection)
                 {
                     Debug.DrawLine(camera.ViewportToWorldPoint(viewportOrigin), camera.ViewportToWorldPoint(viewportPoint), Color.black);

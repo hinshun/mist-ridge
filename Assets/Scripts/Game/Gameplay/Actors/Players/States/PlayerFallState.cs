@@ -6,17 +6,14 @@ namespace MistRidge
 {
     public class PlayerFallState : PlayerBaseState
     {
-        private readonly Player player;
-
         public PlayerFallState(
                 Input input,
                 Player player,
                 PlayerStateMachine stateMachine,
                 PlayerView playerView,
                 PlayerController playerController)
-            : base(input, stateMachine, playerView, playerController)
+            : base(input, player, stateMachine, playerView, playerController)
         {
-            this.player = player;
             stateType = PlayerStateType.Fall;
         }
 
