@@ -48,11 +48,6 @@ namespace MistRidge
                 }
 
                 playerView.Animator.SetFloat(
-                    "Speed",
-                    input.Mapping.Direction.Vector.magnitude
-                );
-
-                playerView.Animator.SetFloat(
                     "Horizontal",
                     turnAngle / 180
                 );
@@ -61,6 +56,11 @@ namespace MistRidge
                     stateMachine.MoveDirection,
                     playerView.MeshTransform.forward * player.CurrentWalkSpeed * input.Mapping.Direction.Vector.magnitude,
                     player.CurrentWalkAcceleration * playerController.DeltaTime
+                );
+
+                playerView.Animator.SetFloat(
+                    "Speed",
+                    stateMachine.MoveDirection.magnitude
                 );
             }
             else

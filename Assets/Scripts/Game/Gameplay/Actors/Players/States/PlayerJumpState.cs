@@ -35,7 +35,15 @@ namespace MistRidge
                 if (playerController.AcquiringGround())
                 {
                     stateMachine.MoveDirection = planarMoveDirection;
-                    stateMachine.ChangeState(PlayerStateType.Idle);
+
+                    if (input.Mapping.Direction.Vector == Vector2.zero)
+                    {
+                        stateMachine.ChangeState(PlayerStateType.Idle);
+                    }
+                    else
+                    {
+                        stateMachine.ChangeState(PlayerStateType.Walk);
+                    }
                     return;
                 }
             }
