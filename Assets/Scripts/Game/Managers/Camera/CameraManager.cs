@@ -12,6 +12,7 @@ namespace MistRidge
         private readonly CameraView cameraView;
         private readonly CameraRigView cameraRigView;
         private readonly DeathManager deathManager;
+        private readonly DisplayManager displayManager;
 
         private Camera currentCamera;
 
@@ -20,13 +21,15 @@ namespace MistRidge
                 Camera camera,
                 CameraView cameraView,
                 CameraRigView cameraRigView,
-                DeathManager deathManager)
+                DeathManager deathManager,
+                DisplayManager displayManager)
         {
             this.settings = settings;
             this.camera = camera;
             this.cameraView = cameraView;
             this.cameraRigView = cameraRigView;
             this.deathManager = deathManager;
+            this.displayManager = displayManager;
         }
 
         public Camera CurrentCamera
@@ -38,6 +41,7 @@ namespace MistRidge
             set
             {
                 currentCamera = value;
+                displayManager.UpdateCamera(value);
             }
         }
 

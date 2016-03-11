@@ -1,16 +1,17 @@
 fileFormatVersion: 2
-guid: 5b235cc4cdc364844b27ff7b11dae44e
-timeCreated: 1457146393
+guid: 0f7aedc249d4641aa8902f9f9314be21
+timeCreated: 1457712085
 licenseType: Pro
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
     100000: //RootNode
+    100002: pCylinder1
     400000: //RootNode
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Cylinder001
-    9500000: //RootNode
+    400002: pCylinder1
+    2300000: pCylinder1
+    3300000: pCylinder1
+    4300000: pCylinder1
   materials:
     importMaterials: 0
     materialName: 0
@@ -69,7 +70,7 @@ ModelImporter:
     rootMotionBoneName: 
     hasTranslationDoF: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

@@ -11,20 +11,24 @@ namespace MistRidge
         private readonly Camera camera;
         private readonly InputManager inputManager;
         private readonly PlayerManager playerManager;
+        private readonly DisplayManager displayManager;
 
         private bool isActive;
+        private Dictionary<PlayerFacade, float> deathTimers;
         private Dictionary<PlayerFacade, bool> playerDeaths;
 
         public DeathManager(
                 Settings settings,
                 Camera camera,
                 InputManager inputManager,
-                PlayerManager playerManager)
+                PlayerManager playerManager,
+                DisplayManager displayManager)
         {
             this.settings = settings;
             this.camera = camera;
             this.inputManager = inputManager;
             this.playerManager = playerManager;
+            this.displayManager = displayManager;
         }
 
         public bool IsActive
@@ -108,6 +112,7 @@ namespace MistRidge
         public void Initialize()
         {
             isActive = false;
+            deathTimers = new Dictionary<PlayerFacade, float>();
             playerDeaths = new Dictionary<PlayerFacade, bool>();
         }
 
@@ -134,9 +139,13 @@ namespace MistRidge
                     continue;
                 }
 
-                if (!GeometryUtility.TestPlanesAABB(planes, playerFacade.Bounds))
+                if (GeometryUtility.TestPlanesAABB(planes, playerFacade.Bounds))
                 {
-                    Kill(playerFacade);
+                    DeathTimerReset(input, playerFacade);
+                }
+                else
+                {
+                    DeathTimerTick(input, playerFacade);
                 }
             }
         }
@@ -163,10 +172,38 @@ namespace MistRidge
                 return;
             }
 
+            if (!deathTimers.ContainsKey(playerFacade))
+            {
+                deathTimers.Add(playerFacade, 0f);
+            }
+
             if (!playerDeaths.ContainsKey(playerFacade))
             {
                 playerDeaths.Add(playerFacade, false);
             }
+        }
+
+        public void DeathTimerTick(Input input, PlayerFacade playerFacade)
+        {
+            Vector3 position = camera.WorldToViewportPoint(playerFacade.Position);
+            displayManager.UpdatePointer(input, position);
+
+            if (deathTimers[playerFacade] == 0)
+            {
+                deathTimers[playerFacade] = Time.time;
+            }
+
+            if (Time.time - deathTimers[playerFacade] > settings.deathTimeLimit)
+            {
+                Kill(playerFacade);
+                DeathTimerReset(input, playerFacade);
+            }
+        }
+
+        public void DeathTimerReset(Input input, PlayerFacade playerFacade)
+        {
+            deathTimers[playerFacade] = 0;
+            displayManager.UpdatePointer(input, Vector2.zero);
         }
 
         public void Kill(PlayerFacade playerFacade)
@@ -223,6 +260,7 @@ namespace MistRidge
             public float minRelevantDistance;
             public float displacementWeight;
             public float altitudeWeight;
+            public float deathTimeLimit;
         }
     }
 }

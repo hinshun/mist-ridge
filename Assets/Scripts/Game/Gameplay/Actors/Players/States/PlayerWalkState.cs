@@ -19,13 +19,15 @@ namespace MistRidge
 
         public override void Update()
         {
-            if (input.Mapping.Jump.WasPressed) {
+            if (input.Mapping.Jump.WasPressed)
+            {
                 base.Update();
                 stateMachine.ChangeState(PlayerStateType.Jump);
                 return;
             }
 
-            if (!playerController.MaintainingGround()) {
+            if (!playerController.MaintainingGround())
+            {
                 base.Update();
                 stateMachine.ChangeState(PlayerStateType.Fall);
                 return;

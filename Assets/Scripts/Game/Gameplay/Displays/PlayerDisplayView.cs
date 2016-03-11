@@ -16,6 +16,9 @@ namespace MistRidge
         [SerializeField]
         private Text aetherText;
 
+        [SerializeField]
+        private Image pointer;
+
         public Image Portrait
         {
             get
@@ -37,6 +40,14 @@ namespace MistRidge
             get
             {
                 return aetherText;
+            }
+        }
+
+        public Image Pointer
+        {
+            get
+            {
+                return pointer;
             }
         }
     }
