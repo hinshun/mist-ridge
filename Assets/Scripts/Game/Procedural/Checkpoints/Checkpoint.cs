@@ -11,22 +11,38 @@ namespace MistRidge
         private readonly SpawnManager spawnManager;
         private readonly CheckpointManager checkpointManager;
         private readonly AetherManager aetherManager;
+        private readonly PlayerManager playerManager;
         private readonly DeathManager deathManager;
 
         private int aetherPosition;
+        private Checkpoint nextCheckpoint;
 
         public Checkpoint(
                 ChunkFacade chunkFacade,
                 SpawnManager spawnManager,
                 CheckpointManager checkpointManager,
                 AetherManager aetherManager,
+                PlayerManager playerManager,
                 DeathManager deathManager)
         {
             this.chunkFacade = chunkFacade;
             this.spawnManager = spawnManager;
             this.checkpointManager = checkpointManager;
             this.aetherManager = aetherManager;
+            this.playerManager = playerManager;
             this.deathManager = deathManager;
+        }
+
+        public Checkpoint NextCheckpoint
+        {
+            get
+            {
+                return nextCheckpoint;
+            }
+            set
+            {
+                nextCheckpoint = value;
+            }
         }
 
         public Transform Parent
@@ -87,15 +103,23 @@ namespace MistRidge
         {
             CheckpointView.SetActive(false);
             spawnManager.CurrentSpawnView = SpawnView;
+            checkpointManager.CurrentCheckpoint = this.nextCheckpoint;
 
             List<PlayerFacade> deadPlayerFacades = deathManager.DeadPlayerFacades;
             foreach (PlayerFacade playerFacade in deadPlayerFacades)
             {
                 playerFacade.Position = spawnManager.CurrentSpawnView.SpawnPoint(playerFacade.Input.DeviceNum);
+                playerFacade.MoveDirection = Vector3.zero;
                 deathManager.Respawn(playerFacade);
             }
 
-            chunkFacade.CheckpointWallView.Open();
+            List<PlayerFacade> alivePlayerFacades = deathManager.AlivePlayerFacades;
+            foreach (PlayerFacade playerFacade in alivePlayerFacades)
+            {
+                playerFacade.StopDance();
+            }
+
+            chunkFacade.CheckpointWallView.SetActive(false);
         }
 
         public void OnCheckpointArrival(PlayerView playerView)
@@ -103,6 +127,15 @@ namespace MistRidge
             aetherManager.AddAether(playerView, AetherAward);
             aetherPosition += 1;
 
+            Input input = playerManager.Input(playerView);
+            PlayerFacade playerFacade = playerManager.PlayerFacade(input);
+            playerFacade.Dance();
+
+            Finish();
+        }
+
+        public void Finish()
+        {
             if (aetherPosition == deathManager.AlivePlayerCount)
             {
                 checkpointManager.FinishCheckpoint(this);

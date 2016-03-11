@@ -19,8 +19,15 @@ namespace MistRidge
 
         public override void Update()
         {
+            if (playerView.Animator.GetBool("IsFreefalling")
+                    && playerController.FreefallAcquiringGround())
+            {
+                playerView.Animator.SetBool("IsFreefalling", false);
+                playerView.CanControl = false;
+            }
+
             if (playerController.AcquiringGround()) {
-                stateMachine.ChangeState(PlayerStateType.Idle);
+                stateMachine.ChangeState(PlayerStateType.Uncontrollable);
                 return;
             }
 
@@ -39,12 +46,15 @@ namespace MistRidge
                 player.CurrentFreefallDrag * playerController.DeltaTime
             );
 
+            stateMachine.MoveDirection -= playerView.Up * player.CurrentGravity * playerController.DeltaTime;
+
             UpdateTilt();
         }
 
         public override void EnterState()
         {
             playerView.Animator.SetTrigger("StartFreefall");
+            playerView.Animator.SetBool("IsFreefalling", true);
 
             playerController.IsClamping = false;
             playerController.IsSlopeLimiting = false;
@@ -59,7 +69,8 @@ namespace MistRidge
 
         public override void ExitState()
         {
-            playerView.Animator.SetTrigger("EndFreefall");
+            playerView.Animator.SetBool("IsFreefalling", false);
+
             playerView.LocalRotation = Quaternion.identity;
         }
 

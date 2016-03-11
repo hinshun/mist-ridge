@@ -8,6 +8,7 @@ namespace MistRidge
     public class ChunkManager : IInitializable
     {
         private readonly Settings settings;
+        private readonly CheckpointManager checkpointManager;
         private readonly SprintFactory sprintFactory;
         private readonly ChunkFacadeFactory chunkFacadeFactory;
 
@@ -18,10 +19,12 @@ namespace MistRidge
 
         public ChunkManager(
                 Settings settings,
+                CheckpointManager checkpointManager,
                 SprintFactory sprintFactory,
                 ChunkFacadeFactory chunkFacadeFactory)
         {
             this.settings = settings;
+            this.checkpointManager = checkpointManager;
             this.sprintFactory = sprintFactory;
             this.chunkFacadeFactory = chunkFacadeFactory;
         }
@@ -73,6 +76,7 @@ namespace MistRidge
         private List<Sprint> SpawnSprints()
         {
             List<Sprint> sprints = new List<Sprint>();
+            Sprint lastSprint = null;
 
             int currentChunkNum = chunkCount - 1;
 
@@ -88,6 +92,17 @@ namespace MistRidge
                 currentChunkNum -= sprintRequest.chunkCount;
 
                 Sprint sprint = sprintFactory.Create(currentSprintRequest);
+
+                if (lastSprint == null)
+                {
+                    checkpointManager.CurrentCheckpoint = sprint.Checkpoint;
+                }
+                else
+                {
+                    lastSprint.Checkpoint.NextCheckpoint = sprint.Checkpoint;
+                }
+                lastSprint = sprint;
+
                 sprints.Add(sprint);
             }
 

@@ -21,6 +21,14 @@ namespace MistRidge
             this.checkpoint = checkpoint;
         }
 
+        public Checkpoint Checkpoint
+        {
+            get
+            {
+                return checkpoint;
+            }
+        }
+
         public List<ChunkFacade> ChunkFacades
         {
             get

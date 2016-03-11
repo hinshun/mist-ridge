@@ -36,11 +36,31 @@ namespace MistRidge
             }
         }
 
+        public Player Player
+        {
+            get
+            {
+                return player;
+            }
+        }
+
         public PlayerView PlayerView
         {
             get
             {
                 return playerView;
+            }
+        }
+
+        public Vector3 MoveDirection
+        {
+            get
+            {
+                return playerStateMachine.MoveDirection;
+            }
+            set
+            {
+                playerStateMachine.MoveDirection = value;
             }
         }
 
@@ -114,6 +134,18 @@ namespace MistRidge
         public void Die()
         {
             IsAlive = false;
+        }
+
+        public void Dance()
+        {
+            playerView.Animator.SetTrigger("StartDance");
+            playerStateMachine.ChangeState(PlayerStateType.Uncontrollable);
+        }
+
+        public void StopDance()
+        {
+            playerView.CanControl = true;
+            playerView.Animator.SetTrigger("StopDance");
         }
 
         public class Factory : FacadeFactory<Input, PlayerFacade>

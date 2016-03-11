@@ -5,7 +5,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class RandomIdles : StateMachineBehaviour
+    public class IdleStateView : StateMachineBehaviour
     {
         [SerializeField]
         private float minChangeTime;

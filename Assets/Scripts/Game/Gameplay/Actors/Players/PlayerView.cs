@@ -20,6 +20,7 @@ namespace MistRidge
         private MeshRenderer meshRenderer;
 
         private bool canPickupItems;
+        private bool canControl;
         private Animator animator;
         private ItemPickupSignal.Trigger itemPickupTrigger;
         private CheckpointSignal.Trigger checkpointTrigger;
@@ -78,6 +79,18 @@ namespace MistRidge
             }
         }
 
+        public bool CanControl
+        {
+            get
+            {
+                return canControl;
+            }
+            set
+            {
+                canControl = value;
+            }
+        }
+
         public void OnDrawGizmos()
         {
             DrawGizmos();
@@ -101,6 +114,9 @@ namespace MistRidge
         {
             animator = GetComponent<Animator>();
             checkpointsVisited = new Dictionary<CheckpointView, bool>();
+
+            canPickupItems = true;
+            canControl = true;
         }
     }
 }

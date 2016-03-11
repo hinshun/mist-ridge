@@ -12,6 +12,7 @@ namespace MistRidge
         private readonly InputManager inputManager;
         private readonly PlayerManager playerManager;
         private readonly DisplayManager displayManager;
+        private readonly FinishCheckpointSignal.Trigger finishCheckpointTrigger;
 
         private bool isActive;
         private Dictionary<PlayerFacade, float> deathTimers;
@@ -22,13 +23,15 @@ namespace MistRidge
                 Camera camera,
                 InputManager inputManager,
                 PlayerManager playerManager,
-                DisplayManager displayManager)
+                DisplayManager displayManager,
+                FinishCheckpointSignal.Trigger finishCheckpointTrigger)
         {
             this.settings = settings;
             this.camera = camera;
             this.inputManager = inputManager;
             this.playerManager = playerManager;
             this.displayManager = displayManager;
+            this.finishCheckpointTrigger = finishCheckpointTrigger;
         }
 
         public bool IsActive
@@ -210,6 +213,7 @@ namespace MistRidge
         {
             playerDeaths[playerFacade] = true;
             playerFacade.Die();
+            finishCheckpointTrigger.Fire();
         }
 
         public void Respawn(PlayerFacade playerFacade)

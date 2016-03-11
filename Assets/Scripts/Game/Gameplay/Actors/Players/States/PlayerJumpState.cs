@@ -27,7 +27,7 @@ namespace MistRidge
             if (Vector3.Angle(verticalMoveDirection, playerView.Up) > 90f)
             {
                 if (!playerView.Animator.GetBool("IsLanding")
-                        && playerController.EarlyAcquiringGround())
+                        && playerController.JumpAcquiringGround())
                 {
                     playerView.Animator.SetBool("IsLanding", true);
                 }

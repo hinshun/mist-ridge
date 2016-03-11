@@ -81,6 +81,7 @@ namespace MistRidge
             if (playerFacade != null)
             {
                 playerFacade.Freefall();
+                playerFacade.Player.Gravity = 0f;
                 displayManager.Display(input);
             }
         }

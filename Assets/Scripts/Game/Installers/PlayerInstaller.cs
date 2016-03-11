@@ -33,6 +33,9 @@ namespace MistRidge
 
             Container.BindSignal<CheckpointSignal>();
             Container.BindTrigger<CheckpointSignal.Trigger>();
+
+            Container.BindSignal<FinishCheckpointSignal>();
+            Container.BindTrigger<FinishCheckpointSignal.Trigger>();
         }
 
         private void InstallPlayerFacade(DiContainer subContainer, Input input)
