@@ -54,6 +54,11 @@ namespace MistRidge
                 player.CurrentJumpAcceleration * playerController.DeltaTime
             );
 
+            planarMoveDirection = Vector3.ClampMagnitude(
+                planarMoveDirection,
+                player.CurrentJumpSpeedLimit
+            );
+
             verticalMoveDirection -= playerView.Up * player.CurrentGravity * playerController.DeltaTime;
 
             stateMachine.MoveDirection = planarMoveDirection + verticalMoveDirection;

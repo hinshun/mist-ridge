@@ -21,6 +21,9 @@ namespace MistRidge
         private float jumpSpeed;
 
         [SerializeField]
+        private float jumpSpeedLimit;
+
+        [SerializeField]
         private float jumpHeight;
 
         [SerializeField]
@@ -78,6 +81,14 @@ namespace MistRidge
             get
             {
                 return jumpSpeed;
+            }
+        }
+
+        public float JumpSpeedLimit
+        {
+            get
+            {
+                return jumpSpeedLimit;
             }
         }
 

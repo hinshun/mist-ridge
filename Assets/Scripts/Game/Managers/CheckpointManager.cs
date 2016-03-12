@@ -59,7 +59,10 @@ namespace MistRidge
         public void FinishCheckpoint(Checkpoint checkpoint)
         {
             checkpoint.Open();
-            mistManager.UpdateMistPosition(checkpoint.NextCheckpoint.CheckpointView.Position.y);
+            if (checkpoint.NextCheckpoint != null)
+            {
+                mistManager.UpdateMistPosition(checkpoint.NextCheckpoint.CheckpointView.Position.y);
+            }
 
             if (checkpoint == lastCheckpoint)
             {

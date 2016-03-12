@@ -19,6 +19,7 @@ namespace MistRidge
         private float walkAcceleration;
         private float walkThreshold;
         private float jumpSpeed;
+        private float jumpSpeedLimit;
         private float jumpHeight;
         private float jumpAcceleration;
         private float freefallSpeed;
@@ -131,6 +132,18 @@ namespace MistRidge
             set
             {
                 jumpSpeed = value;
+            }
+        }
+
+        public float JumpSpeedLimit
+        {
+            get
+            {
+                return jumpSpeedLimit;
+            }
+            set
+            {
+                jumpSpeedLimit = value;
             }
         }
 
@@ -258,6 +271,14 @@ namespace MistRidge
             }
         }
 
+        public float CurrentJumpSpeedLimit
+        {
+            get
+            {
+                return jumpSpeedLimit * playerPhysics.JumpSpeedLimit;
+            }
+        }
+
         public float CurrentJumpHeight
         {
             get
@@ -328,6 +349,7 @@ namespace MistRidge
             walkAcceleration = 1f;
             walkThreshold = 1f;
             jumpSpeed = 1f;
+            jumpSpeedLimit = 1f;
             jumpHeight = 1f;
             jumpAcceleration = 1f;
             freefallSpeed = 1f;
