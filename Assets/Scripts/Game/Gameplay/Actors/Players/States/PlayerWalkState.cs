@@ -67,7 +67,14 @@ namespace MistRidge
             }
             else
             {
-                stateMachine.ChangeState(PlayerStateType.Idle);
+                if (stateMachine.MoveDirection.magnitude > player.CurrentHaltThreshold)
+                {
+                    stateMachine.ChangeState(PlayerStateType.Halt);
+                }
+                else
+                {
+                    stateMachine.ChangeState(PlayerStateType.Idle);
+                }
             }
         }
 

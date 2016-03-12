@@ -6,6 +6,7 @@ namespace MistRidge
         Walk,
         Jump,
         Fall,
+        Halt,
         Freefall,
         Uncontrollable,
     }

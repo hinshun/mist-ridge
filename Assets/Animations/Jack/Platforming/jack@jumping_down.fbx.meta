@@ -200,7 +200,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.93174064
+      - time: 0.83524907
         functionName: PlayerAllowJump
         data: 
         objectReferenceParameter: {instanceID: 0}

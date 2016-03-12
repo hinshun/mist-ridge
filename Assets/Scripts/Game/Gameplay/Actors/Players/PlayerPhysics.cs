@@ -30,6 +30,12 @@ namespace MistRidge
         private float jumpAcceleration;
 
         [SerializeField]
+        private float haltSpeed;
+
+        [SerializeField]
+        private float haltThreshold;
+
+        [SerializeField]
         private float freefallSpeed;
 
         [SerializeField]
@@ -105,6 +111,22 @@ namespace MistRidge
             get
             {
                 return jumpAcceleration;
+            }
+        }
+
+        public float HaltSpeed
+        {
+            get
+            {
+                return haltSpeed;
+            }
+        }
+
+        public float HaltThreshold
+        {
+            get
+            {
+                return haltThreshold;
             }
         }
 

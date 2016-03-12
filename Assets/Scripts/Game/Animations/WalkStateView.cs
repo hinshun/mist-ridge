@@ -31,6 +31,7 @@ namespace MistRidge
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             playerView = animator.GetComponent<PlayerView>();
+            playerView.PlayerAllowJump();
             EmitDustTrail(animator);
         }
 

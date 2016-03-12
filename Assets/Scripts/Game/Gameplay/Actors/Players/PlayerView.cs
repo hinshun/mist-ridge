@@ -23,6 +23,9 @@ namespace MistRidge
         private ParticleSystem dustLand;
 
         [SerializeField]
+        private int dustJumpParticleCount;
+
+        [SerializeField]
         private int dustLandParticleCount;
 
         [SerializeField]
@@ -144,6 +147,12 @@ namespace MistRidge
         public void PlayerAllowJump()
         {
             canJump = true;
+        }
+
+        public void PlayerJump()
+        {
+            dustTrail.Emit(dustJumpParticleCount);
+            dustTrail.Play();
         }
 
         public void PlayerLand()

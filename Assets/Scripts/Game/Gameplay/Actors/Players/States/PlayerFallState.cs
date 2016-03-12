@@ -21,6 +21,12 @@ namespace MistRidge
         {
             base.Update();
 
+            if (!playerView.Animator.GetBool("IsLanding")
+                    && playerController.FallAcquiringGround())
+            {
+                playerView.Animator.SetBool("IsLanding", true);
+            }
+
             if (playerController.AcquiringGround()) {
                 stateMachine.MoveDirection = Math3d.ProjectVectorOnPlane(playerView.Up, stateMachine.MoveDirection);
                 stateMachine.ChangeState(PlayerStateType.Idle);
@@ -32,13 +38,19 @@ namespace MistRidge
 
         public override void EnterState()
         {
+            playerView.Animator.SetBool("IsFalling", true);
+            playerView.Animator.SetBool("IsLanding", false);
+
+            playerView.CanJump = false;
+
             playerController.IsClamping = false;
             playerController.IsSlopeLimiting = false;
         }
 
         public override void ExitState()
         {
-            // Do Nothing
+            playerView.Animator.SetBool("IsFalling", false);
+            playerView.Animator.SetBool("IsLanding", true);
         }
     }
 }

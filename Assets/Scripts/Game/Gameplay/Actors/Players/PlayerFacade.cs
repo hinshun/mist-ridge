@@ -128,6 +128,7 @@ namespace MistRidge
 
         public void Respawn()
         {
+            playerView.PlayerAllowJump();
             IsAlive = true;
         }
 
