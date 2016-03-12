@@ -18,7 +18,11 @@ namespace MistRidge
         private float nextChange;
         private Array idleStates;
 
-        public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        private PlayerView playerView;
+        private bool dustTrailEmitting;
+
+        public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
             if (Time.time - timer >= nextChange)
             {
                 timer = Time.time;
@@ -35,14 +39,33 @@ namespace MistRidge
                         break;
                 }
             }
+
+            if (dustTrailEmitting)
+            {
+                if (playerView.IsDustTrailEmitting)
+                {
+                    playerView.IsDustTrailEmitting = false;
+                }
+
+                dustTrailEmitting = false;
+            }
         }
 
-        public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            playerView = animator.GetComponent<PlayerView>();
             idleStates = Enum.GetValues(typeof(IdleState));
             random = new System.Random();
 
             timer = Time.time;
             nextChange = UnityEngine.Random.Range(minChangeTime, maxChangeTime);
+
+            playerView.IsDustTrailEmitting = false;
+        }
+
+        public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
+            dustTrailEmitting = true;
         }
 
         private enum IdleState

@@ -17,7 +17,19 @@ namespace MistRidge
         private Transform meshTransform;
 
         [SerializeField]
-        private MeshRenderer meshRenderer;
+        private ParticleSystem dustTrail;
+
+        [SerializeField]
+        private ParticleSystem dustLand;
+
+        [SerializeField]
+        private int dustLandParticleCount;
+
+        [SerializeField]
+        private ParticleSystem dustFreefallLand;
+
+        [SerializeField]
+        private int dustFreefallLandParticleCount;
 
         private bool canPickupItems;
         private bool canControl;
@@ -51,19 +63,25 @@ namespace MistRidge
             }
         }
 
+        public bool IsDustTrailEmitting
+        {
+            get
+            {
+                ParticleSystem.EmissionModule emission = dustTrail.emission;
+                return emission.enabled;
+            }
+            set
+            {
+                ParticleSystem.EmissionModule emission = dustTrail.emission;
+                emission.enabled = value;
+            }
+        }
+
         public Transform MeshTransform
         {
             get
             {
                 return meshTransform;
-            }
-        }
-
-        public MeshRenderer MeshRenderer
-        {
-            get
-            {
-                return meshRenderer;
             }
         }
 
@@ -110,6 +128,16 @@ namespace MistRidge
             }
         }
 
+        public void PlayerLand()
+        {
+            dustLand.Emit(dustLandParticleCount);
+        }
+
+        public void PlayerFreefallLand()
+        {
+            dustLand.Emit(dustFreefallLandParticleCount);
+        }
+
         private void Awake()
         {
             animator = GetComponent<Animator>();
@@ -117,6 +145,8 @@ namespace MistRidge
 
             canPickupItems = true;
             canControl = true;
+
+            IsDustTrailEmitting = false;
         }
     }
 }

@@ -361,10 +361,6 @@ namespace MistRidge
 
         private void ResetPlayerMaterials(int deviceNum)
         {
-            if (playerView.MeshRenderer != null)
-            {
-                playerView.MeshRenderer.material = settings.playerMaterials[deviceNum];
-            }
         }
 
         [Serializable]

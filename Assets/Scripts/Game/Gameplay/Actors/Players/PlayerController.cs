@@ -145,7 +145,7 @@ namespace MistRidge
 
         public bool FreefallAcquiringGround()
         {
-            return grounding.IsGrounded(feetSphere, false, 2f);
+            return grounding.IsGrounded(feetSphere, false, 3f);
         }
 
         public bool AcquiringGround()

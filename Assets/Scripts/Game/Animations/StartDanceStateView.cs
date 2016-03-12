@@ -10,7 +10,8 @@ namespace MistRidge
         private System.Random random;
         private Array danceStates;
 
-        public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        {
             danceStates = Enum.GetValues(typeof(DanceState));
             random = new System.Random();
 
