@@ -150,10 +150,16 @@ ModelImporter:
     optimizeGameObjects: 0
     motionNodeName: 
     animationImportErrors: 
-    animationImportWarnings: "\nClip 'mixamo.com' has import animation warnings that
-      might lower retargeting quality:\nNote: Activate translation DOF on avatar to
-      improve retargeting quality.\n\t'mixamorig:Spine2' is inbetween humanoid transforms
-      and has rotation animation that will be discarded.\n"
+    animationImportWarnings: "\nDefault bone length found in this file is different
+      form the one found in the source avatar:\n\t'mixamorig:LeftUpLeg' : position
+      error = 3.421202 mm\n\t'mixamorig:LeftLeg' : position error = 2.701961 mm\n\t'mixamorig:LeftFoot'
+      : position error = 16.840582 mm\n\t'mixamorig:LeftToeBase' : position error
+      = 4.221181 mm\n\t'mixamorig:RightUpLeg' : position error = 4.510144 mm\n\t'mixamorig:RightLeg'
+      : position error = 2.752484 mm\n\t'mixamorig:RightFoot' : position error = 16.865149
+      mm\n\t'mixamorig:RightToeBase' : position error = 1.277574 mm\n\nClip 'mixamo.com'
+      has import animation warnings that might lower retargeting quality:\nNote: Activate
+      translation DOF on avatar to improve retargeting quality.\n\t'mixamorig:Spine2'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     animationCompression: 3
@@ -186,7 +192,14 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.99658704
+        functionName: PlayerAllowJump
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1

@@ -31,6 +31,7 @@ namespace MistRidge
         [SerializeField]
         private int dustFreefallLandParticleCount;
 
+        private bool canJump;
         private bool canPickupItems;
         private bool canControl;
         private Animator animator;
@@ -85,6 +86,18 @@ namespace MistRidge
             }
         }
 
+        public bool CanJump
+        {
+            get
+            {
+                return canJump;
+            }
+            set
+            {
+                canJump = value;
+            }
+        }
+
         public bool CanPickupItems
         {
             get
@@ -128,6 +141,11 @@ namespace MistRidge
             }
         }
 
+        public void PlayerAllowJump()
+        {
+            canJump = true;
+        }
+
         public void PlayerLand()
         {
             dustLand.Emit(dustLandParticleCount);
@@ -143,6 +161,7 @@ namespace MistRidge
             animator = GetComponent<Animator>();
             checkpointsVisited = new Dictionary<CheckpointView, bool>();
 
+            canJump = true;
             canPickupItems = true;
             canControl = true;
 

@@ -69,6 +69,8 @@ namespace MistRidge
             playerView.Animator.SetBool("IsJumping", true);
             playerView.Animator.SetBool("IsLanding", false);
 
+            playerView.CanJump = false;
+
             playerController.IsClamping = false;
             playerController.IsSlopeLimiting = false;
 

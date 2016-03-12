@@ -27,6 +27,7 @@ namespace MistRidge
 
         public override void EnterState()
         {
+            playerView.CanJump = false;
             playerView.CanControl = false;
         }
     }
