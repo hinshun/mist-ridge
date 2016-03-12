@@ -4,10 +4,11 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class FloorBoundsView : MonoView
+    public class MistView : MonoView
     {
         private PlayerManager playerManager;
         private DeathManager deathManager;
+        private BoxCollider collider;
 
         [PostInject]
         public void Init(
@@ -18,6 +19,14 @@ namespace MistRidge
             this.deathManager = deathManager;
         }
 
+        public BoxCollider Collider
+        {
+            get
+            {
+                return collider;
+            }
+        }
+
         public void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("Player"))
@@ -26,8 +35,13 @@ namespace MistRidge
                 Input input = playerManager.Input(playerView);
                 PlayerFacade playerFacade = playerManager.PlayerFacade(input);
 
-                deathManager.Kill(playerFacade);
+                deathManager.Kill(input, playerFacade);
             }
+        }
+
+        private void Awake()
+        {
+            collider = GetComponent<BoxCollider>();
         }
     }
 }

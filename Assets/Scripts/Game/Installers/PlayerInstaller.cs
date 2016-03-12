@@ -34,8 +34,8 @@ namespace MistRidge
             Container.BindSignal<CheckpointSignal>();
             Container.BindTrigger<CheckpointSignal.Trigger>();
 
-            Container.BindSignal<FinishCheckpointSignal>();
-            Container.BindTrigger<FinishCheckpointSignal.Trigger>();
+            Container.BindSignal<CheckpointActionSignal>();
+            Container.BindTrigger<CheckpointActionSignal.Trigger>();
         }
 
         private void InstallPlayerFacade(DiContainer subContainer, Input input)
@@ -93,11 +93,18 @@ namespace MistRidge
         {
             Container.Bind<DeathManager>().ToSingle();
             Container.BindAllInterfacesToSingle<DeathManager>();
+
+            Container.Bind<MistContainerView>().ToSinglePrefab(settings.mistManagerSettings.mistContainerPrefab);
+            Container.Bind<MistView>().ToSinglePrefab(settings.mistManagerSettings.mistContainerPrefab);
+
+            Container.Bind<MistManager>().ToSingle();
+            Container.BindAllInterfacesToSingle<MistManager>();
         }
 
         private void InstallSettings()
         {
             Container.Bind<DeathManager.Settings>().ToSingleInstance(settings.deathManagerSettings);
+            Container.Bind<MistManager.Settings>().ToSingleInstance(settings.mistManagerSettings);
 
             Container.Bind<Player.Settings>().ToSingleInstance(settings.player.playerSettings);
             Container.Bind<PlayerController.Settings>().ToSingleInstance(settings.player.controllerSettings);
@@ -115,6 +122,7 @@ namespace MistRidge
             public PlayerSettings player;
             public CameraSettings camera;
             public DeathManager.Settings deathManagerSettings;
+            public MistManager.Settings mistManagerSettings;
 
             [Serializable]
             public class PlayerSettings

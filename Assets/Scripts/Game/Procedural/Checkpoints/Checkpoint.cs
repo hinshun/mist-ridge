@@ -103,15 +103,9 @@ namespace MistRidge
         {
             CheckpointView.SetActive(false);
             spawnManager.CurrentSpawnView = SpawnView;
-            checkpointManager.CurrentCheckpoint = this.nextCheckpoint;
+            checkpointManager.CurrentCheckpoint = this;
 
-            List<PlayerFacade> deadPlayerFacades = deathManager.DeadPlayerFacades;
-            foreach (PlayerFacade playerFacade in deadPlayerFacades)
-            {
-                playerFacade.Position = spawnManager.CurrentSpawnView.SpawnPoint(playerFacade.Input.DeviceNum);
-                playerFacade.MoveDirection = Vector3.zero;
-                deathManager.Respawn(playerFacade);
-            }
+            RespawnPlayers();
 
             List<PlayerFacade> alivePlayerFacades = deathManager.AlivePlayerFacades;
             foreach (PlayerFacade playerFacade in alivePlayerFacades)
@@ -120,6 +114,17 @@ namespace MistRidge
             }
 
             chunkFacade.CheckpointWallView.SetActive(false);
+        }
+
+        public void RespawnPlayers()
+        {
+            List<PlayerFacade> deadPlayerFacades = deathManager.DeadPlayerFacades;
+            foreach (PlayerFacade playerFacade in deadPlayerFacades)
+            {
+                playerFacade.Position = spawnManager.CurrentSpawnView.SpawnPoint(playerFacade.Input.DeviceNum);
+                playerFacade.MoveDirection = Vector3.zero;
+                deathManager.Respawn(playerFacade);
+            }
         }
 
         public void OnCheckpointArrival(PlayerView playerView)

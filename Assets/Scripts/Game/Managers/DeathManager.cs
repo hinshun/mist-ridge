@@ -12,7 +12,7 @@ namespace MistRidge
         private readonly InputManager inputManager;
         private readonly PlayerManager playerManager;
         private readonly DisplayManager displayManager;
-        private readonly FinishCheckpointSignal.Trigger finishCheckpointTrigger;
+        private readonly CheckpointActionSignal.Trigger checkpointActionTrigger;
 
         private bool isActive;
         private Dictionary<PlayerFacade, float> deathTimers;
@@ -24,14 +24,14 @@ namespace MistRidge
                 InputManager inputManager,
                 PlayerManager playerManager,
                 DisplayManager displayManager,
-                FinishCheckpointSignal.Trigger finishCheckpointTrigger)
+                CheckpointActionSignal.Trigger checkpointActionTrigger)
         {
             this.settings = settings;
             this.camera = camera;
             this.inputManager = inputManager;
             this.playerManager = playerManager;
             this.displayManager = displayManager;
-            this.finishCheckpointTrigger = finishCheckpointTrigger;
+            this.checkpointActionTrigger = checkpointActionTrigger;
         }
 
         public bool IsActive
@@ -198,7 +198,7 @@ namespace MistRidge
 
             if (Time.time - deathTimers[playerFacade] > settings.deathTimeLimit)
             {
-                Kill(playerFacade);
+                Kill(input, playerFacade);
                 DeathTimerReset(input, playerFacade);
             }
         }
@@ -209,11 +209,20 @@ namespace MistRidge
             displayManager.UpdatePointer(input, Vector2.zero);
         }
 
-        public void Kill(PlayerFacade playerFacade)
+        public void Kill(Input input, PlayerFacade playerFacade)
         {
             playerDeaths[playerFacade] = true;
             playerFacade.Die();
-            finishCheckpointTrigger.Fire();
+            displayManager.UpdatePointer(input, Vector2.zero);
+
+            if (AlivePlayerCount == 0)
+            {
+                checkpointActionTrigger.Fire(CheckpointAction.Respawn);
+            }
+            else
+            {
+                checkpointActionTrigger.Fire(CheckpointAction.Finish);
+            }
         }
 
         public void Respawn(PlayerFacade playerFacade)

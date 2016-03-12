@@ -8,8 +8,9 @@ namespace MistRidge
     public class CheckpointManager : IInitializable
     {
         private readonly SpawnManager spawnManager;
+        private readonly MistManager mistManager;
         private readonly CheckpointSignal checkpointSignal;
-        private readonly FinishCheckpointSignal finishCheckpointSignal;
+        private readonly CheckpointActionSignal checkpointActionSignal;
         private readonly GameStateSignal.Trigger gameStateTrigger;
 
         private Checkpoint lastCheckpoint;
@@ -18,13 +19,15 @@ namespace MistRidge
 
         public CheckpointManager(
                 SpawnManager spawnManager,
+                MistManager mistManager,
                 CheckpointSignal checkpointSignal,
-                FinishCheckpointSignal finishCheckpointSignal,
+                CheckpointActionSignal checkpointActionSignal,
                 GameStateSignal.Trigger gameStateTrigger)
         {
             this.spawnManager = spawnManager;
+            this.mistManager = mistManager;
             this.checkpointSignal = checkpointSignal;
-            this.finishCheckpointSignal = finishCheckpointSignal;
+            this.checkpointActionSignal = checkpointActionSignal;
             this.gameStateTrigger = gameStateTrigger;
         }
 
@@ -44,7 +47,7 @@ namespace MistRidge
         {
             checkpointMapping = new Dictionary<CheckpointView, Checkpoint>();
             checkpointSignal.Event += OnCheckpointArrival;
-            finishCheckpointSignal.Event += OnCheckpointFinish;
+            checkpointActionSignal.Event += OnCheckpointAction;
         }
 
         public void AddCheckpoint(Checkpoint checkpoint)
@@ -56,6 +59,7 @@ namespace MistRidge
         public void FinishCheckpoint(Checkpoint checkpoint)
         {
             checkpoint.Open();
+            mistManager.UpdateMistPosition(checkpoint.NextCheckpoint.CheckpointView.Position.y);
 
             if (checkpoint == lastCheckpoint)
             {
@@ -74,11 +78,17 @@ namespace MistRidge
             arrivedCheckpoint.OnCheckpointArrival(playerView);
         }
 
-        private void OnCheckpointFinish()
+        private void OnCheckpointAction(CheckpointAction checkpointAction)
         {
-            if (CurrentCheckpoint != null)
+            switch (checkpointAction)
             {
-                CurrentCheckpoint.Finish();
+                case CheckpointAction.Finish:
+                    CurrentCheckpoint.NextCheckpoint.Finish();
+                    return;
+
+                case CheckpointAction.Respawn:
+                    CurrentCheckpoint.RespawnPlayers();
+                    return;
             }
         }
     }

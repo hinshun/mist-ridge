@@ -3,7 +3,7 @@ using Zenject.Commands;
 
 namespace MistRidge
 {
-    public class FinishCheckpointSignal : Signal
+    public class CheckpointActionSignal : Signal<CheckpointAction>
     {
         public class Trigger : TriggerBase
         {

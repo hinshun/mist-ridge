@@ -12,6 +12,8 @@ namespace MistRidge
         private readonly InputManager inputManager;
         private readonly PlayerManager playerManager;
         private readonly DeathManager deathManager;
+        private readonly MistManager mistManager;
+        private readonly CheckpointManager checkpointManager;
         private readonly CameraView cameraView;
         private readonly CameraManager cameraManager;
         private readonly CameraAnchorManager cameraAnchorManager;
@@ -23,6 +25,8 @@ namespace MistRidge
                 InputManager inputManager,
                 PlayerManager playerManager,
                 DeathManager deathManager,
+                MistManager mistManager,
+                CheckpointManager checkpointManager,
                 CameraView cameraView,
                 CameraManager cameraManager,
                 CameraAnchorManager cameraAnchorManager)
@@ -33,6 +37,8 @@ namespace MistRidge
             this.inputManager = inputManager;
             this.playerManager = playerManager;
             this.deathManager = deathManager;
+            this.mistManager = mistManager;
+            this.checkpointManager = checkpointManager;
             this.cameraView = cameraView;
             this.cameraManager = cameraManager;
             this.cameraAnchorManager = cameraAnchorManager;
@@ -63,6 +69,8 @@ namespace MistRidge
             cameraAnchorManager.ResetAnchor();
             cameraManager.ResetCamera();
             deathManager.IsActive = true;
+            mistManager.IsActive = true;
+            mistManager.UpdateMistPosition(checkpointManager.CurrentCheckpoint.CheckpointView.Position.y);
         }
     }
 }
