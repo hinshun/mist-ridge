@@ -49,6 +49,8 @@ namespace MistRidge
 
         public override void ExitState()
         {
+            playerView.PlayerLand();
+
             playerView.Animator.SetBool("IsFalling", false);
             playerView.Animator.SetBool("IsLanding", true);
         }

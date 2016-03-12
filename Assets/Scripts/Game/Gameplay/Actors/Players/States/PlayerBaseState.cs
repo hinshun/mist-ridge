@@ -29,5 +29,31 @@ namespace MistRidge
         {
             playerView.MeshTransform.rotation = Quaternion.LookRotation(stateMachine.LookDirection, playerView.Up);
         }
+
+        protected void SetHorizontal()
+        {
+            if (input.Mapping.Direction.Vector.magnitude == 0) {
+                return;
+            }
+
+            Quaternion lookRotation = Quaternion.LookRotation(stateMachine.LookDirection, playerView.Up);
+
+            playerView.MeshTransform.rotation = Quaternion.RotateTowards(
+                playerView.MeshTransform.rotation,
+                lookRotation,
+                playerController.DeltaTime * player.CurrentRotationSpeed
+            );
+
+            float turnAngle = Quaternion.Angle(playerView.MeshTransform.rotation, lookRotation);
+            if (Vector3.Cross(playerView.MeshTransform.forward, stateMachine.LookDirection).y < 0)
+            {
+                turnAngle = -turnAngle;
+            }
+
+            playerView.Animator.SetFloat(
+                "Horizontal",
+                turnAngle / 180
+            );
+        }
     }
 }

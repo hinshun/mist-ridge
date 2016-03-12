@@ -19,6 +19,8 @@ namespace MistRidge
 
         public override void Update()
         {
+            SetHorizontal();
+
             if (playerView.CanJump && input.Mapping.Jump.WasPressed) {
                 stateMachine.ChangeState(PlayerStateType.Jump);
                 return;
@@ -31,7 +33,10 @@ namespace MistRidge
 
             if (input.Mapping.Direction.Vector.magnitude > player.CurrentWalkThreshold)
             {
-                stateMachine.ChangeState(PlayerStateType.Walk);
+                if (Mathf.Abs(playerView.Animator.GetFloat("Horizontal")) < 0.3f)
+                {
+                    stateMachine.ChangeState(PlayerStateType.Walk);
+                }
             }
         }
 
@@ -46,6 +51,7 @@ namespace MistRidge
         public override void ExitState()
         {
             playerView.Animator.SetBool("IsIdling", false);
+            playerView.Animator.SetFloat("Horizontal", 0);
         }
     }
 }

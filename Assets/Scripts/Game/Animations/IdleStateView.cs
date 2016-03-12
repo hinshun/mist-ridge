@@ -23,6 +23,12 @@ namespace MistRidge
 
         public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            float horizontal = animator.GetFloat("Horizontal");
+            if (horizontal > 0.1f || horizontal < 0.1f)
+            {
+                timer = Time.time;
+            }
+
             if (Time.time - timer >= nextChange)
             {
                 timer = Time.time;

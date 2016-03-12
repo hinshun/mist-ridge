@@ -38,7 +38,8 @@ namespace MistRidge
 
                     if (input.Mapping.Direction.Vector == Vector2.zero)
                     {
-                        stateMachine.ChangeState(PlayerStateType.Idle);
+                        JumpHalt();
+                        stateMachine.ChangeState(PlayerStateType.Halt);
                     }
                     else
                     {
@@ -79,8 +80,19 @@ namespace MistRidge
 
         public override void ExitState()
         {
+            playerView.PlayerLand();
+
             playerView.Animator.SetBool("IsJumping", false);
             playerView.Animator.SetBool("IsLanding", true);
+        }
+
+        private void JumpHalt()
+        {
+            stateMachine.MoveDirection = Vector3.MoveTowards(
+                stateMachine.MoveDirection,
+                Vector3.zero,
+                player.CurrentJumpHaltSpeed * playerController.DeltaTime
+            );
         }
     }
 }

@@ -19,7 +19,6 @@ namespace MistRidge
 
         public override void Update()
         {
-
             if (playerView.CanJump && input.Mapping.Jump.WasPressed) {
                 stateMachine.ChangeState(PlayerStateType.Jump);
                 return;
