@@ -8,23 +8,23 @@ namespace MistRidge
     public class CheckpointFactory
     {
         private readonly DiContainer container;
-        private readonly List<IChunkFeatureContainer> chunkFeatureContainers;
+        private readonly List<IBiome> biomes;
         private readonly ChunkFacadeFactory chunkFacadeFactory;
-        private readonly IChunkFeatureContainerPickingStrategy chunkFeatureContainerPickingStrategy;
+        private readonly BiomePickingStrategy biomePickingStrategy;
 
         public CheckpointFactory(
                 DiContainer container,
-                List<IChunkFeatureContainer> chunkFeatureContainers,
-                IChunkFeatureContainerPickingStrategy chunkFeatureContainerPickingStrategy,
+                List<IBiome> biomes,
+                BiomePickingStrategy biomePickingStrategy,
                 ChunkFacadeFactory chunkFacadeFactory)
         {
             this.container = container;
-            this.chunkFeatureContainers = chunkFeatureContainers;
-            this.chunkFeatureContainerPickingStrategy = chunkFeatureContainerPickingStrategy;
+            this.biomes = biomes;
+            this.biomePickingStrategy = biomePickingStrategy;
             this.chunkFacadeFactory = chunkFacadeFactory;
         }
 
-        public Checkpoint Create(ChunkRequest chunkRequest)
+        public Checkpoint Create(ChunkRequest chunkRequest, float altitude)
         {
             ChunkRequest checkpointRequest = new ChunkRequest()
             {
@@ -32,7 +32,7 @@ namespace MistRidge
                 chunkCount = chunkRequest.chunkCount,
                 heightChunkNum = chunkRequest.chunkNum,
                 sprintEndChunkNum = chunkRequest.sprintEndChunkNum,
-                chunkFeatureContainer = chunkFeatureContainerPickingStrategy.Pick(chunkFeatureContainers),
+                biome = biomePickingStrategy.Pick(biomes, altitude),
             };
 
             ChunkFacade chunkFacade = chunkFacadeFactory.Create(checkpointRequest);

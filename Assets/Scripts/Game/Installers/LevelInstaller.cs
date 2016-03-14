@@ -42,7 +42,7 @@ namespace MistRidge
 
         private void InstallChunks()
         {
-            Container.Bind<IChunkFeatureContainerPickingStrategy>().ToSingle<BiomePickingStrategy>();
+            Container.Bind<BiomePickingStrategy>().ToSingle();
             Container.Bind<IChunkFeaturePickingStrategy>().ToSingle<StandardChunkFeaturePickingStrategy>();
             Container.Bind<IInitializable>().ToSingle<StandardChunkFeaturePickingStrategy>();
             Container.Bind<IChunkPlacingStrategy>().ToSingle<SpiralChunkPlacingStrategy>();
@@ -75,7 +75,7 @@ namespace MistRidge
         {
             foreach(Biome checkpointBiome in settings.chunk.checkpointBiomes)
             {
-                Container.Bind<IChunkFeatureContainer>().ToInstance(checkpointBiome).WhenInjectedInto<CheckpointFactory>();
+                Container.Bind<IBiome>().ToInstance(checkpointBiome).WhenInjectedInto<CheckpointFactory>();
             }
 
             Container.Bind<CheckpointFactory>().ToSingle();
@@ -88,10 +88,11 @@ namespace MistRidge
         {
             foreach(Biome biome in settings.chunk.biomes)
             {
-                Container.Bind<IChunkFeatureContainer>().ToInstance(biome).WhenInjectedInto<SprintFactory>();
+                Container.Bind<IBiome>().ToInstance(biome).WhenInjectedInto<SprintFactory>();
             }
 
             Container.Bind<SprintFactory>().ToSingle();
+            Container.BindAllInterfacesToSingle<SprintFactory>();
             Container.Bind<SprintView>().ToTransientPrefab(settings.chunk.sprintPrefab);
         }
 

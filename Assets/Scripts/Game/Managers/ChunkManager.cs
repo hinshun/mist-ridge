@@ -117,7 +117,7 @@ namespace MistRidge
                 chunkCount = chunkCount,
                 heightChunkNum = chunkCount,
                 sprintEndChunkNum = chunkCount,
-                chunkFeatureContainer = settings.startingZoneFeatureContainer,
+                biome = settings.startingZoneBiome,
             };
 
             ChunkFacade chunkFacade = chunkFacadeFactory.Create(chunkRequest);
@@ -138,7 +138,7 @@ namespace MistRidge
                     chunkCount = chunkCount,
                     heightChunkNum = settings.peakChunkCount - 1,
                     sprintEndChunkNum = 0,
-                    chunkFeatureContainer = settings.peakFeatureContainer,
+                    biome = settings.peakBiome,
                 };
 
                 ChunkFacade chunkFacade = chunkFacadeFactory.Create(chunkRequest);
@@ -154,8 +154,8 @@ namespace MistRidge
         public class Settings
         {
             public int peakChunkCount;
-            public GenericChunkFeatureContainer peakFeatureContainer;
-            public GenericChunkFeatureContainer startingZoneFeatureContainer;
+            public GlobalBiome peakBiome;
+            public GlobalBiome startingZoneBiome;
             public List<SprintRequest> sprintRequests;
         }
     }

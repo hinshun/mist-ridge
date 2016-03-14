@@ -45,6 +45,14 @@ namespace MistRidge
             }
         }
 
+        public Vector3 Position
+        {
+            get
+            {
+                return chunkFacade.Position;
+            }
+        }
+
         public Transform Parent
         {
             get

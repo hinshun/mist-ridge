@@ -3,8 +3,10 @@ using System.Collections.Generic;
 
 namespace MistRidge
 {
-    public interface IChunkFeatureContainer
+    public interface IBiome
     {
+        float StartAltitude();
+        float EndAltitude();
         List<ChunkFeature> ChunkFeatures();
     }
 }

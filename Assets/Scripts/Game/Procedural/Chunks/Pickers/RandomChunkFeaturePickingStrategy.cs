@@ -20,8 +20,8 @@ namespace MistRidge
 
         public ChunkFeature Pick(ChunkRequest chunkRequest)
         {
-            IChunkFeatureContainer chunkFeatureContainer = chunkRequest.chunkFeatureContainer;
-            List<ChunkFeature> chunkFeatures = chunkFeatureContainer.ChunkFeatures();
+            IBiome biome = chunkRequest.biome;
+            List<ChunkFeature> chunkFeatures = biome.ChunkFeatures();
             int randomIndex = generator.Random.Next(chunkFeatures.Count);
             return chunkFeatures[randomIndex];
         }

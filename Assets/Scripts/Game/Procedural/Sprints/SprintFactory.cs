@@ -5,29 +5,36 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class SprintFactory
+    public class SprintFactory : IInitializable
     {
         private readonly DiContainer container;
         private readonly CheckpointManager checkpointManager;
-        private readonly List<IChunkFeatureContainer> chunkFeatureContainers;
-        private readonly IChunkFeatureContainerPickingStrategy chunkFeatureContainerPickingStrategy;
+        private readonly List<IBiome> biomes;
+        private readonly BiomePickingStrategy biomePickingStrategy;
         private readonly ChunkFacadeFactory chunkFacadeFactory;
         private readonly CheckpointFactory checkpointFactory;
+
+        private float altitude;
 
         public SprintFactory(
                 DiContainer container,
                 CheckpointManager checkpointManager,
-                List<IChunkFeatureContainer> chunkFeatureContainers,
-                IChunkFeatureContainerPickingStrategy chunkFeatureContainerPickingStrategy,
+                List<IBiome> biomes,
+                BiomePickingStrategy biomePickingStrategy,
                 ChunkFacadeFactory chunkFacadeFactory,
                 CheckpointFactory checkpointFactory)
         {
             this.container = container;
             this.checkpointManager = checkpointManager;
-            this.chunkFeatureContainers = chunkFeatureContainers;
-            this.chunkFeatureContainerPickingStrategy = chunkFeatureContainerPickingStrategy;
+            this.biomes = biomes;
+            this.biomePickingStrategy = biomePickingStrategy;
             this.chunkFacadeFactory = chunkFacadeFactory;
             this.checkpointFactory = checkpointFactory;
+        }
+
+        public void Initialize()
+        {
+            altitude = 0;
         }
 
         public Sprint Create(SprintRequest sprintRequest)
@@ -55,10 +62,12 @@ namespace MistRidge
                     chunkCount = sprintRequest.totalChunkCount,
                     heightChunkNum = chunkNum,
                     sprintEndChunkNum = endChunkNum + 1,
-                    chunkFeatureContainer = chunkFeatureContainerPickingStrategy.Pick(chunkFeatureContainers),
+                    biome = biomePickingStrategy.Pick(biomes, altitude),
                 };
 
                 ChunkFacade chunkFacade = chunkFacadeFactory.Create(chunkRequest);
+                altitude = chunkFacade.Position.y;
+
                 chunkFacades.Add(chunkFacade);
             }
 
@@ -73,7 +82,9 @@ namespace MistRidge
                 chunkCount = sprintRequest.totalChunkCount,
             };
 
-            Checkpoint checkpoint = checkpointFactory.Create(checkpointRequest);
+            Checkpoint checkpoint = checkpointFactory.Create(checkpointRequest, altitude);
+            altitude = checkpoint.Position.y;
+
             checkpointManager.AddCheckpoint(checkpoint);
 
             return checkpoint;

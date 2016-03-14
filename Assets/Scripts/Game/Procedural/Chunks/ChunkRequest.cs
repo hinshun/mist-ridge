@@ -6,6 +6,6 @@ namespace MistRidge
         public int chunkCount;
         public int heightChunkNum;
         public int sprintEndChunkNum;
-        public IChunkFeatureContainer chunkFeatureContainer;
+        public IBiome biome;
     }
 }

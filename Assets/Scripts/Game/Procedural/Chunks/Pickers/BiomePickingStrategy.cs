@@ -1,10 +1,11 @@
 using UnityEngine;
+using System.Linq;
 using System.Collections.Generic;
 using Zenject;
 
 namespace MistRidge
 {
-    public class BiomePickingStrategy : IChunkFeatureContainerPickingStrategy
+    public class BiomePickingStrategy
     {
         private readonly Generator generator;
 
@@ -13,10 +14,14 @@ namespace MistRidge
             this.generator = generator;
         }
 
-        public IChunkFeatureContainer Pick(List<IChunkFeatureContainer> chunkFeatureContainers)
+        public IBiome Pick(List<IBiome> biomes, float altitude)
         {
-            int randomIndex = generator.Random.Next(chunkFeatureContainers.Count);
-            return chunkFeatureContainers[randomIndex];
+            biomes = biomes
+                .Where(biome => altitude >= biome.StartAltitude() && altitude < biome.EndAltitude())
+                .ToList();
+
+            int randomIndex = generator.Random.Next(biomes.Count);
+            return biomes[randomIndex];
         }
     }
 }

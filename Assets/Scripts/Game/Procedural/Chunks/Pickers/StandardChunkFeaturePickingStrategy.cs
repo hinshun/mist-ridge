@@ -36,8 +36,8 @@ namespace MistRidge
                 return chunkChainedFeature;
             }
 
-            IChunkFeatureContainer chunkFeatureContainer = chunkRequest.chunkFeatureContainer;
-            List<ChunkFeature> chunkFeatures = chunkFeatureContainer.ChunkFeatures();
+            IBiome biome = chunkRequest.biome;
+            List<ChunkFeature> chunkFeatures = biome.ChunkFeatures();
             chunkFeatures = chunkFeatures
                 .Where(chunkFeature => !chunkFeature.IsUnique || (chunkFeature.IsUnique && !pickedUniqueChunkFeatures.Contains(chunkFeature)))
                 .ToList();
