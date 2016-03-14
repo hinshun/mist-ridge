@@ -28,8 +28,6 @@ namespace MistRidge
             int depth = ChunkMath.Depth(chunkRequest);
             int sideChunkNum = ChunkMath.SideChunkNum(chunkRequest);
 
-            Debug.Log("chunkNum: " + chunkRequest.chunkNum + ", depth: " + depth + ", sideChunkNum: " + sideChunkNum);
-
             if (chunkChain != null)
             {
                 ChunkFeature chunkChainedFeature = chunkChain;
