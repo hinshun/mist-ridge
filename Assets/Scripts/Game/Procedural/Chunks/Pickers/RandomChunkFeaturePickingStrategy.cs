@@ -18,8 +18,9 @@ namespace MistRidge
             // Do Nothing
         }
 
-        public ChunkFeature Pick(IChunkFeatureContainer chunkFeatureContainer)
+        public ChunkFeature Pick(ChunkRequest chunkRequest)
         {
+            IChunkFeatureContainer chunkFeatureContainer = chunkRequest.chunkFeatureContainer;
             List<ChunkFeature> chunkFeatures = chunkFeatureContainer.ChunkFeatures();
             int randomIndex = generator.Random.Next(chunkFeatures.Count);
             return chunkFeatures[randomIndex];

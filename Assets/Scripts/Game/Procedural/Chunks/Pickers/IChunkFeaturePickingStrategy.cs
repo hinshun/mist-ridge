@@ -6,6 +6,6 @@ namespace MistRidge
 {
     public interface IChunkFeaturePickingStrategy : IInitializable
     {
-        ChunkFeature Pick(IChunkFeatureContainer chunkFeatureContainer);
+        ChunkFeature Pick(ChunkRequest chunkRequest);
     }
 }

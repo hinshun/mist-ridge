@@ -26,17 +26,15 @@ namespace MistRidge
                 return;
             }
 
-            int depth = Mathf.FloorToInt((3 + Mathf.Sqrt((12 * chunkRequest.chunkNum) - 3)) / 6);
-            int side = Mathf.CeilToInt((float)chunkRequest.chunkNum / depth) - (3 * depth) + 2;
-
-			chunkView.Rotation *= BirdseyeRotation(chunkView, chunkRequest, depth, side);
-			chunkView.Position = BirdseyePosition(chunkView, chunkRequest, depth, side);
+            chunkView.Rotation *= BirdseyeRotation(chunkView, chunkRequest);
+            chunkView.Position = BirdseyePosition(chunkView, chunkRequest);
         }
 
-        private Quaternion BirdseyeRotation(ChunkView chunkView, ChunkRequest chunkRequest, int depth, int side)
+        private Quaternion BirdseyeRotation(ChunkView chunkView, ChunkRequest chunkRequest)
         {
-            int depthStartChunkNum = (3 * depth * (depth - 1)) + 1;
-            int depthEndChunkNum = 3 * depth * (depth + 1);
+            int side = ChunkMath.Side(chunkRequest);
+            int depthStartChunkNum = ChunkMath.DepthStartChunkNum(chunkRequest);
+            int depthEndChunkNum = ChunkMath.DepthEndChunkNum(chunkRequest);
 
             if (chunkRequest.chunkNum == depthStartChunkNum || chunkRequest.chunkNum == depthEndChunkNum)
             {
@@ -51,11 +49,13 @@ namespace MistRidge
             );
         }
 
-        private Vector3 BirdseyePosition(ChunkView chunkView, ChunkRequest chunkRequest, int depth, int side)
+        private Vector3 BirdseyePosition(ChunkView chunkView, ChunkRequest chunkRequest)
         {
-            int depthStartChunkNum = (3 * depth * (depth - 1)) + 1;
-            int sideStartChunkNum = depthStartChunkNum + (depth * side);
-            int sideChunkNum = chunkRequest.chunkNum - sideStartChunkNum;
+            int depth = ChunkMath.Depth(chunkRequest);
+            int side = ChunkMath.Side(chunkRequest);
+            int depthStartChunkNum = ChunkMath.DepthStartChunkNum(chunkRequest);
+            int sideStartChunkNum = ChunkMath.SideStartChunkNum(chunkRequest);
+            int sideChunkNum = ChunkMath.SideChunkNum(chunkRequest);
 
             switch (side)
             {

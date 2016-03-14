@@ -23,8 +23,9 @@ namespace MistRidge
             pickedUniqueChunkFeatures = new HashSet<ChunkFeature>();
         }
 
-        public ChunkFeature Pick(IChunkFeatureContainer chunkFeatureContainer)
+        public ChunkFeature Pick(ChunkRequest chunkRequest)
         {
+            IChunkFeatureContainer chunkFeatureContainer = chunkRequest.chunkFeatureContainer;
             List<ChunkFeature> chunkFeatures = chunkFeatureContainer.ChunkFeatures();
             chunkFeatures = chunkFeatures
                 .Where(chunkFeature => !chunkFeature.IsUnique || (chunkFeature.IsUnique && !pickedUniqueChunkFeatures.Contains(chunkFeature)))
@@ -35,8 +36,28 @@ namespace MistRidge
                 containerCDF.Add(chunkFeatureContainer, CreateCDF(chunkFeatures));
             }
 
+            int depth = ChunkMath.Depth(chunkRequest);
+            int sideChunkNum = ChunkMath.SideChunkNum(chunkRequest);
+
+            Debug.Log("depth: " + depth + ", sideChunkNum: " + sideChunkNum);
+
             List<int> cachedCDF = containerCDF[chunkFeatureContainer];
+
+            if (sideChunkNum == depth - 1) // Currently picking for corner
+            {
+                chunkFeatures = chunkFeatures
+                    .Where(chunkFeature => !chunkFeature.SkipCorners)
+                    .ToList();
+                cachedCDF = CreateCDF(chunkFeatures);
+            }
+
             int random = generator.Random.Next(cachedCDF[cachedCDF.Count - 1]);
+
+            if (cachedCDF.Count == 0)
+            {
+                Debug.LogError("Failed to pick chunk feature because chunk feature container ran out of features");
+                return null;
+            }
 
             int randomIndex = 0;
             foreach (int probability in cachedCDF)
