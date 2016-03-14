@@ -31,7 +31,8 @@ namespace MistRidge
                 chunkNum = chunkRequest.chunkNum,
                 chunkCount = chunkRequest.chunkCount,
                 heightChunkNum = chunkRequest.chunkNum,
-                chunkFeatureContainer = chunkFeatureContainerPickingStrategy.Pick(chunkFeatureContainers)
+                sprintEndChunkNum = chunkRequest.sprintEndChunkNum,
+                chunkFeatureContainer = chunkFeatureContainerPickingStrategy.Pick(chunkFeatureContainers),
             };
 
             ChunkFacade chunkFacade = chunkFacadeFactory.Create(checkpointRequest);

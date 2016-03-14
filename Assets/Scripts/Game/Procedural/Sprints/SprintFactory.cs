@@ -54,6 +54,7 @@ namespace MistRidge
                     chunkNum = chunkNum,
                     chunkCount = sprintRequest.totalChunkCount,
                     heightChunkNum = chunkNum,
+                    sprintEndChunkNum = endChunkNum + 1,
                     chunkFeatureContainer = chunkFeatureContainerPickingStrategy.Pick(chunkFeatureContainers),
                 };
 

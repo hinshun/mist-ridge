@@ -9,8 +9,8 @@ namespace MistRidge
     {
         private readonly Generator generator;
 
-        private Dictionary<IChunkFeatureContainer, List<int>> containerCDF;
         private HashSet<ChunkFeature> pickedUniqueChunkFeatures;
+        private ChunkFeature chunkChain;
 
         public StandardChunkFeaturePickingStrategy(Generator generator)
         {
@@ -19,69 +19,47 @@ namespace MistRidge
 
         public void Initialize()
         {
-            containerCDF = new Dictionary<IChunkFeatureContainer, List<int>>();
             pickedUniqueChunkFeatures = new HashSet<ChunkFeature>();
+            chunkChain = null;
         }
 
         public ChunkFeature Pick(ChunkRequest chunkRequest)
         {
+            int depth = ChunkMath.Depth(chunkRequest);
+            int sideChunkNum = ChunkMath.SideChunkNum(chunkRequest);
+
+            Debug.Log("chunkNum: " + chunkRequest.chunkNum + ", depth: " + depth + ", sideChunkNum: " + sideChunkNum);
+
+            if (chunkChain != null)
+            {
+                ChunkFeature chunkChainedFeature = chunkChain;
+                chunkChain = chunkChain.ChunkChainNext;
+
+                return chunkChainedFeature;
+            }
+
             IChunkFeatureContainer chunkFeatureContainer = chunkRequest.chunkFeatureContainer;
             List<ChunkFeature> chunkFeatures = chunkFeatureContainer.ChunkFeatures();
             chunkFeatures = chunkFeatures
                 .Where(chunkFeature => !chunkFeature.IsUnique || (chunkFeature.IsUnique && !pickedUniqueChunkFeatures.Contains(chunkFeature)))
                 .ToList();
 
-            if (!containerCDF.ContainsKey(chunkFeatureContainer))
+            List<int> unfittedChunkIndices = GetUnfittedChunkIndices(chunkRequest, chunkFeatures);
+            foreach (int index in unfittedChunkIndices)
             {
-                containerCDF.Add(chunkFeatureContainer, CreateCDF(chunkFeatures));
+                chunkFeatures.RemoveAt(index);
             }
 
-            int depth = ChunkMath.Depth(chunkRequest);
-            int sideChunkNum = ChunkMath.SideChunkNum(chunkRequest);
-
-            Debug.Log("depth: " + depth + ", sideChunkNum: " + sideChunkNum);
-
-            List<int> cachedCDF = containerCDF[chunkFeatureContainer];
-
-            if (sideChunkNum == depth - 1) // Currently picking for corner
-            {
-                chunkFeatures = chunkFeatures
-                    .Where(chunkFeature => !chunkFeature.SkipCorners)
-                    .ToList();
-                cachedCDF = CreateCDF(chunkFeatures);
-            }
-
-            int random = generator.Random.Next(cachedCDF[cachedCDF.Count - 1]);
-
-            if (cachedCDF.Count == 0)
-            {
-                Debug.LogError("Failed to pick chunk feature because chunk feature container ran out of features");
-                return null;
-            }
-
-            int randomIndex = 0;
-            foreach (int probability in cachedCDF)
-            {
-                if (probability > random)
-                {
-                    break;
-                }
-
-                randomIndex++;
-            }
-
-            if (randomIndex > chunkFeatures.Count - 1)
-            {
-                randomIndex = chunkFeatures.Count - 1;
-            }
-
+            List<int> cdf = CreateCDF(chunkFeatures);
+            int randomIndex = GetRandomIndex(cdf, chunkFeatures);
             ChunkFeature pickedChunkFeature = chunkFeatures[randomIndex];
 
             if (pickedChunkFeature.IsUnique)
             {
                 pickedUniqueChunkFeatures.Add(pickedChunkFeature);
-                containerCDF[chunkFeatureContainer] = CreateCDF(chunkFeatures);
             }
+
+            chunkChain = pickedChunkFeature.ChunkChainNext;
 
             return pickedChunkFeature;
         }
@@ -98,6 +76,80 @@ namespace MistRidge
             }
 
             return featuresCDF;
+        }
+
+        private int GetRandomIndex(List<int> cdf, List<ChunkFeature> chunkFeatures)
+        {
+            if (cdf.Count == 0)
+            {
+                Debug.LogError("Failed to pick chunk feature because chunk feature container ran out of features");
+                return 0;
+            }
+
+            int random = generator.Random.Next(cdf[cdf.Count - 1]);
+
+            int randomIndex = 0;
+            foreach (int probability in cdf)
+            {
+                if (probability > random)
+                {
+                    break;
+                }
+
+                randomIndex++;
+            }
+
+            if (randomIndex > chunkFeatures.Count - 1)
+            {
+                randomIndex = chunkFeatures.Count - 1;
+            }
+
+            return randomIndex;
+        }
+
+        private List<int> GetUnfittedChunkIndices(ChunkRequest chunkRequest, List<ChunkFeature> chunkFeatures)
+        {
+            List<int> unfittedChunkIndices = new List<int>();
+            for (int index = 0; index < chunkFeatures.Count; ++index)
+            {
+                ChunkFeature chunkFeature = chunkFeatures[index];
+                ChunkFeature chunkChainedFeature = chunkFeature;
+
+                int chunkNumOffset = 0;
+                bool chained = false;
+                while (chunkChainedFeature != null)
+                {
+                    ChunkRequest nextChunkRequest = new ChunkRequest()
+                    {
+                        chunkNum = chunkRequest.chunkNum - chunkNumOffset,
+                    };
+
+
+                    if (chained && nextChunkRequest.chunkNum == chunkRequest.sprintEndChunkNum)
+                    {
+                        unfittedChunkIndices.Add(index);
+                        break;
+                    }
+
+                    int nextDepth = ChunkMath.Depth(nextChunkRequest);
+                    int nextDepthEndChunkNum = ChunkMath.DepthEndChunkNum(nextChunkRequest);
+                    int nextSideChunkNum = ChunkMath.SideChunkNum(nextChunkRequest);
+
+                    // Mark chunk feature to be removed if it hits a corner and it is supposed to skip corners
+                    if ((chained || nextChunkRequest.chunkNum != nextDepthEndChunkNum)
+                        && (nextSideChunkNum == nextDepth - 1 && chunkChainedFeature.SkipCorners))
+                    {
+                        unfittedChunkIndices.Add(index);
+                        break;
+                    }
+
+                    chunkChainedFeature = chunkChainedFeature.ChunkChainNext;
+                    chunkNumOffset++;
+                    chained = true;
+                }
+            }
+
+            return unfittedChunkIndices;
         }
     }
 }

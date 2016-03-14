@@ -116,6 +116,7 @@ namespace MistRidge
                 chunkNum = chunkCount,
                 chunkCount = chunkCount,
                 heightChunkNum = chunkCount,
+                sprintEndChunkNum = chunkCount,
                 chunkFeatureContainer = settings.startingZoneFeatureContainer,
             };
 
@@ -136,6 +137,7 @@ namespace MistRidge
                     chunkNum = chunkNum,
                     chunkCount = chunkCount,
                     heightChunkNum = settings.peakChunkCount - 1,
+                    sprintEndChunkNum = 0,
                     chunkFeatureContainer = settings.peakFeatureContainer,
                 };
 
