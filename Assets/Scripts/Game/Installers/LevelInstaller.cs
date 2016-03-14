@@ -26,6 +26,7 @@ namespace MistRidge
             Container.Install<ExecutionOrderInstaller>(
                 new List<Type>()
                 {
+                    typeof(IChunkFeaturePickingStrategy),
                     typeof(CheckpointManager),
                     typeof(ChunkManager),
                     typeof(LevelManager),
@@ -42,7 +43,8 @@ namespace MistRidge
         private void InstallChunks()
         {
             Container.Bind<IChunkFeatureContainerPickingStrategy>().ToSingle<BiomePickingStrategy>();
-            Container.Bind<IChunkFeaturePickingStrategy>().ToSingle<RandomChunkFeaturePickingStrategy>();
+            Container.Bind<IChunkFeaturePickingStrategy>().ToSingle<StandardChunkFeaturePickingStrategy>();
+            Container.Bind<IInitializable>().ToSingle<StandardChunkFeaturePickingStrategy>();
             Container.Bind<IChunkPlacingStrategy>().ToSingle<SpiralChunkPlacingStrategy>();
 
             Container.BindGameObjectFactory<PlatformView.Factory>(settings.chunk.platformPrefab);

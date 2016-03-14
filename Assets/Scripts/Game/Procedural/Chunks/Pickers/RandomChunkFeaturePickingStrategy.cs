@@ -13,6 +13,11 @@ namespace MistRidge
             this.generator = generator;
         }
 
+        public void Initialize()
+        {
+            // Do Nothing
+        }
+
         public ChunkFeature Pick(IChunkFeatureContainer chunkFeatureContainer)
         {
             List<ChunkFeature> chunkFeatures = chunkFeatureContainer.ChunkFeatures();
