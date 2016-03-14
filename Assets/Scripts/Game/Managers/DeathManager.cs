@@ -198,7 +198,7 @@ namespace MistRidge
 
             if (Time.time - deathTimers[playerFacade] > settings.deathTimeLimit)
             {
-                Kill(input, playerFacade);
+                Kill(playerFacade);
                 DeathTimerReset(input, playerFacade);
             }
         }
@@ -209,11 +209,16 @@ namespace MistRidge
             displayManager.UpdatePointer(input, Vector2.zero);
         }
 
-        public void Kill(Input input, PlayerFacade playerFacade)
+        public void Kill(PlayerFacade playerFacade)
         {
+            Input input = playerManager.Input(playerFacade.PlayerView);
+
             playerDeaths[playerFacade] = true;
             playerFacade.Die();
+            displayManager.UpdateBackdrop(input, BackdropHealth.Dead);
+            displayManager.UpdatePortraitImage(input, playerFacade.CharacterType, PortraitEmotion.Dead);
             displayManager.UpdatePointer(input, Vector2.zero);
+            displayManager.UpdateRank(input, -1);
 
             if (AlivePlayerCount == 0)
             {
@@ -227,7 +232,11 @@ namespace MistRidge
 
         public void Respawn(PlayerFacade playerFacade)
         {
+            Input input = playerManager.Input(playerFacade.PlayerView);
+
             playerDeaths[playerFacade] = false;
+            displayManager.UpdateBackdrop(input, BackdropHealth.Alive);
+            displayManager.UpdatePortraitImage(input, playerFacade.CharacterType, PortraitEmotion.Neutral);
             playerFacade.Respawn();
         }
 

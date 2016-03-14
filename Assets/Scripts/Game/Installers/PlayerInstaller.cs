@@ -17,6 +17,7 @@ namespace MistRidge
             InstallCamera();
             InstallSpawn();
             InstallDeath();
+            InstallRank();
             InstallSettings();
         }
 
@@ -24,7 +25,7 @@ namespace MistRidge
         {
             Container.Bind<PlayerContainerView>().ToSinglePrefab(settings.player.playerContainerPrefab);
 
-            Container.BindFacadeFactory<Input, PlayerFacade, PlayerFacade.Factory>(InstallPlayerFacade);
+            Container.BindFacadeFactory<CharacterType, Input, PlayerFacade, PlayerFacadeFactory>(InstallPlayerFacade);
 
             Container.Bind<PlayerManager>().ToSingle();
             Container.BindAllInterfacesToSingle<PlayerManager>();
@@ -38,15 +39,15 @@ namespace MistRidge
             Container.BindTrigger<CheckpointActionSignal.Trigger>();
         }
 
-        private void InstallPlayerFacade(DiContainer subContainer, Input input)
+        private void InstallPlayerFacade(DiContainer subContainer, CharacterType characterType, Input input)
         {
+            subContainer.BindInstance(characterType);
             subContainer.BindInstance(input);
+
             subContainer.Bind<Grounding>().ToSingle();
 
             subContainer.Bind<Player>().ToSingle();
             subContainer.BindAllInterfacesToSingle<Player>();
-
-            subContainer.Bind<PlayerView>().ToSinglePrefab(settings.player.playerPrefab);
 
             subContainer.Bind<PlayerController>().ToSingle();
             subContainer.BindAllInterfacesToSingle<PlayerController>();
@@ -101,6 +102,12 @@ namespace MistRidge
             Container.BindAllInterfacesToSingle<MistManager>();
         }
 
+        private void InstallRank()
+        {
+            Container.Bind<RankManager>().ToSingle();
+            Container.BindAllInterfacesToSingle<RankManager>();
+        }
+
         private void InstallSettings()
         {
             Container.Bind<DeathManager.Settings>().ToSingleInstance(settings.deathManagerSettings);
@@ -109,6 +116,7 @@ namespace MistRidge
             Container.Bind<Player.Settings>().ToSingleInstance(settings.player.playerSettings);
             Container.Bind<PlayerController.Settings>().ToSingleInstance(settings.player.controllerSettings);
             Container.Bind<PlayerStateMachine.Settings>().ToSingleInstance(settings.player.stateMachineSettings);
+            Container.Bind<PlayerFacadeFactory.Settings>().ToSingleInstance(settings.player.facadeFactorySettings);
 
             Container.Bind<Grounding.Settings>().ToSingleInstance(settings.player.collision.groundingSettings);
 
@@ -127,13 +135,13 @@ namespace MistRidge
             [Serializable]
             public class PlayerSettings
             {
-                public GameObject playerPrefab;
                 public GameObject playerContainerPrefab;
                 public PlayerPhysics playerPhysics;
                 public CollisionSettings collision;
                 public Player.Settings playerSettings;
                 public PlayerController.Settings controllerSettings;
                 public PlayerStateMachine.Settings stateMachineSettings;
+                public PlayerFacadeFactory.Settings facadeFactorySettings;
 
                 [Serializable]
                 public class CollisionSettings

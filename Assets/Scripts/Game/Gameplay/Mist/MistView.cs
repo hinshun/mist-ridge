@@ -35,7 +35,7 @@ namespace MistRidge
                 Input input = playerManager.Input(playerView);
                 PlayerFacade playerFacade = playerManager.PlayerFacade(input);
 
-                deathManager.Kill(input, playerFacade);
+                deathManager.Kill(playerFacade);
             }
         }
 

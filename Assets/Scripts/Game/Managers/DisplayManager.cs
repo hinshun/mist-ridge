@@ -10,16 +10,19 @@ namespace MistRidge
     {
         private readonly Settings settings;
         private readonly GameDisplayView gameDisplayView;
+        private readonly PlayerManager playerManager;
 
         private Canvas gameDisplayCanvas;
         private CanvasScaler gameDisplayScaler;
 
         public DisplayManager(
                 Settings settings,
-                GameDisplayView gameDisplayView)
+                GameDisplayView gameDisplayView,
+                PlayerManager playerManager)
         {
             this.settings = settings;
             this.gameDisplayView = gameDisplayView;
+            this.playerManager = playerManager;
         }
 
         public void Initialize()
@@ -36,9 +39,13 @@ namespace MistRidge
 
         public void Display(Input input)
         {
-            PlayerDisplay(input).SetActive(true);
-            UpdateAether(input, 0);
+            UpdateBackdrop(input, BackdropHealth.Alive);
+            UpdateNameTag(input, playerManager.GetCharacterType(input));
+            UpdatePortraitImage(input, playerManager.GetCharacterType(input), PortraitEmotion.Neutral);
             UpdateItem(input, null);
+            UpdateRank(input, -1);
+            UpdateAether(input, 0);
+            PlayerDisplay(input).SetActive(true);
             UpdatePointer(input, Vector2.zero);
         }
 
@@ -48,24 +55,97 @@ namespace MistRidge
             gameDisplayCanvas.planeDistance = 1f;
         }
 
-        public void UpdateAether(Input input, int aetherCount)
+        public void UpdateBackdrop(Input input, BackdropHealth backdropHealth)
         {
-            Text aetherText = PlayerDisplay(input).AetherText;
-            aetherText.text = aetherCount.ToString();
+            Image background = PlayerDisplay(input).Background;
+            Image itemCircle = PlayerDisplay(input).ItemCircle;
+
+            switch (backdropHealth)
+            {
+                case BackdropHealth.Alive:
+                    background.sprite = settings.backdrops[input.DeviceNum].background;
+                    itemCircle.sprite = settings.backdrops[input.DeviceNum].itemCircle;
+                    return;
+
+                case BackdropHealth.Dead:
+                    background.sprite = settings.deadBackdrop.background;
+                    itemCircle.sprite = settings.deadBackdrop.itemCircle;
+                    return;
+            }
+
+            Debug.LogError("Failed to find valid backdrop health");
+            background.sprite = null;
+            itemCircle.sprite = null;
+        }
+
+        public void UpdateNameTag(Input input, CharacterType characterType)
+        {
+            Image nameTag = PlayerDisplay(input).NameTag;
+            nameTag.sprite = GetPortrait(characterType).nameTag;
+        }
+
+        public void UpdatePortraitImage(Input input, CharacterType characterType, PortraitEmotion portraitEmotion)
+        {
+            Image portraitImage = PlayerDisplay(input).PortraitImage;
+            Portrait portrait = GetPortrait(characterType);
+
+            switch (portraitEmotion)
+            {
+                case PortraitEmotion.Neutral:
+                    portraitImage.sprite = portrait.neutral;
+                    return;
+
+                case PortraitEmotion.Hit:
+                    portraitImage.sprite = portrait.hit;
+                    return;
+
+                case PortraitEmotion.Joy:
+                    portraitImage.sprite = portrait.joy;
+                    return;
+
+                case PortraitEmotion.Dead:
+                    portraitImage.sprite = portrait.dead;
+                    return;
+            }
+
+            Debug.LogError("Failed to find valid portrait emotion");
+            portraitImage.sprite = null;
         }
 
         public void UpdateItem(Input input, ItemDrop itemDrop)
         {
-            Image itemImage = PlayerDisplay(input).ItemImage;
+            Image itemSlot = PlayerDisplay(input).ItemSlot;
 
             if (itemDrop == null)
             {
-                /* itemImage.sprite = settings.emptyItem; */
+                itemSlot.enabled = false;
             }
             else
             {
-                itemImage.sprite = itemDrop.ItemSprite;
+                itemSlot.sprite = itemDrop.ItemSprite;
+                itemSlot.enabled = true;
             }
+        }
+
+        public void UpdateRank(Input input, int rank)
+        {
+            Image rankImage = PlayerDisplay(input).RankImage;
+
+            if (rank >= 0)
+            {
+                rankImage.sprite = settings.rankSprites[rank];
+                rankImage.enabled = true;
+            }
+            else
+            {
+                rankImage.enabled = false;
+            }
+        }
+
+        public void UpdateAether(Input input, int aetherCount)
+        {
+            Text aetherText = PlayerDisplay(input).AetherText;
+            aetherText.text = aetherCount.ToString();
         }
 
         public void UpdatePointer(Input input, Vector2 position)
@@ -113,10 +193,31 @@ namespace MistRidge
             return gameDisplayView.PlayerDisplays[input.DeviceNum];
         }
 
+        private Portrait GetPortrait(CharacterType characterType)
+        {
+            switch (characterType)
+            {
+                case CharacterType.Jack:
+                    return settings.jack;
+
+                case CharacterType.Jill:
+                    return settings.jill;
+            }
+
+            Debug.LogError("Failed to find valid character type");
+            return new Portrait();
+        }
+
         [Serializable]
         public class Settings
         {
-            public Sprite emptyItem;
+            public Portrait jack;
+            public Portrait jill;
+
+            public List<Sprite> rankSprites;
+
+            public Backdrop deadBackdrop;
+            public List<Backdrop> backdrops;
         }
     }
 }

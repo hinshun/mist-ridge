@@ -9,14 +9,14 @@ namespace MistRidge
     {
         private readonly PlayerContainerView playerContainerView;
         private readonly SpawnManager spawnManager;
-        private readonly PlayerFacade.Factory playerFacadeFactory;
+        private readonly PlayerFacadeFactory playerFacadeFactory;
         private Dictionary<Input, PlayerFacade> playerFacades;
         private Dictionary<PlayerView, Input> playerViewMapping;
 
         public PlayerManager(
                 PlayerContainerView playerContainerView,
                 SpawnManager spawnManager,
-                PlayerFacade.Factory playerFacadeFactory)
+                PlayerFacadeFactory playerFacadeFactory)
         {
             this.playerContainerView = playerContainerView;
             this.spawnManager = spawnManager;
@@ -59,7 +59,9 @@ namespace MistRidge
         {
             if (!playerFacades.ContainsKey(input))
             {
-                PlayerFacade playerFacade = playerFacadeFactory.Create(input);
+                CharacterType characterType = GetCharacterType(input);
+                PlayerFacade playerFacade = playerFacadeFactory.Create(characterType, input);
+
                 playerFacade.Position = spawnManager.CurrentSpawnView.SpawnPoint(input.DeviceNum);
                 playerFacade.Parent = playerContainerView.transform;
 
@@ -70,6 +72,18 @@ namespace MistRidge
             }
 
             return null;
+        }
+
+        public CharacterType GetCharacterType(Input input)
+        {
+            if (input.DeviceNum % 2 == 0)
+            {
+                return CharacterType.Jack;
+            }
+            else
+            {
+                return CharacterType.Jill;
+            }
         }
     }
 }
