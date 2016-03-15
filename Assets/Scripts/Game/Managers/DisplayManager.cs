@@ -164,16 +164,16 @@ namespace MistRidge
 
                 if (position.x < 0)
                 {
-                    angle = 180f;
+                    angle = 90;
+                }
+                else if (position.x > 1f)
+                {
+                    angle = 270f;
                 }
 
                 if (position.y < 0)
                 {
-                    angle = 270f;
-                }
-                else if (position.y > 1f)
-                {
-                    angle = 90f;
+                    angle = 180f;
                 }
 
                 pointerTransform.localRotation = Quaternion.AngleAxis(angle, Vector3.forward);
