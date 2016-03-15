@@ -5,6 +5,6 @@ namespace MistRidge
 {
     public interface IChunkPlacingStrategy
     {
-        void Place(ChunkView chunkView, ChunkRequest chunkRequest);
+        void Place(ChunkView chunkView, ChunkRequest chunkRequest, ChunkFeatureView chunkFeatureView);
     }
 }

@@ -68,7 +68,7 @@ namespace MistRidge
 
         private void PlaceChunk()
         {
-            chunkPlacingStrategy.Place(chunkView, chunkRequest);
+            chunkPlacingStrategy.Place(chunkView, chunkRequest, chunkFeatureView);
         }
 
         private List<ItemContainerView> SpawnItemContainers()

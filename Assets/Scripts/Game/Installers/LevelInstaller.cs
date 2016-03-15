@@ -104,12 +104,15 @@ namespace MistRidge
         {
             Container.Bind<Chunk.Settings>().ToSingleInstance(settings.chunk.chunkSettings);
             Container.Bind<ChunkManager.Settings>().ToSingleInstance(settings.chunk.chunkManagerSettings);
+
+            Container.Bind<SpiralChunkPlacingStrategy.Settings>().ToSingleInstance(settings.spiralChunkPlacingStrategySettings);
         }
 
         [Serializable]
         public class Settings
         {
             public ChunkSettings chunk;
+            public SpiralChunkPlacingStrategy.Settings spiralChunkPlacingStrategySettings;
 
             [Serializable]
             public class ChunkSettings

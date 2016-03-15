@@ -23,16 +23,32 @@ namespace MistRidge
         };
 
         [SerializeField]
-        public float minAltitude;
+        public float entryAltitude;
 
         [SerializeField]
-        public float maxAltitude;
+        public float exitAltitude;
 
         public PlatformBaseConfig PlatformBaseConfig
         {
             get
             {
                 return platformBaseConfig;
+            }
+        }
+
+        public float EntryAltitude
+        {
+            get
+            {
+                return entryAltitude;
+            }
+        }
+
+        public float ExitAltitude
+        {
+            get
+            {
+                return exitAltitude;
             }
         }
 
@@ -45,7 +61,7 @@ namespace MistRidge
 
             DrawForwardDirectionGizmos();
             DrawSpawnablePlatformBaseGizmos();
-            DrawMinMaxAltitudeGizmos();
+            DrawEntryExitAltitudeGizmos();
         }
 
         private void DrawForwardDirectionGizmos()
@@ -131,10 +147,10 @@ namespace MistRidge
             }
         }
 
-        private void DrawMinMaxAltitudeGizmos()
+        private void DrawEntryExitAltitudeGizmos()
         {
-            DrawAltitudeGizmos(minAltitude, Color.red);
-            DrawAltitudeGizmos(maxAltitude, Color.blue);
+            DrawAltitudeGizmos(entryAltitude, Color.red);
+            DrawAltitudeGizmos(exitAltitude, Color.blue);
         }
 
         private void DrawAltitudeGizmos(float altitude, Color color)

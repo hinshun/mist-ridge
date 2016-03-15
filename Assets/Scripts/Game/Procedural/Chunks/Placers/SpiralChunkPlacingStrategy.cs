@@ -7,16 +7,20 @@ namespace MistRidge
 {
     public class SpiralChunkPlacingStrategy : IChunkPlacingStrategy
     {
+        private readonly Settings settings;
         private readonly ChunkReference chunkReference;
 
         private ChunkView previousChunkView;
 
-        public SpiralChunkPlacingStrategy(ChunkReference chunkReference)
+        public SpiralChunkPlacingStrategy(
+                Settings settings,
+                ChunkReference chunkReference)
         {
+            this.settings = settings;
             this.chunkReference = chunkReference;
         }
 
-        public void Place(ChunkView chunkView, ChunkRequest chunkRequest)
+        public void Place(ChunkView chunkView, ChunkRequest chunkRequest, ChunkFeatureView chunkFeatureView)
         {
             if (chunkRequest.chunkNum == 0)
             {
@@ -24,12 +28,12 @@ namespace MistRidge
                     120,
                     chunkView.Up
                 );
-                chunkView.Position = Vector3.zero + Altitude(chunkRequest);
+                chunkView.Position = Vector3.zero + Altitude(chunkRequest, chunkFeatureView);
                 return;
             }
 
             chunkView.Rotation *= BirdseyeRotation(chunkView, chunkRequest);
-            chunkView.Position = BirdseyePosition(chunkView, chunkRequest);
+            chunkView.Position = BirdseyePosition(chunkView, chunkRequest, chunkFeatureView);
 
             previousChunkView = chunkView;
         }
@@ -53,7 +57,7 @@ namespace MistRidge
             );
         }
 
-        private Vector3 BirdseyePosition(ChunkView chunkView, ChunkRequest chunkRequest)
+        private Vector3 BirdseyePosition(ChunkView chunkView, ChunkRequest chunkRequest, ChunkFeatureView chunkFeatureView)
         {
             int depth = ChunkMath.Depth(chunkRequest);
             int side = ChunkMath.Side(chunkRequest);
@@ -64,36 +68,46 @@ namespace MistRidge
             switch (side)
             {
                 case 0:
-                    return Position(chunkRequest, chunkReference.Northeast, chunkReference.Northwest, sideChunkNum, depth);
+                    return Position(chunkRequest, chunkReference.Northeast, chunkReference.Northwest, sideChunkNum, depth, chunkFeatureView);
                 case 1:
-                    return Position(chunkRequest, chunkReference.East, chunkReference.Northeast, sideChunkNum, depth);
+                    return Position(chunkRequest, chunkReference.East, chunkReference.Northeast, sideChunkNum, depth, chunkFeatureView);
                 case 2:
-                    return Position(chunkRequest, chunkReference.Southeast, chunkReference.East, sideChunkNum, depth);
+                    return Position(chunkRequest, chunkReference.Southeast, chunkReference.East, sideChunkNum, depth, chunkFeatureView);
                 case 3:
-                    return Position(chunkRequest, chunkReference.Southwest, chunkReference.Southeast, sideChunkNum, depth);
+                    return Position(chunkRequest, chunkReference.Southwest, chunkReference.Southeast, sideChunkNum, depth, chunkFeatureView);
                 case 4:
-                    return Position(chunkRequest, chunkReference.West, chunkReference.Southwest, sideChunkNum, depth);
+                    return Position(chunkRequest, chunkReference.West, chunkReference.Southwest, sideChunkNum, depth, chunkFeatureView);
                 case 5:
-                    return Position(chunkRequest, chunkReference.Northwest, chunkReference.West, sideChunkNum, depth);
+                    return Position(chunkRequest, chunkReference.Northwest, chunkReference.West, sideChunkNum, depth, chunkFeatureView);
             }
 
             Debug.LogError("Failed to compute spiral chunk position");
             return Vector3.zero;
         }
 
-        private Vector3 Position(ChunkRequest chunkRequest, Vector3 sideDirection, Vector3 depthDirection, int sideChunkNum, int depth)
+        private Vector3 Position(ChunkRequest chunkRequest, Vector3 sideDirection, Vector3 depthDirection, int sideChunkNum, int depth, ChunkFeatureView chunkFeatureView)
         {
-            return ((sideChunkNum + 1) * sideDirection) + ((depth - sideChunkNum - 1) * depthDirection) + Altitude(chunkRequest);
+            return ((sideChunkNum + 1) * sideDirection) + ((depth - sideChunkNum - 1) * depthDirection) + Altitude(chunkRequest, chunkFeatureView);
         }
 
-        private Vector3 Altitude(ChunkRequest chunkRequest)
+        private Vector3 Altitude(ChunkRequest chunkRequest, ChunkFeatureView chunkFeatureView)
         {
-            /* if (previousChunkView == null) */
-            /* { */
-            /*     return Vector3.zero; */
-            /* } */
+            if (previousChunkView == null)
+            {
+                return settings.mountainOffset * Vector3.up;
+            }
 
-            return 2 * Vector3.up * (chunkRequest.chunkCount - chunkRequest.heightChunkNum) + (20 * Vector3.up);
+            float previousAltitude = previousChunkView.Position.y + previousChunkView.ChunkFeatureView.ExitAltitude;
+            float variability = UnityEngine.Random.value * settings.altitudeRange;
+
+            return (variability + previousAltitude - chunkFeatureView.EntryAltitude) * Vector3.up;
+        }
+
+        [Serializable]
+        public class Settings
+        {
+            public float mountainOffset;
+            public float altitudeRange;
         }
     }
 }

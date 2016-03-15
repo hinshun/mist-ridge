@@ -59,8 +59,8 @@ namespace MistRidge
         public void Initialize()
         {
             chunkCount = CountChunks() + settings.peakChunkCount;
-            sprints = SpawnSprints();
             startingChunkFacade = SpawnStartingChunkFacade();
+            sprints = SpawnSprints();
             peakChunkFacades = SpawnPeakChunkFacades();
 
             sprintManager.SetSprintCount(sprints.Count);
