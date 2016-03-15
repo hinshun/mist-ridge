@@ -30,6 +30,8 @@ namespace MistRidge
             gameDisplayCanvas = gameDisplayView.GetComponent<Canvas>();
             gameDisplayScaler = gameDisplayView.GetComponent<CanvasScaler>();
 
+            UpdateSprint(false);
+
             foreach (PlayerDisplayView playerDisplay in gameDisplayView.PlayerDisplays)
             {
                 playerDisplay.SetActive(false);
@@ -53,6 +55,18 @@ namespace MistRidge
         {
             gameDisplayCanvas.worldCamera = camera;
             gameDisplayCanvas.planeDistance = 1f;
+        }
+
+        public void UpdateSprint(bool show)
+        {
+            SprintDisplayView sprintDisplay = gameDisplayView.SprintDisplay;
+            sprintDisplay.SetActive(show);
+        }
+
+        public void UpdateSprintText(int current, int total)
+        {
+            Text sprintText = gameDisplayView.SprintDisplay.SprintText;
+            sprintText.text = current + " / " + total;
         }
 
         public void UpdateBackdrop(Input input, BackdropHealth backdropHealth)

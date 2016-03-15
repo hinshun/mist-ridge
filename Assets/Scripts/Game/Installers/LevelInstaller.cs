@@ -94,6 +94,9 @@ namespace MistRidge
             Container.Bind<SprintFactory>().ToSingle();
             Container.BindAllInterfacesToSingle<SprintFactory>();
             Container.Bind<SprintView>().ToTransientPrefab(settings.chunk.sprintPrefab);
+
+            Container.Bind<SprintManager>().ToSingle();
+            Container.BindAllInterfacesToSingle<SprintManager>();
         }
 
         private void InstallSettings()

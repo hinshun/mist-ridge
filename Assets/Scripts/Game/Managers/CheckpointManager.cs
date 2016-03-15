@@ -9,6 +9,7 @@ namespace MistRidge
     {
         private readonly SpawnManager spawnManager;
         private readonly MistManager mistManager;
+        private readonly SprintManager sprintManager;
         private readonly CheckpointSignal checkpointSignal;
         private readonly CheckpointActionSignal checkpointActionSignal;
         private readonly GameStateSignal.Trigger gameStateTrigger;
@@ -20,12 +21,14 @@ namespace MistRidge
         public CheckpointManager(
                 SpawnManager spawnManager,
                 MistManager mistManager,
+                SprintManager sprintManager,
                 CheckpointSignal checkpointSignal,
                 CheckpointActionSignal checkpointActionSignal,
                 GameStateSignal.Trigger gameStateTrigger)
         {
             this.spawnManager = spawnManager;
             this.mistManager = mistManager;
+            this.sprintManager = sprintManager;
             this.checkpointSignal = checkpointSignal;
             this.checkpointActionSignal = checkpointActionSignal;
             this.gameStateTrigger = gameStateTrigger;
@@ -63,6 +66,8 @@ namespace MistRidge
             {
                 mistManager.UpdateMistPosition(checkpoint.NextCheckpoint.CheckpointView.Position.y);
             }
+            sprintManager.IncrementSprintNum();
+            sprintManager.UpdateSprintText();
 
             if (checkpoint == lastCheckpoint)
             {
