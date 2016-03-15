@@ -22,6 +22,12 @@ namespace MistRidge
             spawnBackwardRight = true,
         };
 
+        [SerializeField]
+        public float minAltitude;
+
+        [SerializeField]
+        public float maxAltitude;
+
         public PlatformBaseConfig PlatformBaseConfig
         {
             get
@@ -30,10 +36,16 @@ namespace MistRidge
             }
         }
 
-        public void OnDrawGizmosSelected()
+        public void OnDrawGizmos()
         {
+            if (!chunkReference.ShowFeatureGuidelines)
+            {
+                return;
+            }
+
             DrawForwardDirectionGizmos();
             DrawSpawnablePlatformBaseGizmos();
+            DrawMinMaxAltitudeGizmos();
         }
 
         private void DrawForwardDirectionGizmos()
@@ -117,6 +129,24 @@ namespace MistRidge
                     chunkReference.LocalScale
                 );
             }
+        }
+
+        private void DrawMinMaxAltitudeGizmos()
+        {
+            DrawAltitudeGizmos(minAltitude, Color.red);
+            DrawAltitudeGizmos(maxAltitude, Color.blue);
+        }
+
+        private void DrawAltitudeGizmos(float altitude, Color color)
+        {
+            Gizmos.color = color - new Color(0, 0, 0, 0.8f);
+
+            Gizmos.DrawWireMesh(
+                chunkReference.PlaneMesh,
+                Position + (Vector3.up * altitude),
+                Quaternion.identity,
+                chunkReference.LocalScale / 2
+            );
         }
     }
 }

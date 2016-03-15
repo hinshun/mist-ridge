@@ -9,6 +9,8 @@ namespace MistRidge
     {
         private readonly ChunkReference chunkReference;
 
+        private ChunkView previousChunkView;
+
         public SpiralChunkPlacingStrategy(ChunkReference chunkReference)
         {
             this.chunkReference = chunkReference;
@@ -28,6 +30,8 @@ namespace MistRidge
 
             chunkView.Rotation *= BirdseyeRotation(chunkView, chunkRequest);
             chunkView.Position = BirdseyePosition(chunkView, chunkRequest);
+
+            previousChunkView = chunkView;
         }
 
         private Quaternion BirdseyeRotation(ChunkView chunkView, ChunkRequest chunkRequest)
@@ -74,7 +78,7 @@ namespace MistRidge
             }
 
             Debug.LogError("Failed to compute spiral chunk position");
-			return Vector3.zero;
+            return Vector3.zero;
         }
 
         private Vector3 Position(ChunkRequest chunkRequest, Vector3 sideDirection, Vector3 depthDirection, int sideChunkNum, int depth)
@@ -84,6 +88,11 @@ namespace MistRidge
 
         private Vector3 Altitude(ChunkRequest chunkRequest)
         {
+            /* if (previousChunkView == null) */
+            /* { */
+            /*     return Vector3.zero; */
+            /* } */
+
             return 2 * Vector3.up * (chunkRequest.chunkCount - chunkRequest.heightChunkNum) + (20 * Vector3.up);
         }
     }

@@ -13,6 +13,12 @@ namespace MistRidge
         [SerializeField]
         private Mesh platformBaseMesh;
 
+        [SerializeField]
+        private Mesh planeMesh;
+
+        [SerializeField]
+        private bool showFeatureGuidelines;
+
         private Vector3 forwardLeft;
         private Vector3 forwardRight;
         private Vector3 left;
@@ -40,6 +46,22 @@ namespace MistRidge
             get
             {
                 return platformBaseMesh;
+            }
+        }
+
+        public Mesh PlaneMesh
+        {
+            get
+            {
+                return planeMesh;
+            }
+        }
+
+        public bool ShowFeatureGuidelines
+        {
+            get
+            {
+                return showFeatureGuidelines;
             }
         }
 
