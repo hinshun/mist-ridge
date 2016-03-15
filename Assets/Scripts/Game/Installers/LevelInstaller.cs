@@ -79,6 +79,7 @@ namespace MistRidge
             }
 
             Container.Bind<CheckpointFactory>().ToSingle();
+            Container.BindAllInterfacesToSingle<CheckpointFactory>();
 
             Container.Bind<CheckpointManager>().ToSingle();
             Container.BindAllInterfacesToSingle<CheckpointManager>();

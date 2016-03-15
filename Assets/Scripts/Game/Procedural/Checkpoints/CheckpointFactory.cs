@@ -5,12 +5,14 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class CheckpointFactory
+    public class CheckpointFactory : IInitializable
     {
         private readonly DiContainer container;
         private readonly List<IBiome> biomes;
         private readonly ChunkFacadeFactory chunkFacadeFactory;
         private readonly BiomePickingStrategy biomePickingStrategy;
+
+        private int checkpointNum;
 
         public CheckpointFactory(
                 DiContainer container,
@@ -22,6 +24,11 @@ namespace MistRidge
             this.biomes = biomes;
             this.biomePickingStrategy = biomePickingStrategy;
             this.chunkFacadeFactory = chunkFacadeFactory;
+        }
+
+        public void Initialize()
+        {
+            checkpointNum = 0;
         }
 
         public Checkpoint Create(ChunkRequest chunkRequest, float altitude)
@@ -36,7 +43,8 @@ namespace MistRidge
             };
 
             ChunkFacade chunkFacade = chunkFacadeFactory.Create(checkpointRequest);
-            Checkpoint checkpoint = container.Instantiate<Checkpoint>(chunkFacade);
+            Checkpoint checkpoint = container.Instantiate<Checkpoint>(checkpointNum, chunkFacade);
+            checkpointNum++;
 
             checkpoint.Initialize();
 

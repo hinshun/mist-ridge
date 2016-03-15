@@ -7,6 +7,7 @@ namespace MistRidge
 {
     public class Checkpoint : IInitializable
     {
+        private readonly int checkpointNum;
         private readonly ChunkFacade chunkFacade;
         private readonly SpawnManager spawnManager;
         private readonly CheckpointManager checkpointManager;
@@ -18,6 +19,7 @@ namespace MistRidge
         private Checkpoint nextCheckpoint;
 
         public Checkpoint(
+                int checkpointNum,
                 ChunkFacade chunkFacade,
                 SpawnManager spawnManager,
                 CheckpointManager checkpointManager,
@@ -25,12 +27,21 @@ namespace MistRidge
                 PlayerManager playerManager,
                 DeathManager deathManager)
         {
+            this.checkpointNum = checkpointNum;
             this.chunkFacade = chunkFacade;
             this.spawnManager = spawnManager;
             this.checkpointManager = checkpointManager;
             this.aetherManager = aetherManager;
             this.playerManager = playerManager;
             this.deathManager = deathManager;
+        }
+
+        public int CheckpointNum
+        {
+            get
+            {
+                return checkpointNum;
+            }
         }
 
         public Checkpoint NextCheckpoint
@@ -109,7 +120,6 @@ namespace MistRidge
 
         public void Open()
         {
-            CheckpointView.SetActive(false);
             spawnManager.CurrentSpawnView = SpawnView;
             checkpointManager.CurrentCheckpoint = this;
 

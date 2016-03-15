@@ -26,9 +26,9 @@ namespace MistRidge
             sprintCount = count;
         }
 
-        public void IncrementSprintNum()
+        public void SetSprintNum(int count)
         {
-            currentSprintNum++;
+            currentSprintNum = count;
         }
 
         public void UpdateSprintText()
