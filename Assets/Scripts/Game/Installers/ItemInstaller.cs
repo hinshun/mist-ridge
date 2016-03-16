@@ -25,7 +25,10 @@ namespace MistRidge
             Container.Bind<IItemFactory>().ToSingle();
 
             Container.Bind<SpeedItemEffect>().ToSingleInstance(settings.itemEffects.speedItemEffect);
-            Container.Bind<StarItemEffect>().ToSingleInstance(settings.itemEffects.starItemEffect);
+            Container.Bind<AetherItemEffect>().ToSingleInstance(settings.itemEffects.aetherItemEffect);
+            Container.Bind<QuicknessItemEffect>().ToSingleInstance(settings.itemEffects.quicknessItemEffect);
+            Container.Bind<BubbleTrapItemEffect>().ToSingleInstance(settings.itemEffects.bubbleTrapItemEffect);
+            Container.Bind<TimeSlowItemEffect>().ToSingleInstance(settings.itemEffects.timeSlowItemEffect);
         }
 
         private void InstallSettings()
@@ -43,7 +46,10 @@ namespace MistRidge
             public class ItemEffectSettings
             {
                 public SpeedItemEffect speedItemEffect;
-                public StarItemEffect starItemEffect;
+                public AetherItemEffect aetherItemEffect;
+                public QuicknessItemEffect quicknessItemEffect;
+                public BubbleTrapItemEffect bubbleTrapItemEffect;
+                public TimeSlowItemEffect timeSlowItemEffect;
             }
         }
     }

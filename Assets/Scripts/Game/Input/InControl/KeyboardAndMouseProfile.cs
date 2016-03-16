@@ -28,28 +28,15 @@ namespace MistRidge
             {
                 new InputControlMapping
                 {
-                    Handle = "Fire - Mouse",
+                    Handle = "Submit",
                     Target = InputControlType.Action1,
-                    Source = MouseButton0
+                    Source = KeyCodeButton( KeyCode.Z, KeyCode.Return )
                 },
                 new InputControlMapping
                 {
-                    Handle = "Fire - Keyboard",
+                    Handle = "Cancel",
                     Target = InputControlType.Action1,
-                    // KeyCodeButton fires when any of the provided KeyCode params are down.
-                    Source = KeyCodeButton( KeyCode.F, KeyCode.Return )
-                },
-                new InputControlMapping
-                {
-                    Handle = "AltFire",
-                    Target = InputControlType.Action2,
-                    Source = MouseButton2
-                },
-                new InputControlMapping
-                {
-                    Handle = "Middle",
-                    Target = InputControlType.Action3,
-                    Source = MouseButton1
+                    Source = KeyCodeButton( KeyCode.X )
                 },
                 new InputControlMapping
                 {
@@ -67,6 +54,12 @@ namespace MistRidge
 
             AnalogMappings = new[]
             {
+                new InputControlMapping
+                {
+                    Handle = "Use",
+                    Target = InputControlType.LeftTrigger,
+                    Source = KeyCodeButton( KeyCode.C )
+                },
                 new InputControlMapping
                 {
                     Handle = "Move X",
@@ -91,30 +84,6 @@ namespace MistRidge
                     Target = InputControlType.LeftStickY,
                     Source = KeyCodeAxis( KeyCode.DownArrow, KeyCode.UpArrow )
                 },
-                new InputControlMapping
-                {
-                    Handle = "Look X",
-                    Target = InputControlType.RightStickX,
-                    Source = MouseXAxis,
-                    Raw    = true,
-                    Scale  = 0.1f
-                },
-                new InputControlMapping
-                {
-                    Handle = "Look Y",
-                    Target = InputControlType.RightStickY,
-                    Source = MouseYAxis,
-                    Raw    = true,
-                    Scale  = 0.1f
-                },
-                new InputControlMapping
-                {
-                    Handle = "Look Z",
-                    Target = InputControlType.ScrollWheel,
-                    Source = MouseScrollWheel,
-                    Raw    = true,
-                    Scale  = 0.1f
-                }
             };
         }
     }

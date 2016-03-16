@@ -10,19 +10,16 @@ namespace MistRidge
     {
         private readonly Settings settings;
         private readonly GameDisplayView gameDisplayView;
-        private readonly PlayerManager playerManager;
 
         private Canvas gameDisplayCanvas;
         private CanvasScaler gameDisplayScaler;
 
         public DisplayManager(
                 Settings settings,
-                GameDisplayView gameDisplayView,
-                PlayerManager playerManager)
+                GameDisplayView gameDisplayView)
         {
             this.settings = settings;
             this.gameDisplayView = gameDisplayView;
-            this.playerManager = playerManager;
         }
 
         public void Initialize()
@@ -39,11 +36,11 @@ namespace MistRidge
             }
         }
 
-        public void Display(Input input)
+        public void Display(Input input, CharacterType characterType)
         {
             UpdateBackdrop(input, BackdropHealth.Alive);
-            UpdateNameTag(input, playerManager.GetCharacterType(input));
-            UpdatePortraitImage(input, playerManager.GetCharacterType(input), PortraitEmotion.Neutral);
+            UpdateNameTag(input, characterType);
+            UpdatePortraitImage(input, characterType, PortraitEmotion.Neutral);
             UpdateItem(input, null);
             UpdateRank(input, -1);
             UpdateAether(input, 0);

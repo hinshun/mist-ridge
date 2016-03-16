@@ -8,6 +8,7 @@ namespace MistRidge
     {
         private readonly Settings settings;
         private readonly Input input;
+        private readonly AetherManager aetherManager;
         private readonly PlayerView playerView;
         private readonly PlayerStateMachine playerStateMachine;
         private readonly PlayerPhysics playerPhysics;
@@ -34,12 +35,14 @@ namespace MistRidge
         public Player(
             Settings settings,
             Input input,
+            AetherManager aetherManager,
             PlayerView playerView,
             PlayerStateMachine playerStateMachine,
             PlayerPhysics playerPhysics)
         {
             this.settings = settings;
             this.input = input;
+            this.aetherManager = aetherManager;
             this.playerView = playerView;
             this.playerStateMachine = playerStateMachine;
             this.playerPhysics = playerPhysics;
@@ -402,6 +405,11 @@ namespace MistRidge
         {
             ResetPlayerProperties();
             ResetPlayerMaterials(input.DeviceNum);
+        }
+
+        public void AddAether(int aetherCount)
+        {
+            aetherManager.AddAether(playerView, aetherCount);
         }
 
         private void ResetPlayerProperties()

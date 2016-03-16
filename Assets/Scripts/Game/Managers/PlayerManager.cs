@@ -9,6 +9,7 @@ namespace MistRidge
     {
         private readonly PlayerContainerView playerContainerView;
         private readonly SpawnManager spawnManager;
+        private readonly DisplayManager displayManager;
         private readonly PlayerFacadeFactory playerFacadeFactory;
         private Dictionary<Input, PlayerFacade> playerFacades;
         private Dictionary<PlayerView, Input> playerViewMapping;
@@ -16,10 +17,12 @@ namespace MistRidge
         public PlayerManager(
                 PlayerContainerView playerContainerView,
                 SpawnManager spawnManager,
+                DisplayManager displayManager,
                 PlayerFacadeFactory playerFacadeFactory)
         {
             this.playerContainerView = playerContainerView;
             this.spawnManager = spawnManager;
+            this.displayManager = displayManager;
             this.playerFacadeFactory = playerFacadeFactory;
         }
 
@@ -67,6 +70,8 @@ namespace MistRidge
 
                 playerFacades[input] = playerFacade;
                 playerViewMapping[playerFacade.PlayerView] = input;
+
+                displayManager.Display(input, playerFacade.CharacterType);
 
                 return playerFacade;
             }

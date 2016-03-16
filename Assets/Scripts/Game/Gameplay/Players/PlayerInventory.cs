@@ -61,6 +61,7 @@ namespace MistRidge
             playerView.CanPickupItems = false;
 
             ItemDrop itemDrop = itemManager.PickItemDrop(itemType);
+            Debug.Log("picked up " + itemDrop.ItemType);
             displayManager.UpdateItem(input, itemDrop);
 
             item = itemManager.NewItem(itemDrop, player);

@@ -12,7 +12,6 @@ namespace MistRidge
         private readonly InputManager inputManager;
         private readonly PlayerManager playerManager;
         private readonly DeathManager deathManager;
-        private readonly DisplayManager displayManager;
         private readonly GameManager gameManager;
 
         public GameReadyState(
@@ -22,7 +21,6 @@ namespace MistRidge
                 InputManager inputManager,
                 PlayerManager playerManager,
                 DeathManager deathManager,
-                DisplayManager displayManager,
                 GameManager gameManager,
                 GameStateMachine stateMachine)
             : base(stateMachine)
@@ -33,7 +31,6 @@ namespace MistRidge
             this.inputManager = inputManager;
             this.playerManager = playerManager;
             this.deathManager = deathManager;
-            this.displayManager = displayManager;
             this.gameManager = gameManager;
 
             stateType = GameStateType.Ready;
@@ -82,7 +79,6 @@ namespace MistRidge
             {
                 playerFacade.Freefall();
                 playerFacade.Player.Gravity = 0f;
-                displayManager.Display(input);
             }
         }
 

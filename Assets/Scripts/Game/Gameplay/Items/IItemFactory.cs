@@ -18,12 +18,24 @@ namespace MistRidge
 
             switch (itemType)
             {
-                case ItemType.Star:
-                    item = container.Instantiate<StarItem>(constructorArgs);
-                    break;
-
                 case ItemType.Speed:
                     item = container.Instantiate<SpeedItem>(constructorArgs);
+                    break;
+
+                case ItemType.Aether:
+                    item = container.Instantiate<AetherItem>(constructorArgs);
+                    break;
+
+                case ItemType.Quickness:
+                    item = container.Instantiate<QuicknessItem>(constructorArgs);
+                    break;
+
+                case ItemType.BubbleTrap:
+                    item = container.Instantiate<BubbleTrapItem>(constructorArgs);
+                    break;
+
+                case ItemType.TimeSlow:
+                    item = container.Instantiate<TimeSlowItem>(constructorArgs);
                     break;
             }
 

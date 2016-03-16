@@ -3,11 +3,11 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class StarItem : ConsumableItem<StarItemEffect>
+    public class QuicknessItem : ConsumableItem<QuicknessItemEffect>
     {
-        public StarItem(
+        public QuicknessItem(
                 Player player,
-                StarItemEffect itemEffect)
+                QuicknessItemEffect itemEffect)
             : base(player, itemEffect)
         {
         }
