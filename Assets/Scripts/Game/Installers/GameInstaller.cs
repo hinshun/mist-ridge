@@ -79,6 +79,9 @@ namespace MistRidge
         private void InstallUtility()
         {
             Container.Bind<SceneLoader>().ToSingle();
+            Container.BindAllInterfacesToSingle<SceneLoader>();
+            Container.Bind<SceneLoaderView>().ToSinglePrefab(settings.sceneLoaderPrefab);
+
             Container.Bind<UnityFixGI>().ToSinglePrefab(settings.unityFixGIPrefab);
 
             Container.Bind<Generator>().ToSingle();
@@ -89,6 +92,7 @@ namespace MistRidge
         {
             Container.Bind<Generator.Settings>().ToSingleInstance(settings.generatorSettings);
             Container.Bind<PoolManager.Settings>().ToSingleInstance(settings.poolManagerSettings);
+            Container.Bind<SceneLoader.Settings>().ToSingleInstance(settings.sceneLoaderSettings);
 
             Container.Bind<GameReadyState.Settings>().ToSingleInstance(settings.game.gameReadyStateSettings);
         }
@@ -98,8 +102,10 @@ namespace MistRidge
         {
             public GameObject inControlManagerPrefab;
             public GameObject unityFixGIPrefab;
+            public GameObject sceneLoaderPrefab;
             public Generator.Settings generatorSettings;
             public PoolManager.Settings poolManagerSettings;
+            public SceneLoader.Settings sceneLoaderSettings;
             public GameSettings game;
 
             [Serializable]

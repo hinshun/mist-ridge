@@ -51,6 +51,14 @@ namespace MistRidge
             this.checkpointTrigger = checkpointTrigger;
         }
 
+        public Vector3 Forward
+        {
+            get
+            {
+                return meshTransform.forward;
+            }
+        }
+
         public Collider Collider
         {
             get

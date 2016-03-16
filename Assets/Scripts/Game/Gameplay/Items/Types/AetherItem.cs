@@ -12,14 +12,6 @@ namespace MistRidge
         {
         }
 
-        public override void Tick()
-        {
-            if (!isDisposable && !IsUsable())
-            {
-                isDisposable = true;
-            }
-        }
-
         public override void OnUse()
         {
             player.AddAether(itemEffect.AetherCount);

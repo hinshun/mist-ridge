@@ -30,7 +30,10 @@ namespace MistRidge
 
         public virtual void Tick()
         {
-            // Do Nothing
+            if (!isDisposable && !IsUsable())
+            {
+                isDisposable = true;
+            }
         }
 
         public virtual void Dispose()

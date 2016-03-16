@@ -1,4 +1,4 @@
-﻿Shader "Seethrough/Silhouette" {
+﻿Shader "MistRidge/Character" {
   Properties {
     _Color ("Sihouette Color", Color) = (0,0,0,1)
   }

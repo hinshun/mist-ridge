@@ -7,24 +7,24 @@ namespace MistRidge
     public class BubbleTrapItemEffect : ItemEffect
     {
         [SerializeField]
-        private float duration;
+        private BubbleTrapView bubbleTrapView;
 
         [SerializeField]
-        private float height;
+        private float distance;
 
-        public float Duration
+        public BubbleTrapView BubbleTrapView
         {
             get
             {
-                return duration;
+                return bubbleTrapView;
             }
         }
 
-        public float Height
+        public float Distance
         {
             get
             {
-                return height;
+                return distance;
             }
         }
     }

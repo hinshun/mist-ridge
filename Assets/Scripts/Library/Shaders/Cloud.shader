@@ -1,4 +1,4 @@
-Shader "My Shaders/AlphaSelfIllum" {
+Shader "MistRidge/Cloud" {
     Properties {
         _Color ("Color Tint", Color) = (1,1,1,1)
         _MainTex ("SelfIllum Color (RGB) Alpha (A)", 2D) = "white"

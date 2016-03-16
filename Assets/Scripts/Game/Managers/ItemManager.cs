@@ -26,6 +26,11 @@ namespace MistRidge
 
         public void Initialize()
         {
+            PopulateItemDrops();
+        }
+
+        public void PopulateItemDrops()
+        {
             items = new List<IItem>();
             itemDropMapping = new Dictionary<ItemType, ItemDrop>();
 

@@ -81,6 +81,26 @@ namespace MistRidge
             }
         }
 
+        public Vector3 Forward
+        {
+            get
+            {
+                return playerView.Forward;
+            }
+        }
+
+        public Vector3 Position
+        {
+            get
+            {
+                return playerView.Position;
+            }
+            set
+            {
+                playerView.Position = value;
+            }
+        }
+
         public float RotationSpeed
         {
             get
