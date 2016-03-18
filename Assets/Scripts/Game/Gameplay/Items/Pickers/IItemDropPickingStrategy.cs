@@ -5,6 +5,6 @@ namespace MistRidge
 {
     public interface IItemDropPickingStrategy
     {
-        ItemDrop Pick(Dictionary<ItemType, ItemDrop> itemDropMapping);
+        ItemDrop Pick(Dictionary<ItemType, ItemDrop> itemDropMapping, Player player);
     }
 }

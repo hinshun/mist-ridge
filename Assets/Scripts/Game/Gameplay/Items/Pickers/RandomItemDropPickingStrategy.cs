@@ -14,7 +14,7 @@ namespace MistRidge
             this.generator = generator;
         }
 
-        public ItemDrop Pick(Dictionary<ItemType, ItemDrop> itemDropMapping)
+        public ItemDrop Pick(Dictionary<ItemType, ItemDrop> itemDropMapping, Player player)
         {
             List<ItemDrop> itemDrops = Enumerable.ToList(itemDropMapping.Values);
             int randomIndex = generator.Random.Next(itemDrops.Count);

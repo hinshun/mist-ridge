@@ -11,6 +11,17 @@ namespace MistRidge
         [SerializeField]
         private Sprite itemSprite;
 
+        [SerializeField]
+        private int rarity;
+
+        [SerializeField]
+        private ItemCollectability itemCollectability = new ItemCollectability() {
+            firstCollectable = true,
+            secondCollectable = true,
+            thirdCollectable = true,
+            fourthCollectable = true,
+        };
+
         public ItemType ItemType
         {
             get
@@ -24,6 +35,22 @@ namespace MistRidge
             get
             {
                 return itemSprite;
+            }
+        }
+
+        public int Rarity
+        {
+            get
+            {
+                return rarity;
+            }
+        }
+
+        public ItemCollectability ItemCollectability
+        {
+            get
+            {
+                return itemCollectability;
             }
         }
     }

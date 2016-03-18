@@ -53,6 +53,7 @@ namespace MistRidge
             for (int rank = 0; rank < alivePlayerFacades.Count; ++rank)
             {
                 PlayerFacade playerFacade = alivePlayerFacades[rank];
+                playerFacade.Player.CurrentRank = rank;
                 Input input = playerManager.Input(playerFacade.PlayerView);
                 displayManager.UpdateRank(input, rank);
             }

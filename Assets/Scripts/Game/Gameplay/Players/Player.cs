@@ -16,6 +16,7 @@ namespace MistRidge
         private readonly ItemEffectSignal itemEffectSignal;
 
         private bool isAlive;
+        private int currentRank;
 
         private float rotationSpeed;
         private float walkSpeed;
@@ -64,6 +65,18 @@ namespace MistRidge
             {
                 isAlive = value;
                 playerView.SetActive(value);
+            }
+        }
+
+        public int CurrentRank
+        {
+            get
+            {
+                return currentRank;
+            }
+            set
+            {
+                currentRank = value;
             }
         }
 

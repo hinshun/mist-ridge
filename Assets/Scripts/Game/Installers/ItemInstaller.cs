@@ -20,7 +20,7 @@ namespace MistRidge
             Container.Bind<ItemManager>().ToSingle();
             Container.BindAllInterfacesToSingle<ItemManager>();
 
-            Container.Bind<IItemDropPickingStrategy>().ToSingle<RandomItemDropPickingStrategy>();
+            Container.Bind<IItemDropPickingStrategy>().ToSingle<StandardItemDropPickingStrategy>();
 
             Container.Bind<IItemFactory>().ToSingle();
 

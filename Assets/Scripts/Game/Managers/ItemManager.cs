@@ -87,11 +87,11 @@ namespace MistRidge
             return item;
         }
 
-        public ItemDrop PickItemDrop(ItemType itemType)
+        public ItemDrop PickItemDrop(ItemType itemType, Player player)
         {
             if (itemType == ItemType.Random)
             {
-                return itemDropPickingStrategy.Pick(itemDropMapping);
+                return itemDropPickingStrategy.Pick(itemDropMapping, player);
             }
 
             return itemDropMapping[itemType];
