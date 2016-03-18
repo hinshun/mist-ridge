@@ -41,7 +41,14 @@ namespace MistRidge
         {
             if (item != null)
             {
-                if (item.IsDisposable())
+                if (item.IsUsable())
+                {
+                    if (input.Mapping.UseItem.WasPressed)
+                    {
+                        item.Use();
+                    }
+                }
+                else
                 {
                     item = null;
                     playerView.CanPickupItems = true;
@@ -49,10 +56,6 @@ namespace MistRidge
                     return;
                 }
 
-                if (input.Mapping.UseItem.WasPressed && item.IsUsable())
-                {
-                    item.Use();
-                }
             }
         }
 
@@ -61,7 +64,6 @@ namespace MistRidge
             playerView.CanPickupItems = false;
 
             ItemDrop itemDrop = itemManager.PickItemDrop(itemType);
-            Debug.Log("picked up " + itemDrop.ItemType);
             displayManager.UpdateItem(input, itemDrop);
 
             item = itemManager.NewItem(itemDrop, player);

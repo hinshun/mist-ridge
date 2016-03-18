@@ -455,6 +455,11 @@ namespace MistRidge
             aetherManager.AddAether(playerView, aetherCount);
         }
 
+        public void AfterImage()
+        {
+            playerView.PlayerAfterImage();
+        }
+
         private void ResetPlayerProperties()
         {
             isAlive = true;

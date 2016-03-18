@@ -37,6 +37,12 @@ namespace MistRidge
         [SerializeField]
         private int dustFreefallLandParticleCount;
 
+        [SerializeField]
+        private List<ParticleSystem> afterImages;
+
+        [SerializeField]
+        private int afterImageParticleCount;
+
         private bool canJump;
         private bool canPickupItems;
         private bool canControl;
@@ -185,6 +191,14 @@ namespace MistRidge
         public void PlayerFreefallLand()
         {
             dustLand.Emit(dustFreefallLandParticleCount);
+        }
+
+        public void PlayerAfterImage()
+        {
+            foreach(ParticleSystem afterImage in afterImages)
+            {
+                afterImage.Emit(afterImageParticleCount);
+            }
         }
 
         public void BubbleTrapped()

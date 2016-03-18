@@ -16,6 +16,12 @@ namespace MistRidge
         private float scaleTime;
 
         [SerializeField]
+        private float popTime;
+
+        [SerializeField]
+        private Vector3 popScale;
+
+        [SerializeField]
         private float duration;
 
         [SerializeField]
@@ -142,8 +148,8 @@ namespace MistRidge
             trappedHashtable.Add("oncompletetarget", gameObject);
 
             destroyHashtable = new Hashtable();
-            destroyHashtable.Add("time", 0.1f);
-            destroyHashtable.Add("scale", finalScale * 1.1f);
+            destroyHashtable.Add("time", popTime);
+            destroyHashtable.Add("scale", popScale);
             destroyHashtable.Add("oncomplete", "Pop");
             destroyHashtable.Add("oncompletetarget", gameObject);
         }
