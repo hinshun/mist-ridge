@@ -13,6 +13,9 @@ namespace MistRidge
         private float throwHeight;
 
         [SerializeField]
+        private float scaleTime;
+
+        [SerializeField]
         private float duration;
 
         [SerializeField]
@@ -126,12 +129,12 @@ namespace MistRidge
 
             moveHashtable = new Hashtable();
             moveHashtable.Add("time", throwTime);
-            moveHashtable.Add("oncomplete", "SetupTrap");
-            moveHashtable.Add("oncompletetarget", gameObject);
 
             scaleHashtable = new Hashtable();
-            scaleHashtable.Add("time", throwTime);
+            scaleHashtable.Add("time", scaleTime);
             scaleHashtable.Add("scale", finalScale);
+            scaleHashtable.Add("oncomplete", "SetupTrap");
+            scaleHashtable.Add("oncompletetarget", gameObject);
 
             trappedHashtable = new Hashtable();
             trappedHashtable.Add("time", duration);

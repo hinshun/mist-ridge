@@ -24,7 +24,6 @@ namespace MistRidge
 
             Container.Bind<IItemFactory>().ToSingle();
 
-            Container.Bind<SpeedItemEffect>().ToSingleInstance(settings.itemEffects.speedItemEffect);
             Container.Bind<AetherItemEffect>().ToSingleInstance(settings.itemEffects.aetherItemEffect);
             Container.Bind<QuicknessItemEffect>().ToSingleInstance(settings.itemEffects.quicknessItemEffect);
             Container.Bind<BubbleTrapItemEffect>().ToSingleInstance(settings.itemEffects.bubbleTrapItemEffect);
@@ -45,7 +44,6 @@ namespace MistRidge
             [Serializable]
             public class ItemEffectSettings
             {
-                public SpeedItemEffect speedItemEffect;
                 public AetherItemEffect aetherItemEffect;
                 public QuicknessItemEffect quicknessItemEffect;
                 public BubbleTrapItemEffect bubbleTrapItemEffect;

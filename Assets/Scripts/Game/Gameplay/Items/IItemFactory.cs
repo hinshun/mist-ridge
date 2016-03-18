@@ -18,10 +18,6 @@ namespace MistRidge
 
             switch (itemType)
             {
-                case ItemType.Speed:
-                    item = container.Instantiate<SpeedItem>(constructorArgs);
-                    break;
-
                 case ItemType.Aether:
                     item = container.Instantiate<AetherItem>(constructorArgs);
                     break;
