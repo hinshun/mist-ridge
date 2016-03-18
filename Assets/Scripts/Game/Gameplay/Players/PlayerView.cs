@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Zenject;
@@ -18,6 +19,12 @@ namespace MistRidge
 
         [SerializeField]
         private Transform handTransform;
+
+        [SerializeField]
+        private float itemFlashTime;
+
+        [SerializeField]
+        private List<SkinnedMeshRenderer> meshRenderers;
 
         [SerializeField]
         private ParticleSystem dustTrail;
@@ -43,9 +50,13 @@ namespace MistRidge
         [SerializeField]
         private int afterImageParticleCount;
 
+        private Hashtable itemFlashInHashtable;
+        private Hashtable itemFlashOutHashtable;
+
         private bool canJump;
         private bool canPickupItems;
         private bool canControl;
+
         private Animator animator;
         private ItemPickupSignal.Trigger itemPickupTrigger;
         private ItemEffectSignal.Trigger itemEffectTrigger;
@@ -160,6 +171,7 @@ namespace MistRidge
 
         public void OnItemPickup(ItemType itemType)
         {
+            iTween.ValueTo(gameObject, itemFlashInHashtable);
             itemPickupTrigger.Fire(itemType);
         }
 
@@ -216,11 +228,40 @@ namespace MistRidge
             animator = GetComponent<Animator>();
             checkpointsVisited = new Dictionary<CheckpointView, bool>();
 
+            itemFlashInHashtable = new Hashtable();
+            itemFlashInHashtable.Add("from", Color.black);
+            itemFlashInHashtable.Add("to", Color.white);
+            itemFlashInHashtable.Add("time", itemFlashTime);
+            itemFlashInHashtable.Add("onupdate", "ItemFlash");
+            itemFlashInHashtable.Add("onupdatetarget", gameObject);
+            itemFlashInHashtable.Add("oncomplete", "ItemFlashOut");
+            itemFlashInHashtable.Add("oncompletetarget", gameObject);
+
+            itemFlashOutHashtable = new Hashtable();
+            itemFlashOutHashtable.Add("from", Color.white);
+            itemFlashOutHashtable.Add("to", Color.black);
+            itemFlashOutHashtable.Add("time", itemFlashTime);
+            itemFlashOutHashtable.Add("onupdate", "ItemFlash");
+            itemFlashOutHashtable.Add("onupdatetarget", gameObject);
+
             canJump = true;
             canPickupItems = true;
             canControl = true;
 
             IsDustTrailEmitting = false;
+        }
+
+        private void ItemFlash(Color color)
+        {
+            foreach (SkinnedMeshRenderer meshRenderer in meshRenderers)
+            {
+                meshRenderer.material.SetColor("_EmissionColor", color);
+            }
+        }
+
+        private void ItemFlashOut()
+        {
+            iTween.ValueTo(gameObject, itemFlashOutHashtable);
         }
     }
 }
