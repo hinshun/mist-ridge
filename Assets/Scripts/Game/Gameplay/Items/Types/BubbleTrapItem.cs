@@ -18,11 +18,17 @@ namespace MistRidge
 
         public override void OnUse()
         {
-            poolManager.ReusePoolInstance(
+            BubbleTrapView bubbleTrapView = poolManager.ReusePoolInstance(
                 itemEffect.BubbleTrapView,
-                player.Position + (player.Forward * itemEffect.Distance),
+                player.HandPosition,
                 Quaternion.identity
+            ) as BubbleTrapView;
+
+            Vector3 landingPosition = Math3d.ProjectVectorOnPlane(
+                player.PrimaryNormal,
+                player.Position + player.Forward * itemEffect.Distance
             );
+            bubbleTrapView.Land(landingPosition);
         }
     }
 }

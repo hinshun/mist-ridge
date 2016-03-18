@@ -8,10 +8,12 @@ namespace MistRidge
     {
         private readonly Settings settings;
         private readonly Input input;
+        private readonly Grounding grounding;
         private readonly AetherManager aetherManager;
         private readonly PlayerView playerView;
         private readonly PlayerStateMachine playerStateMachine;
         private readonly PlayerPhysics playerPhysics;
+        private readonly ItemEffectSignal itemEffectSignal;
 
         private bool isAlive;
 
@@ -35,17 +37,21 @@ namespace MistRidge
         public Player(
             Settings settings,
             Input input,
+            Grounding grounding,
             AetherManager aetherManager,
             PlayerView playerView,
             PlayerStateMachine playerStateMachine,
-            PlayerPhysics playerPhysics)
+            PlayerPhysics playerPhysics,
+            ItemEffectSignal itemEffectSignal)
         {
             this.settings = settings;
             this.input = input;
+            this.grounding =  grounding;
             this.aetherManager = aetherManager;
             this.playerView = playerView;
             this.playerStateMachine = playerStateMachine;
             this.playerPhysics = playerPhysics;
+            this.itemEffectSignal = itemEffectSignal;
         }
 
         public bool IsAlive
@@ -58,6 +64,14 @@ namespace MistRidge
             {
                 isAlive = value;
                 playerView.SetActive(value);
+            }
+        }
+
+        public Vector3 PrimaryNormal
+        {
+            get
+            {
+                return grounding.PrimaryNormal;
             }
         }
 
@@ -86,6 +100,14 @@ namespace MistRidge
             get
             {
                 return playerView.Forward;
+            }
+        }
+
+        public Vector3 HandPosition
+        {
+            get
+            {
+                return playerView.HandTransform.position;
             }
         }
 
@@ -425,6 +447,7 @@ namespace MistRidge
         {
             ResetPlayerProperties();
             ResetPlayerMaterials(input.DeviceNum);
+            itemEffectSignal.Event += OnItemEffect;
         }
 
         public void AddAether(int aetherCount)
@@ -455,6 +478,32 @@ namespace MistRidge
 
         private void ResetPlayerMaterials(int deviceNum)
         {
+        }
+
+        private void OnItemEffect(ItemType itemType, ItemStage itemStage)
+        {
+            switch (itemType)
+            {
+                case ItemType.BubbleTrap:
+                    OnBubbleTrap(itemStage);
+                    break;
+            }
+        }
+
+        private void OnBubbleTrap(ItemStage itemStage)
+        {
+            switch (itemStage)
+            {
+                case ItemStage.Start:
+                    gravity = 0f;
+                    playerStateMachine.ChangeState(PlayerStateType.Floating);
+                    break;
+
+                case ItemStage.End:
+                    gravity = 1f;
+                    playerStateMachine.ChangeState(PlayerStateType.Fall);
+                    break;
+            }
         }
 
         [Serializable]

@@ -17,6 +17,9 @@ namespace MistRidge
         private Transform meshTransform;
 
         [SerializeField]
+        private Transform handTransform;
+
+        [SerializeField]
         private ParticleSystem dustTrail;
 
         [SerializeField]
@@ -39,15 +42,18 @@ namespace MistRidge
         private bool canControl;
         private Animator animator;
         private ItemPickupSignal.Trigger itemPickupTrigger;
+        private ItemEffectSignal.Trigger itemEffectTrigger;
         private CheckpointSignal.Trigger checkpointTrigger;
         private Dictionary<CheckpointView, bool> checkpointsVisited;
 
         [PostInject]
         public void Init(
                 ItemPickupSignal.Trigger itemPickupTrigger,
+                ItemEffectSignal.Trigger itemEffectTrigger,
                 CheckpointSignal.Trigger checkpointTrigger)
         {
             this.itemPickupTrigger = itemPickupTrigger;
+            this.itemEffectTrigger = itemEffectTrigger;
             this.checkpointTrigger = checkpointTrigger;
         }
 
@@ -94,6 +100,14 @@ namespace MistRidge
             get
             {
                 return meshTransform;
+            }
+        }
+
+        public Transform HandTransform
+        {
+            get
+            {
+                return handTransform;
             }
         }
 
@@ -171,6 +185,16 @@ namespace MistRidge
         public void PlayerFreefallLand()
         {
             dustLand.Emit(dustFreefallLandParticleCount);
+        }
+
+        public void BubbleTrapped()
+        {
+            itemEffectTrigger.Fire(ItemType.BubbleTrap, ItemStage.Start);
+        }
+
+        public void BubbleTrapRelease()
+        {
+            itemEffectTrigger.Fire(ItemType.BubbleTrap, ItemStage.End);
         }
 
         private void Awake()

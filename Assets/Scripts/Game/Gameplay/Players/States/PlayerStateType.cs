@@ -8,6 +8,7 @@ namespace MistRidge
         Fall,
         Halt,
         Freefall,
+        Floating,
         Uncontrollable,
     }
 }

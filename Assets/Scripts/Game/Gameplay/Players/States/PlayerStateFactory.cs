@@ -39,6 +39,10 @@ namespace MistRidge
                     playerState = container.Instantiate<PlayerFreefallState>();
                     break;
 
+                case PlayerStateType.Floating:
+                    playerState = container.Instantiate<PlayerFloatingState>();
+                    break;
+
                 case PlayerStateType.Uncontrollable:
                     playerState = container.Instantiate<PlayerUncontrollableState>();
                     break;

@@ -58,6 +58,9 @@ namespace MistRidge
             subContainer.BindSignal<ItemPickupSignal>();
             subContainer.BindTrigger<ItemPickupSignal.Trigger>();
 
+            subContainer.BindSignal<ItemEffectSignal>();
+            subContainer.BindTrigger<ItemEffectSignal.Trigger>();
+
             subContainer.Bind<PlayerStateMachine>().ToSingle();
             subContainer.Bind<PlayerStateFactory>().ToSingle();
         }

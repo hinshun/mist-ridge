@@ -26,14 +26,17 @@ namespace MistRidge
             CreatePools();
         }
 
-        public void ReusePoolInstance(PoolInstanceView poolInstanceView, Vector3 position, Quaternion rotation)
+        public PoolInstanceView ReusePoolInstance(PoolInstanceView poolInstanceView, Vector3 position, Quaternion rotation)
         {
             int poolKey = poolInstanceView.gameObject.GetInstanceID();
 
             if (pools.ContainsKey(poolKey))
             {
-                pools[poolKey].ReusePoolInstance(position, rotation);
+                return pools[poolKey].ReusePoolInstance(position, rotation);
             }
+
+            Debug.LogError("Cannot reuse non-existant pool instance");
+            return null;
         }
 
         public void ClearPool(PoolInstanceView poolInstanceView)

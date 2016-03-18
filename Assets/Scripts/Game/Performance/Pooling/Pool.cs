@@ -49,7 +49,7 @@ namespace MistRidge
             }
         }
 
-        public void ReusePoolInstance(Vector3 position, Quaternion rotation)
+        public PoolInstanceView ReusePoolInstance(Vector3 position, Quaternion rotation)
         {
             PoolInstanceView poolInstanceView = Dequeue();
 
@@ -59,6 +59,8 @@ namespace MistRidge
             poolInstanceView.OnPoolInstanceReuse();
 
             Enqueue(poolInstanceView);
+
+            return poolInstanceView;
         }
 
         public void Clear()
