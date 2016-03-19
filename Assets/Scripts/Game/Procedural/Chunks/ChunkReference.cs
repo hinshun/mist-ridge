@@ -113,7 +113,7 @@ namespace MistRidge
         {
             get
             {
-				return -Left;
+                return -Left;
             }
         }
 
@@ -121,7 +121,7 @@ namespace MistRidge
         {
             get
             {
-				return -ForwardRight;
+                return -ForwardRight;
             }
         }
 
@@ -129,7 +129,7 @@ namespace MistRidge
         {
             get
             {
-				return -ForwardLeft;
+                return -ForwardLeft;
             }
         }
 

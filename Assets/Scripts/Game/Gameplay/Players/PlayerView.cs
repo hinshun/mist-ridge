@@ -21,6 +21,9 @@ namespace MistRidge
         private Transform handTransform;
 
         [SerializeField]
+        private Transform emoteTransform;
+
+        [SerializeField]
         private float itemFlashTime;
 
         [SerializeField]
