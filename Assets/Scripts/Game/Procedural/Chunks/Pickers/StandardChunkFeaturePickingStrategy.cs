@@ -42,10 +42,10 @@ namespace MistRidge
                 .Where(chunkFeature => !chunkFeature.IsUnique || (chunkFeature.IsUnique && !pickedUniqueChunkFeatures.Contains(chunkFeature)))
                 .ToList();
 
-            List<int> unfittedChunkIndices = GetUnfittedChunkIndices(chunkRequest, chunkFeatures);
-            foreach (int index in unfittedChunkIndices)
+            List<ChunkFeature> unfittedChunkIndices = GetUnfittedChunkIndices(chunkRequest, chunkFeatures);
+            foreach (ChunkFeature chunkFeature in unfittedChunkIndices)
             {
-                chunkFeatures.RemoveAt(index);
+                chunkFeatures.Remove(chunkFeature);
             }
 
             List<int> cdf = CreateCDF(chunkFeatures);
@@ -105,9 +105,9 @@ namespace MistRidge
             return randomIndex;
         }
 
-        private List<int> GetUnfittedChunkIndices(ChunkRequest chunkRequest, List<ChunkFeature> chunkFeatures)
+        private List<ChunkFeature> GetUnfittedChunkIndices(ChunkRequest chunkRequest, List<ChunkFeature> chunkFeatures)
         {
-            List<int> unfittedChunkIndices = new List<int>();
+            List<ChunkFeature> unfittedChunkIndices = new List<ChunkFeature>();
             for (int index = 0; index < chunkFeatures.Count; ++index)
             {
                 ChunkFeature chunkFeature = chunkFeatures[index];
@@ -125,7 +125,7 @@ namespace MistRidge
 
                     if (chained && nextChunkRequest.chunkNum == chunkRequest.sprintEndChunkNum)
                     {
-                        unfittedChunkIndices.Add(index);
+                        unfittedChunkIndices.Add(chunkFeature);
                         break;
                     }
 
@@ -137,7 +137,7 @@ namespace MistRidge
                     if ((chained || nextChunkRequest.chunkNum != nextDepthEndChunkNum)
                         && (nextSideChunkNum == nextDepth - 1 && chunkChainedFeature.SkipCorners))
                     {
-                        unfittedChunkIndices.Add(index);
+                        unfittedChunkIndices.Add(chunkFeature);
                         break;
                     }
 
