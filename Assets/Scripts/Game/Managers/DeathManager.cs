@@ -90,6 +90,28 @@ namespace MistRidge
             }
         }
 
+        public List<Vector3> AlivePlayerPositions
+        {
+            get
+            {
+                List<Vector3> playerPositions = new List<Vector3>();
+                foreach (PlayerFacade playerFacade in AlivePlayerFacades)
+                {
+                    playerPositions.Add(playerFacade.Position);
+                }
+
+                return playerPositions;
+            }
+        }
+
+        public List<Vector3> AliveRelevantPlayerPositions
+        {
+            get
+            {
+                return RelevantPositions(AlivePlayerPositions);
+            }
+        }
+
         public List<Vector3> AlivePlayerGroundingPositions
         {
             get

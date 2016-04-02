@@ -72,7 +72,7 @@ namespace MistRidge
 
         private Vector3 ZoomPosition()
         {
-            float zoom = CameraZoomForEncapsulation(deathManager.AliveRelevantPlayerGroundingPositions);
+            float zoom = CameraZoomForEncapsulation(deathManager.AliveRelevantPlayerPositions);
             float cappedZoom = Mathf.Max(zoom, settings.minZoom);
 
             return new Vector3(

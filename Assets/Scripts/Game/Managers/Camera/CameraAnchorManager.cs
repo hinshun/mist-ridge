@@ -58,7 +58,7 @@ namespace MistRidge
 
         private Vector3 AnchorPosition()
         {
-            return CenterPoint(deathManager.AliveRelevantPlayerGroundingPositions);
+            return CenterPoint(deathManager.AliveRelevantPlayerPositions);
         }
 
         private Quaternion AnchorRotation(Vector3 anchorPosition)
