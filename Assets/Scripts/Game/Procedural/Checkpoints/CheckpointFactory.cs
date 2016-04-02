@@ -37,7 +37,6 @@ namespace MistRidge
             {
                 chunkNum = chunkRequest.chunkNum,
                 chunkCount = chunkRequest.chunkCount,
-                heightChunkNum = chunkRequest.chunkNum,
                 sprintEndChunkNum = chunkRequest.sprintEndChunkNum,
                 biome = biomePickingStrategy.Pick(biomes, altitude),
             };

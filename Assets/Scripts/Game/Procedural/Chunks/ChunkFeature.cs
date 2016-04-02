@@ -20,6 +20,9 @@ namespace MistRidge
         [SerializeField]
         private bool skipCorners;
 
+        [SerializeField]
+        private bool matchChainHeight;
+
         public ChunkFeatureView ChunkFeatureView
         {
             get
@@ -57,6 +60,14 @@ namespace MistRidge
             get
             {
                 return skipCorners;
+            }
+        }
+
+        public bool MatchChainHeight
+        {
+            get
+            {
+                return matchChainHeight;
             }
         }
     }

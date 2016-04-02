@@ -121,7 +121,6 @@ namespace MistRidge
             {
                 chunkNum = chunkCount,
                 chunkCount = chunkCount,
-                heightChunkNum = chunkCount,
                 sprintEndChunkNum = chunkCount,
                 biome = settings.startingZoneBiome,
             };
@@ -142,7 +141,6 @@ namespace MistRidge
                 {
                     chunkNum = chunkNum,
                     chunkCount = chunkCount,
-                    heightChunkNum = settings.peakChunkCount - 1,
                     sprintEndChunkNum = 0,
                     biome = settings.peakBiome,
                 };

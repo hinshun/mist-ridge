@@ -10,6 +10,7 @@ namespace MistRidge
         private readonly Settings settings;
         private readonly ChunkRequest chunkRequest;
         private readonly ChunkView chunkView;
+        private readonly ChunkFeature chunkFeature;
         private readonly ChunkFeatureView chunkFeatureView;
         private readonly IChunkPlacingStrategy chunkPlacingStrategy;
 
@@ -22,12 +23,14 @@ namespace MistRidge
                 Settings settings,
                 ChunkRequest chunkRequest,
                 ChunkView chunkView,
+                ChunkFeature chunkFeature,
                 ChunkFeatureView chunkFeatureView,
                 IChunkPlacingStrategy chunkPlacingStrategy)
         {
             this.settings = settings;
             this.chunkRequest = chunkRequest;
             this.chunkView = chunkView;
+            this.chunkFeature = chunkFeature;
             this.chunkFeatureView = chunkFeatureView;
             this.chunkPlacingStrategy = chunkPlacingStrategy;
         }
@@ -68,7 +71,7 @@ namespace MistRidge
 
         private void PlaceChunk()
         {
-            chunkPlacingStrategy.Place(chunkView, chunkRequest, chunkFeatureView);
+            chunkPlacingStrategy.Place(chunkView, chunkRequest, chunkFeature, chunkFeatureView);
         }
 
         private List<ItemContainerView> SpawnItemContainers()
