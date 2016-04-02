@@ -25,9 +25,6 @@ namespace MistRidge
 
         public ChunkFeature Pick(ChunkRequest chunkRequest)
         {
-            int depth = ChunkMath.Depth(chunkRequest);
-            int sideChunkNum = ChunkMath.SideChunkNum(chunkRequest);
-
             if (chunkChain != null)
             {
                 ChunkFeature chunkChainedFeature = chunkChain;
@@ -130,12 +127,14 @@ namespace MistRidge
                     }
 
                     int nextDepth = ChunkMath.Depth(nextChunkRequest);
+                    int nextDepthStartChunkNum = ChunkMath.DepthStartChunkNum(nextChunkRequest);
                     int nextDepthEndChunkNum = ChunkMath.DepthEndChunkNum(nextChunkRequest);
                     int nextSideChunkNum = ChunkMath.SideChunkNum(nextChunkRequest);
 
                     // Mark chunk feature to be removed if it hits a corner and it is supposed to skip corners
-                    if ((chained || nextChunkRequest.chunkNum != nextDepthEndChunkNum)
-                        && (nextSideChunkNum == nextDepth - 1 && chunkChainedFeature.SkipCorners))
+                    if (chunkChainedFeature.SkipCorners && (chained || nextChunkRequest.chunkNum != nextDepthEndChunkNum)
+                        && (nextSideChunkNum == nextDepth - 1
+                            || nextChunkRequest.chunkNum == nextDepthStartChunkNum))
                     {
                         unfittedChunkIndices.Add(chunkFeature);
                         break;
