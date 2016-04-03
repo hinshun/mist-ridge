@@ -7,18 +7,15 @@ namespace MistRidge
 {
     public class SceneLoader : IInitializable
     {
-        private readonly Settings settings;
         private readonly SceneLoaderView sceneLoaderView;
 
         private Hashtable fadeInHashtable;
         private Hashtable fadeOutHashtable;
 
         public SceneLoader(
-                Settings settings,
                 SceneLoaderView sceneLoaderView,
                 UnityFixGI unityFixGI)
         {
-            this.settings = settings;
             this.sceneLoaderView = sceneLoaderView;
         }
 
@@ -26,35 +23,30 @@ namespace MistRidge
         {
             sceneLoaderView.SceneLoader = this;
 
-            GameObject fadeObject = iTween.CameraFadeAdd(settings.fadeTexture);
-            fadeObject.transform.parent = sceneLoaderView.transform;
-
             fadeInHashtable = new Hashtable();
-            fadeInHashtable.Add("amount", 1f);
+            fadeInHashtable.Add("from", Color.clear);
+            fadeInHashtable.Add("to", Color.white);
             fadeInHashtable.Add("time", 1f);
+            fadeInHashtable.Add("onupdate", "UpdateColor");
             fadeInHashtable.Add("oncomplete", "LoadScene");
             fadeInHashtable.Add("oncompletetarget", sceneLoaderView.gameObject);
 
             fadeOutHashtable = new Hashtable();
-            fadeOutHashtable.Add("amount", 0f);
+            fadeOutHashtable.Add("from", Color.white);
+            fadeOutHashtable.Add("to", Color.clear);
+            fadeOutHashtable.Add("onupdate", "UpdateColor");
             fadeOutHashtable.Add("time", 1f);
         }
 
         public void Load(string sceneName)
         {
             fadeInHashtable["oncompleteparams"] = sceneName;
-            iTween.CameraFadeTo(fadeInHashtable);
+            iTween.ValueTo(sceneLoaderView.FadeObject, fadeInHashtable);
         }
 
         public void FadeOut()
         {
-            iTween.CameraFadeTo(fadeOutHashtable);
-        }
-
-        [Serializable]
-        public class Settings
-        {
-            public Texture2D fadeTexture;
+            iTween.ValueTo(sceneLoaderView.FadeObject, fadeOutHashtable);
         }
     }
 }

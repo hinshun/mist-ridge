@@ -60,7 +60,7 @@ namespace MistRidge
             playerAethers[playerView] += aetherCount;
 
             Input input = playerManager.Input(playerView);
-            displayManager.UpdateAether(input, playerAethers[playerView]);
+            displayManager.UpdateAether(input.DeviceNum, playerAethers[playerView]);
         }
     }
 }

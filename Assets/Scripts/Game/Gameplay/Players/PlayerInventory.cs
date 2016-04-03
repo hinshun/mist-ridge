@@ -52,7 +52,7 @@ namespace MistRidge
                 {
                     item = null;
                     playerView.CanPickupItems = true;
-                    displayManager.UpdateItem(input, null);
+                    displayManager.UpdateItem(input.DeviceNum, null);
                     return;
                 }
 
@@ -64,7 +64,7 @@ namespace MistRidge
             playerView.CanPickupItems = false;
 
             ItemDrop itemDrop = itemManager.PickItemDrop(itemType, player);
-            displayManager.UpdateItem(input, itemDrop);
+            displayManager.UpdateItem(input.DeviceNum, itemDrop);
 
             item = itemManager.NewItem(itemDrop, player);
         }

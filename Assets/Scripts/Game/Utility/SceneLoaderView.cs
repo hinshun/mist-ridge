@@ -7,7 +7,18 @@ namespace MistRidge
 {
     public class SceneLoaderView : MonoView
     {
+        [SerializeField]
+        private GameObject fadeObject;
+
         private SceneLoader sceneLoader;
+
+        public GameObject FadeObject
+        {
+            get
+            {
+                return fadeObject;
+            }
+        }
 
         public SceneLoader SceneLoader
         {

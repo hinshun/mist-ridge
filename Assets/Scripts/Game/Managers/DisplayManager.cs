@@ -10,16 +10,19 @@ namespace MistRidge
     {
         private readonly Settings settings;
         private readonly GameDisplayView gameDisplayView;
+        private readonly CharacterSelectDisplayView characterSelectDisplayView;
 
         private Canvas gameDisplayCanvas;
         private CanvasScaler gameDisplayScaler;
 
         public DisplayManager(
                 Settings settings,
-                GameDisplayView gameDisplayView)
+                GameDisplayView gameDisplayView,
+                CharacterSelectDisplayView characterSelectDisplayView)
         {
             this.settings = settings;
             this.gameDisplayView = gameDisplayView;
+            this.characterSelectDisplayView = characterSelectDisplayView;
         }
 
         public void Initialize()
@@ -34,18 +37,29 @@ namespace MistRidge
                 playerDisplay.SetActive(false);
                 playerDisplay.Pointer.enabled = false;
             }
+
+            DisplayCharacterSelect(false);
+
+            for (int i = 0; i < 4; ++i)
+            {
+                DisplayCharacter(i, CharacterType.None);
+                DisplayCharacterArrows(i, false);
+                DisplayCharacterJoin(i, false);
+                DisplayCharacterSelect(i, false);
+                DisplayCharacterPlayerTag(i, false);
+            }
         }
 
-        public void Display(Input input, CharacterType characterType)
+        public void Display(int deviceNum, CharacterType characterType)
         {
-            UpdateBackdrop(input, BackdropHealth.Alive);
-            UpdateNameTag(input, characterType);
-            UpdatePortraitImage(input, characterType, PortraitEmotion.Neutral);
-            UpdateItem(input, null);
-            UpdateRank(input, -1);
-            UpdateAether(input, 0);
-            PlayerDisplay(input).SetActive(true);
-            UpdatePointer(input, Vector2.zero);
+            UpdateBackdrop(deviceNum, BackdropHealth.Alive);
+            UpdateNameTag(deviceNum, characterType);
+            UpdatePortraitImage(deviceNum, characterType, PortraitEmotion.Neutral);
+            UpdateItem(deviceNum, null);
+            UpdateRank(deviceNum, -1);
+            UpdateAether(deviceNum, 0);
+            PlayerDisplay(deviceNum).SetActive(true);
+            UpdatePointer(deviceNum, Vector2.zero);
         }
 
         public void UpdateCamera(Camera camera)
@@ -66,16 +80,16 @@ namespace MistRidge
             sprintText.text = current + " / " + total;
         }
 
-        public void UpdateBackdrop(Input input, BackdropHealth backdropHealth)
+        public void UpdateBackdrop(int deviceNum, BackdropHealth backdropHealth)
         {
-            Image background = PlayerDisplay(input).Background;
-            Image itemCircle = PlayerDisplay(input).ItemCircle;
+            Image background = PlayerDisplay(deviceNum).Background;
+            Image itemCircle = PlayerDisplay(deviceNum).ItemCircle;
 
             switch (backdropHealth)
             {
                 case BackdropHealth.Alive:
-                    background.sprite = settings.backdrops[input.DeviceNum].background;
-                    itemCircle.sprite = settings.backdrops[input.DeviceNum].itemCircle;
+                    background.sprite = settings.backdrops[deviceNum].background;
+                    itemCircle.sprite = settings.backdrops[deviceNum].itemCircle;
                     return;
 
                 case BackdropHealth.Dead:
@@ -89,15 +103,15 @@ namespace MistRidge
             itemCircle.sprite = null;
         }
 
-        public void UpdateNameTag(Input input, CharacterType characterType)
+        public void UpdateNameTag(int deviceNum, CharacterType characterType)
         {
-            Image nameTag = PlayerDisplay(input).NameTag;
+            Image nameTag = PlayerDisplay(deviceNum).NameTag;
             nameTag.sprite = GetPortrait(characterType).nameTag;
         }
 
-        public void UpdatePortraitImage(Input input, CharacterType characterType, PortraitEmotion portraitEmotion)
+        public void UpdatePortraitImage(int deviceNum, CharacterType characterType, PortraitEmotion portraitEmotion)
         {
-            Image portraitImage = PlayerDisplay(input).PortraitImage;
+            Image portraitImage = PlayerDisplay(deviceNum).PortraitImage;
             Portrait portrait = GetPortrait(characterType);
 
             switch (portraitEmotion)
@@ -123,9 +137,9 @@ namespace MistRidge
             portraitImage.sprite = null;
         }
 
-        public void UpdateItem(Input input, ItemDrop itemDrop)
+        public void UpdateItem(int deviceNum, ItemDrop itemDrop)
         {
-            Image itemSlot = PlayerDisplay(input).ItemSlot;
+            Image itemSlot = PlayerDisplay(deviceNum).ItemSlot;
 
             if (itemDrop == null)
             {
@@ -138,9 +152,9 @@ namespace MistRidge
             }
         }
 
-        public void UpdateRank(Input input, int rank)
+        public void UpdateRank(int deviceNum, int rank)
         {
-            Image rankImage = PlayerDisplay(input).RankImage;
+            Image rankImage = PlayerDisplay(deviceNum).RankImage;
 
             if (rank >= 0)
             {
@@ -153,15 +167,15 @@ namespace MistRidge
             }
         }
 
-        public void UpdateAether(Input input, int aetherCount)
+        public void UpdateAether(int deviceNum, int aetherCount)
         {
-            Text aetherText = PlayerDisplay(input).AetherText;
+            Text aetherText = PlayerDisplay(deviceNum).AetherText;
             aetherText.text = aetherCount.ToString();
         }
 
-        public void UpdatePointer(Input input, Vector2 position)
+        public void UpdatePointer(int deviceNum, Vector2 position)
         {
-            Image pointer = PlayerDisplay(input) .Pointer;
+            Image pointer = PlayerDisplay(deviceNum) .Pointer;
 
             if (position == Vector2.zero)
             {
@@ -199,9 +213,65 @@ namespace MistRidge
             }
         }
 
-        private PlayerDisplayView PlayerDisplay(Input input)
+        public void DisplayCharacterSelect(bool show)
         {
-            return gameDisplayView.PlayerDisplays[input.DeviceNum];
+            characterSelectDisplayView.SetActive(show);
+        }
+
+        public void DisplayCharacter(int deviceNum, CharacterType characterType)
+        {
+            Image portrait = PlayerCharacterDisplay(deviceNum).Portrait;
+            Image nameTag = PlayerCharacterDisplay(deviceNum).NameTag;
+
+            if (characterType == CharacterType.None)
+            {
+                portrait.enabled = false;
+                nameTag.enabled = false;
+                return;
+            }
+            portrait.enabled = true;
+            nameTag.enabled = true;
+
+            CharacterPortrait characterPortrait = GetCharacterPortrait(characterType);
+            portrait.sprite = characterPortrait.portrait;
+            nameTag.sprite = characterPortrait.nameTag;
+        }
+
+        public void DisplayCharacterArrows(int deviceNum, bool show)
+        {
+            Image arrowLeft = PlayerCharacterDisplay(deviceNum).ArrowLeft;
+            Image arrowRight = PlayerCharacterDisplay(deviceNum).ArrowRight;
+
+            arrowLeft.enabled = show;
+            arrowRight.enabled = show;
+        }
+
+        public void DisplayCharacterJoin(int deviceNum, bool show)
+        {
+            Image join = PlayerCharacterDisplay(deviceNum).Join;
+            join.enabled = show;
+        }
+
+        public void DisplayCharacterSelect(int deviceNum, bool show)
+        {
+            Image select = PlayerCharacterDisplay(deviceNum).Select;
+            select.enabled = show;
+        }
+
+        public void DisplayCharacterPlayerTag(int deviceNum, bool show)
+        {
+            Image playerTag = PlayerCharacterDisplay(deviceNum).PlayerTag;
+            playerTag.enabled = show;
+        }
+
+        private PlayerDisplayView PlayerDisplay(int deviceNum)
+        {
+            return gameDisplayView.PlayerDisplays[deviceNum];
+        }
+
+        private PlayerCharacterDisplayView PlayerCharacterDisplay(int deviceNum)
+        {
+            return characterSelectDisplayView.PlayerCharacterDisplays[deviceNum];
         }
 
         private Portrait GetPortrait(CharacterType characterType)
@@ -215,15 +285,32 @@ namespace MistRidge
                     return settings.jill;
             }
 
-            Debug.LogError("Failed to find valid character type");
+            Debug.LogError("Failed to find valid character type for portrait");
             return new Portrait();
+        }
+
+        private CharacterPortrait GetCharacterPortrait(CharacterType characterType)
+        {
+            switch (characterType)
+            {
+                case CharacterType.Jack:
+                    return settings.jackCharacter;
+
+                case CharacterType.Jill:
+                    return settings.jillCharacter;
+            }
+
+            Debug.LogError("Failed to find valid character type for character portrait");
+            return new CharacterPortrait();
         }
 
         [Serializable]
         public class Settings
         {
             public Portrait jack;
+            public CharacterPortrait jackCharacter;
             public Portrait jill;
+            public CharacterPortrait jillCharacter;
 
             public List<Sprite> rankSprites;
 

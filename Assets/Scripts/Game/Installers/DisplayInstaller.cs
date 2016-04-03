@@ -21,6 +21,7 @@ namespace MistRidge
             Container.BindAllInterfacesToSingle<DisplayManager>();
 
             Container.Bind<GameDisplayView>().ToSinglePrefab(settings.gameDisplayPrefab);
+            Container.Bind<CharacterSelectDisplayView>().ToSinglePrefab(settings.characterSelectDisplayPrefab);
         }
 
         private void InstallSettings()
@@ -32,6 +33,7 @@ namespace MistRidge
         public class Settings
         {
             public GameObject gameDisplayPrefab;
+            public GameObject characterSelectDisplayPrefab;
             public DisplayManager.Settings displayManagerSettings;
         }
     }

@@ -71,7 +71,7 @@ namespace MistRidge
                 playerFacades[input] = playerFacade;
                 playerViewMapping[playerFacade.PlayerView] = input;
 
-                displayManager.Display(input, playerFacade.CharacterType);
+                displayManager.Display(input.DeviceNum, playerFacade.CharacterType);
 
                 return playerFacade;
             }

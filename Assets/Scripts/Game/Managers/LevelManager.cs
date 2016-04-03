@@ -56,16 +56,14 @@ namespace MistRidge
 
             foreach (Input input in inputManager.Inputs)
             {
-                if (playerManager.HasPlayerFacade(input))
-                {
-                    PlayerFacade playerFacade = playerManager.PlayerFacade(input);
-                    playerFacade.Position = spawnManager.CurrentSpawnView.SpawnPoint(input.DeviceNum);
+                PlayerFacade playerFacade = playerManager.SpawnPlayer(input);
+                deathManager.AddPlayer(input);
 
-                    playerFacade.Player.Gravity = 1f;
-                    playerFacade.MoveDirection = Vector3.zero;
+                playerFacade.Freefall();
+                playerFacade.Player.Gravity = 1f;
+                playerFacade.MoveDirection = Vector3.zero;
 
-                    playerFacade.ProbeGround();
-                }
+                playerFacade.ProbeGround();
             }
 
             cameraView.IsActive = true;

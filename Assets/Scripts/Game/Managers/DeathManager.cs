@@ -175,14 +175,6 @@ namespace MistRidge
             }
         }
 
-        public void PopulatePlayerDeaths()
-        {
-            foreach (Input input in inputManager.Inputs)
-            {
-                AddPlayer(input);
-            }
-        }
-
         public void AddPlayer(Input input)
         {
             if (!playerManager.HasPlayerFacade(input))
@@ -211,7 +203,7 @@ namespace MistRidge
         public void DeathTimerTick(Input input, PlayerFacade playerFacade)
         {
             Vector3 position = camera.WorldToViewportPoint(playerFacade.Position);
-            displayManager.UpdatePointer(input, position);
+            displayManager.UpdatePointer(input.DeviceNum, position);
 
             if (deathTimers[playerFacade] == 0)
             {
@@ -228,7 +220,7 @@ namespace MistRidge
         public void DeathTimerReset(Input input, PlayerFacade playerFacade)
         {
             deathTimers[playerFacade] = 0;
-            displayManager.UpdatePointer(input, Vector2.zero);
+            displayManager.UpdatePointer(input.DeviceNum, Vector2.zero);
         }
 
         public void Kill(PlayerFacade playerFacade)
@@ -237,10 +229,10 @@ namespace MistRidge
 
             playerDeaths[playerFacade] = true;
             playerFacade.Die();
-            displayManager.UpdateBackdrop(input, BackdropHealth.Dead);
-            displayManager.UpdatePortraitImage(input, playerFacade.CharacterType, PortraitEmotion.Dead);
-            displayManager.UpdatePointer(input, Vector2.zero);
-            displayManager.UpdateRank(input, -1);
+            displayManager.UpdateBackdrop(input.DeviceNum, BackdropHealth.Dead);
+            displayManager.UpdatePortraitImage(input.DeviceNum, playerFacade.CharacterType, PortraitEmotion.Dead);
+            displayManager.UpdatePointer(input.DeviceNum, Vector2.zero);
+            displayManager.UpdateRank(input.DeviceNum, -1);
 
             if (AlivePlayerCount == 0)
             {
@@ -257,8 +249,8 @@ namespace MistRidge
             Input input = playerManager.Input(playerFacade.PlayerView);
 
             playerDeaths[playerFacade] = false;
-            displayManager.UpdateBackdrop(input, BackdropHealth.Alive);
-            displayManager.UpdatePortraitImage(input, playerFacade.CharacterType, PortraitEmotion.Neutral);
+            displayManager.UpdateBackdrop(input.DeviceNum, BackdropHealth.Alive);
+            displayManager.UpdatePortraitImage(input.DeviceNum, playerFacade.CharacterType, PortraitEmotion.Neutral);
             playerFacade.Respawn();
         }
 

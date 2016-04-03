@@ -30,6 +30,7 @@ public abstract class StateMachine<TStateMachine, TState, TStateType, TStateFact
         }
 
         state = stateFactory.Create(stateType);
+        ChangedState(stateType);
         state.EnterState();
     }
 
@@ -52,6 +53,8 @@ public abstract class StateMachine<TStateMachine, TState, TStateType, TStateFact
         lastState = state;
         timeEnteredState = Time.time;
     }
+
+    protected virtual void ChangedState(TStateType stateType) { }
 
     protected virtual void EarlyGlobalUpdate() { }
 

@@ -55,7 +55,7 @@ namespace MistRidge
                 PlayerFacade playerFacade = alivePlayerFacades[rank];
                 playerFacade.Player.CurrentRank = rank;
                 Input input = playerManager.Input(playerFacade.PlayerView);
-                displayManager.UpdateRank(input, rank);
+                displayManager.UpdateRank(input.DeviceNum, rank);
             }
         }
     }

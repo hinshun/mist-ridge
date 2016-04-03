@@ -8,17 +8,22 @@ namespace MistRidge
     {
         private readonly MenuSignal.Trigger menuSignalTrigger;
         private readonly InputManager inputManager;
+        private readonly DisplayManager displayManager;
         private readonly CameraView cameraView;
+
+        private bool tweening;
 
         public GameStartState(
                 MenuSignal.Trigger menuSignalTrigger,
                 InputManager inputManager,
+                DisplayManager displayManager,
                 CameraView cameraView,
                 GameStateMachine stateMachine)
             : base(stateMachine)
         {
             this.menuSignalTrigger = menuSignalTrigger;
             this.inputManager = inputManager;
+            this.displayManager = displayManager;
             this.cameraView = cameraView;
 
             stateType = GameStateType.Start;
@@ -26,10 +31,16 @@ namespace MistRidge
 
         public override void Update()
         {
+            if (tweening)
+            {
+                return;
+            }
+
             foreach(Input input in inputManager.Inputs)
             {
                 if (input.Mapping.Submit.WasPressed)
                 {
+                    tweening = true;
                     menuSignalTrigger.Fire(input, MenuSignalType.Submit);
                     return;
                 }
@@ -47,7 +58,9 @@ namespace MistRidge
 
         public override void EnterState()
         {
+            tweening = false;
             cameraView.IsActive = false;
+            displayManager.DisplayCharacterSelect(false);
         }
 
         public override void ExitState()
