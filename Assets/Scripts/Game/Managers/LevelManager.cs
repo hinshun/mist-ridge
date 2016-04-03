@@ -7,6 +7,7 @@ namespace MistRidge
     public class LevelManager : IInitializable
     {
         private readonly GameStateSignal.Trigger gameStateTrigger;
+        private readonly GameStateMachine gameStateMachine;
         private readonly SpawnManager spawnManager;
         private readonly ChunkManager chunkManager;
         private readonly InputManager inputManager;
@@ -21,6 +22,7 @@ namespace MistRidge
 
         public LevelManager(
                 GameStateSignal.Trigger gameStateTrigger,
+                GameStateMachine gameStateMachine,
                 SpawnManager spawnManager,
                 ChunkManager chunkManager,
                 InputManager inputManager,
@@ -34,6 +36,7 @@ namespace MistRidge
                 CameraAnchorManager cameraAnchorManager)
         {
             this.gameStateTrigger = gameStateTrigger;
+            this.gameStateMachine = gameStateMachine;
             this.spawnManager = spawnManager;
             this.chunkManager = chunkManager;
             this.inputManager = inputManager;
@@ -54,7 +57,7 @@ namespace MistRidge
 
             gameStateTrigger.Fire(GameStateType.Play);
 
-            foreach (Input input in inputManager.Inputs)
+            foreach (Input input in gameStateMachine.GameReadyState.JoinedInputs)
             {
                 PlayerFacade playerFacade = playerManager.SpawnPlayer(input);
                 deathManager.AddPlayer(input);
