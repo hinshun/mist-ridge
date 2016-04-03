@@ -53,7 +53,9 @@ namespace MistRidge
         public void Initialize()
         {
             ChunkFacade startingChunkFacade = chunkManager.StartingChunkFacade;
-            spawnManager.CurrentSpawnView = startingChunkFacade.SpawnView;
+            StartingZoneView startingZoneView = startingChunkFacade.ChunkView.GetComponentInChildren<StartingZoneView>();;
+
+            spawnManager.CurrentSpawnView = startingZoneView.InitialSpawn.GetComponentInChildren<SpawnView>();
 
             gameStateTrigger.Fire(GameStateType.Play);
 
@@ -68,6 +70,8 @@ namespace MistRidge
 
                 playerFacade.ProbeGround();
             }
+
+            spawnManager.CurrentSpawnView = startingZoneView.NormalSpawn.GetComponentInChildren<SpawnView>();
 
             cameraView.IsActive = true;
             cameraAnchorManager.ResetAnchor();

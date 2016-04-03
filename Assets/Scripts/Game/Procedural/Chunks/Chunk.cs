@@ -15,9 +15,9 @@ namespace MistRidge
         private readonly IChunkPlacingStrategy chunkPlacingStrategy;
 
         private List<ItemContainerView> itemContainerViews;
+        private List<SpawnView> spawnViews;
         private CheckpointWallView checkpointWallView;
         private CheckpointView checkpointView;
-        private SpawnView spawnView;
 
         public Chunk(
                 Settings settings,
@@ -51,11 +51,11 @@ namespace MistRidge
             }
         }
 
-        public SpawnView SpawnView
+        public List<SpawnView> SpawnViews
         {
             get
             {
-                return spawnView;
+                return spawnViews;
             }
         }
 
@@ -65,8 +65,8 @@ namespace MistRidge
             PlaceChunk();
             itemContainerViews = SpawnItemContainers();
             checkpointWallView = chunkView.GetComponentInChildren<CheckpointWallView>();
-            checkpointView = Spawn<CheckpointSpawnView, CheckpointView>(settings.checkpointPrefab);
-            spawnView = Spawn<SpawnSpawnView, SpawnView>(settings.spawnPrefab);
+            checkpointView = SpawnCheckpoint();
+            spawnViews = SpawnSpawns();
         }
 
         private void PlaceChunk()
@@ -92,11 +92,30 @@ namespace MistRidge
             return itemContainerViews;
         }
 
-        private TComponent Spawn<TSpawner, TComponent>(GameObject prefab)
+        private CheckpointView SpawnCheckpoint()
+        {
+            CheckpointSpawnView checkpointSpawnView = chunkView.GetComponentInChildren<CheckpointSpawnView>();
+            return Spawn<CheckpointSpawnView, CheckpointView>(checkpointSpawnView, settings.checkpointPrefab);
+        }
+
+        private List<SpawnView> SpawnSpawns()
+        {
+            List<SpawnView> spawnViews = new List<SpawnView>();
+            SpawnSpawnView[] spawnSpawnViews = chunkView.GetComponentsInChildren<SpawnSpawnView>();
+
+            foreach(SpawnSpawnView spawnSpawnView in spawnSpawnViews)
+            {
+                SpawnView spawnView = Spawn<SpawnSpawnView, SpawnView>(spawnSpawnView, settings.spawnPrefab);
+                spawnViews.Add(spawnView);
+            }
+
+            return spawnViews;
+        }
+
+        private TComponent Spawn<TSpawner, TComponent>(TSpawner spawner, GameObject prefab)
             where TSpawner : MonoBehaviour
             where TComponent : MonoView
         {
-            TSpawner spawner = chunkView.GetComponentInChildren<TSpawner>();
             if (spawner == null)
             {
                 return null;

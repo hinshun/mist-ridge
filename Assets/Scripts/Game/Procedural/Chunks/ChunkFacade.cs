@@ -81,11 +81,19 @@ namespace MistRidge
             }
         }
 
+        public ChunkView ChunkView
+        {
+            get
+            {
+                return chunkView;
+            }
+        }
+
         public SpawnView SpawnView
         {
             get
             {
-                return chunk.SpawnView;
+                return chunk.SpawnViews[0];
             }
         }
     }
