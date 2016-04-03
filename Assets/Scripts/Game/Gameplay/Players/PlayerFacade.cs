@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 namespace MistRidge
@@ -158,6 +159,11 @@ namespace MistRidge
         {
             playerView.CanControl = true;
             playerView.Animator.SetTrigger("StopDance");
+        }
+
+        public void SetPlayerCircle(Sprite playerCircle)
+        {
+            playerView.PlayerCircle.sprite = playerCircle;
         }
     }
 }

@@ -113,6 +113,7 @@ namespace MistRidge
 
         private void InstallSettings()
         {
+            Container.Bind<PlayerManager.Settings>().ToSingleInstance(settings.playerManagerSettings);
             Container.Bind<DeathManager.Settings>().ToSingleInstance(settings.deathManagerSettings);
             Container.Bind<MistManager.Settings>().ToSingleInstance(settings.mistManagerSettings);
 
@@ -132,6 +133,7 @@ namespace MistRidge
         {
             public PlayerSettings player;
             public CameraSettings camera;
+            public PlayerManager.Settings playerManagerSettings;
             public DeathManager.Settings deathManagerSettings;
             public MistManager.Settings mistManagerSettings;
 

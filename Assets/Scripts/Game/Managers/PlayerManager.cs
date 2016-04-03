@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
 using Zenject;
@@ -7,6 +8,7 @@ namespace MistRidge
 {
     public class PlayerManager : IInitializable, ITickable
     {
+        private readonly Settings settings;
         private readonly PlayerContainerView playerContainerView;
         private readonly SpawnManager spawnManager;
         private readonly DisplayManager displayManager;
@@ -15,11 +17,13 @@ namespace MistRidge
         private Dictionary<PlayerView, Input> playerViewMapping;
 
         public PlayerManager(
+                Settings settings,
                 PlayerContainerView playerContainerView,
                 SpawnManager spawnManager,
                 DisplayManager displayManager,
                 PlayerFacadeFactory playerFacadeFactory)
         {
+            this.settings = settings;
             this.playerContainerView = playerContainerView;
             this.spawnManager = spawnManager;
             this.displayManager = displayManager;
@@ -65,6 +69,8 @@ namespace MistRidge
                 CharacterType characterType = GetCharacterType(input);
                 PlayerFacade playerFacade = playerFacadeFactory.Create(characterType, input);
 
+                playerFacade.SetPlayerCircle(settings.playerCircles[input.DeviceNum]);
+
                 playerFacade.Position = spawnManager.CurrentSpawnView.SpawnPoint(input.DeviceNum);
                 playerFacade.Parent = playerContainerView.transform;
 
@@ -89,6 +95,12 @@ namespace MistRidge
             {
                 return CharacterType.Jill;
             }
+        }
+
+        [Serializable]
+        public class Settings
+        {
+            public List<Sprite> playerCircles;
         }
     }
 }

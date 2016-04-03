@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -52,6 +53,9 @@ namespace MistRidge
 
         [SerializeField]
         private int afterImageParticleCount;
+
+        [SerializeField]
+        private SpriteRenderer playerCircle;
 
         private Hashtable itemFlashInHashtable;
         private Hashtable itemFlashOutHashtable;
@@ -164,6 +168,14 @@ namespace MistRidge
             set
             {
                 canControl = value;
+            }
+        }
+
+        public SpriteRenderer PlayerCircle
+        {
+            get
+            {
+                return playerCircle;
             }
         }
 
