@@ -147,6 +147,14 @@ namespace MistRidge
             // Do Nothing
         }
 
+        private int SelectPlayerCount
+        {
+            get
+            {
+                return JoinedInputs.Count;
+            }
+        }
+
         private void SubmitPlayer(Input input)
         {
             CharacterType characterType = inputTypeMapping[input];
@@ -169,6 +177,12 @@ namespace MistRidge
                     displayManager.DisplayCharacterSelect(input.DeviceNum, false);
 
                     inputSelectMapping[input] = SelectType.Select;
+
+                    if (SelectPlayerCount >= settings.minStartPlayers)
+                    {
+                        displayManager.DisplayCharacterStart(true);
+                    }
+
                     break;
             }
         }
@@ -202,6 +216,12 @@ namespace MistRidge
                     displayManager.DisplayCharacterSelect(input.DeviceNum, true);
 
                     inputSelectMapping[input] = SelectType.Join;
+
+                    if (SelectPlayerCount < settings.minStartPlayers)
+                    {
+                        displayManager.DisplayCharacterStart(false);
+                    }
+
                     break;
             }
         }
@@ -213,6 +233,11 @@ namespace MistRidge
             switch (selectType)
             {
                 case SelectType.Select:
+                    if (SelectPlayerCount < settings.minStartPlayers)
+                    {
+                        break;
+                    }
+
                     stateMachine.ChangeState(GameStateType.Play);
                     sceneLoader.Load(settings.levelSceneName);
                     break;
@@ -247,6 +272,7 @@ namespace MistRidge
         [Serializable]
         public class Settings
         {
+            public int minStartPlayers;
             public string startMenuSceneName;
             public string levelSceneName;
         }

@@ -39,6 +39,7 @@ namespace MistRidge
             }
 
             DisplayCharacterSelect(false);
+            DisplayCharacterStart(false);
 
             for (int i = 0; i < 4; ++i)
             {
@@ -262,6 +263,12 @@ namespace MistRidge
         {
             Image playerTag = PlayerCharacterDisplay(deviceNum).PlayerTag;
             playerTag.enabled = show;
+        }
+
+        public void DisplayCharacterStart(bool show)
+        {
+            Image start = characterSelectDisplayView.Start;
+            start.enabled = show;
         }
 
         private PlayerDisplayView PlayerDisplay(int deviceNum)
