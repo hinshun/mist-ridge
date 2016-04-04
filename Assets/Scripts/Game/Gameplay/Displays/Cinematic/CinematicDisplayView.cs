@@ -21,11 +21,15 @@ namespace MistRidge
         private Hashtable slideInHashtable;
         private Hashtable slideOutHashtable;
 
+        private PlayerManager playerManager;
         private CinematicSignal cinematicSignal;
 
         [PostInject]
-        public void Init(CinematicSignal cinematicSignal)
+        public void Init(
+                PlayerManager playerManager,
+                CinematicSignal cinematicSignal)
         {
+            this.playerManager = playerManager;
             this.cinematicSignal = cinematicSignal;
             this.cinematicSignal.Event += OnCinematicRequest;
         }
@@ -56,6 +60,8 @@ namespace MistRidge
 
             if (isActive)
             {
+                playerManager.ChangePlayerControl(false);
+
                 topBar.anchoredPosition3D = new Vector3(
                     topBar.anchoredPosition3D.x,
                     -25,
@@ -85,6 +91,7 @@ namespace MistRidge
         public void OnSlideOutComplete()
         {
             tweening = false;
+            playerManager.ChangePlayerControl(true);
             gameObject.SetActive(false);
         }
 

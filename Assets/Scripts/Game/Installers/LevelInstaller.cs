@@ -15,7 +15,6 @@ namespace MistRidge
         {
             InitExecutionOrder();
             InstallLevel();
-            InstallSignals();
             InstallTutorial();
             InstallChunks();
             InstallCheckpoints();
@@ -40,12 +39,6 @@ namespace MistRidge
         {
             Container.Bind<LevelManager>().ToSingle();
             Container.BindAllInterfacesToSingle<LevelManager>();
-        }
-
-        private void InstallSignals()
-        {
-            Container.BindSignal<TutorialSignal>();
-            Container.BindTrigger<TutorialSignal.Trigger>();
         }
 
         private void InstallTutorial()

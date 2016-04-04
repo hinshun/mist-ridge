@@ -34,6 +34,8 @@ namespace MistRidge
             Container.Bind<DialogueDisplayView>().ToSinglePrefab(settings.dialogueDisplayPrefab);
             Container.Bind<ReadySetGoDisplayView>().ToSinglePrefab(settings.readySetGoDisplayPrefab);
             Container.Bind<ScoreDisplayView>().ToSinglePrefab(settings.scoreDisplayPrefab);
+
+            Container.Bind<DialogueManagerView>().ToSinglePrefab(settings.dialogueManagerPrefab);
         }
 
         private void InstallSignals()
@@ -43,6 +45,9 @@ namespace MistRidge
 
             Container.BindSignal<DialogueStateSignal>();
             Container.BindTrigger<DialogueStateSignal.Trigger>();
+
+            Container.BindSignal<TutorialSignal>();
+            Container.BindTrigger<TutorialSignal.Trigger>();
         }
 
         private void InstallSettings()
@@ -60,6 +65,7 @@ namespace MistRidge
             public GameObject dialogueDisplayPrefab;
             public GameObject readySetGoDisplayPrefab;
             public GameObject scoreDisplayPrefab;
+            public GameObject dialogueManagerPrefab;
             public DisplayManager.Settings displayManagerSettings;
             public DialogueManager.Settings dialogueManagerSettings;
         }

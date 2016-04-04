@@ -200,7 +200,6 @@ namespace MistRidge
         public void PlayerGettingUp()
         {
             PlayerAllowJump();
-            playerControlTrigger.Fire(this, true);
             cinematicTrigger.Fire(CinematicTransitionType.SlideOut);
         }
 
