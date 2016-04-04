@@ -90,6 +90,11 @@ namespace MistRidge
             }
         }
 
+        public CharacterType ChosenCharacterType(Input input)
+        {
+            return inputTypeMapping[input];
+        }
+
         private void ResetMappings()
         {
             foreach (Input input in inputManager.Inputs)

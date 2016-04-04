@@ -64,7 +64,7 @@ namespace MistRidge
 
             foreach (Input input in gameStateMachine.GameReadyState.JoinedInputs)
             {
-                PlayerFacade playerFacade = playerManager.SpawnPlayer(input);
+                PlayerFacade playerFacade = playerManager.SpawnPlayer(input, gameStateMachine.GameReadyState.ChosenCharacterType(input));
                 deathManager.AddPlayer(input);
 
                 float randomFactor = Mathf.Pow(UnityEngine.Random.value * 2, 2) / 4;

@@ -11,10 +11,10 @@ namespace MistRidge
         private List<PlayerScoreDisplayView> playerScoreDisplayViews;
 
         [SerializeField]
-        private Text time;
+        private ScoreTimeDisplayView scoreTimeDisplayView;
 
         [SerializeField]
-        private Image back;
+        private ScoreMenuDisplayView scoreMenuDisplayView;
 
         public List<PlayerScoreDisplayView> PlayerScoreDisplays
         {
@@ -24,19 +24,19 @@ namespace MistRidge
             }
         }
 
-        public Text Time
+        public ScoreTimeDisplayView ScoreTimeDisplayView
         {
             get
             {
-                return time;
+                return scoreTimeDisplayView;
             }
         }
 
-        public Image Back
+        public ScoreMenuDisplayView ScoreMenuDisplayView
         {
             get
             {
-                return back;
+                return scoreMenuDisplayView;
             }
         }
     }

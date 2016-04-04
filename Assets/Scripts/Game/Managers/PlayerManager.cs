@@ -66,11 +66,10 @@ namespace MistRidge
             }
         }
 
-        public PlayerFacade SpawnPlayer(Input input)
+        public PlayerFacade SpawnPlayer(Input input, CharacterType characterType)
         {
             if (!playerFacades.ContainsKey(input))
             {
-                CharacterType characterType = GetCharacterType(input);
                 PlayerFacade playerFacade = playerFacadeFactory.Create(characterType, input);
 
                 playerFacade.SetPlayerCircle(settings.playerCircles[input.DeviceNum]);
@@ -81,24 +80,10 @@ namespace MistRidge
                 playerFacades[input] = playerFacade;
                 playerViewMapping[playerFacade.PlayerView] = input;
 
-                /* displayManager.Display(input.DeviceNum, playerFacade.CharacterType); */
-
                 return playerFacade;
             }
 
             return null;
-        }
-
-        public CharacterType GetCharacterType(Input input)
-        {
-            if (input.DeviceNum % 2 == 0)
-            {
-                return CharacterType.Jack;
-            }
-            else
-            {
-                return CharacterType.Jill;
-            }
         }
 
         public void ChangePlayerControl(bool control)

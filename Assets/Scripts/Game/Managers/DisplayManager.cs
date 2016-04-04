@@ -69,7 +69,7 @@ namespace MistRidge
             UpdateReadySetGo(ReadySetGoType.None);
 
             UpdateScoreTime(false, 0);
-            UpdateScoreBack(false);
+            UpdateScoreMenu(false);
         }
 
         public void Display(int deviceNum, CharacterType characterType)
@@ -344,33 +344,31 @@ namespace MistRidge
             if (scorePlacementType == ScorePlacementType.None
                 || characterType == CharacterType.None)
             {
-                PlayerScoreDisplay(deviceNum).SetActive(false);
+                PlayerScoreDisplay(scorePlacementType).SetActive(false);
                 return;
             }
 
-            Image background = PlayerScoreDisplay(deviceNum).Background;
-            Image crown = PlayerScoreDisplay(deviceNum).Crown;
-            Image portrait = PlayerScoreDisplay(deviceNum).Portrait;
-            Image playerTag = PlayerScoreDisplay(deviceNum).PlayerTag;
-            Text aetherText = PlayerScoreDisplay(deviceNum).AetherText;
+            Image portrait = PlayerScoreDisplay(scorePlacementType).Portrait;
+            Image playerTag = PlayerScoreDisplay(scorePlacementType).PlayerTag;
+            Text aetherText = PlayerScoreDisplay(scorePlacementType).AetherText;
 
-            crown.sprite = GetCrown(scorePlacementType);
             portrait.sprite = GetScorePortrait(characterType);
             playerTag.sprite = GetPlayerTag(deviceNum);
             aetherText.text = aetherCount.ToString();
 
-            PlayerScoreDisplay(deviceNum).SetActive(true);
+            PlayerScoreDisplay(scorePlacementType).SetActive(true);
         }
 
         public void UpdateScoreTime(bool show, float seconds)
         {
-            scoreDisplayView.Time.text = "Time: " + seconds + "s";
-            scoreDisplayView.Time.enabled = show;
+            ScoreTimeDisplayView scoreTimeDisplayView = scoreDisplayView.ScoreTimeDisplayView;
+            scoreTimeDisplayView.Time.text = "Time: " + seconds + "s";
+            scoreDisplayView.SetActive(show);
         }
 
-        public void UpdateScoreBack(bool show)
+        public void UpdateScoreMenu(bool show)
         {
-            scoreDisplayView.Back.enabled = show;
+            scoreDisplayView.ScoreMenuDisplayView.SetActive(show);
         }
 
         private PlayerDisplayView PlayerDisplay(int deviceNum)
@@ -383,9 +381,24 @@ namespace MistRidge
             return characterSelectDisplayView.PlayerCharacterDisplays[deviceNum];
         }
 
-        private PlayerScoreDisplayView PlayerScoreDisplay(int deviceNum)
+        private PlayerScoreDisplayView PlayerScoreDisplay(ScorePlacementType scorePlacementType)
         {
-            return scoreDisplayView.PlayerScoreDisplays[deviceNum];
+            switch(scorePlacementType)
+            {
+                case ScorePlacementType.First:
+                    return scoreDisplayView.PlayerScoreDisplays[0];
+
+                case ScorePlacementType.Second:
+                    return scoreDisplayView.PlayerScoreDisplays[1];
+
+                case ScorePlacementType.Third:
+                    return scoreDisplayView.PlayerScoreDisplays[2];
+
+                case ScorePlacementType.Fourth:
+                    return scoreDisplayView.PlayerScoreDisplays[3];
+            }
+
+            return null;
         }
 
         private Portrait GetPortrait(CharacterType characterType)
@@ -430,27 +443,6 @@ namespace MistRidge
             }
 
             Debug.LogError("Failed to find valid character type for score portrait");
-            return new Sprite();
-        }
-
-        private Sprite GetCrown(ScorePlacementType scorePlacementType)
-        {
-            switch (scorePlacementType)
-            {
-                case ScorePlacementType.First:
-                    return settings.crownSprites[0];
-
-                case ScorePlacementType.Second:
-                    return settings.crownSprites[1];
-
-                case ScorePlacementType.Third:
-                    return settings.crownSprites[2];
-
-                case ScorePlacementType.Fourth:
-                    return settings.crownSprites[3];
-            }
-
-            Debug.LogError("Failed to find valid score placement type for crown");
             return new Sprite();
         }
 
