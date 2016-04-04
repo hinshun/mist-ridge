@@ -11,6 +11,7 @@ namespace MistRidge
         private readonly DisplayManager displayManager;
         private readonly DeathManager deathManager;
         private readonly CinematicManager cinematicManager;
+        private readonly ReadySetGoManager readySetGoManager;
         private readonly CameraManager cameraManager;
         private readonly CameraRigManager cameraRigManager;
         private readonly InputManager inputManager;
@@ -24,6 +25,7 @@ namespace MistRidge
                 CameraManager cameraManager,
                 CameraRigManager cameraRigManager,
                 CinematicManager cinematicManager,
+                ReadySetGoManager readySetGoManager,
                 InputManager inputManager,
                 PlayerManager playerManager)
         {
@@ -34,6 +36,7 @@ namespace MistRidge
             this.cameraManager = cameraManager;
             this.cameraRigManager = cameraRigManager;
             this.cinematicManager = cinematicManager;
+            this.readySetGoManager = readySetGoManager;
             this.inputManager = inputManager;
             this.playerManager = playerManager;
         }
@@ -73,6 +76,7 @@ namespace MistRidge
         private void EndTutorial()
         {
             displayManager.UpdateCinematic(false);
+
             deathManager.IsTutorial = false;
             deathManager.IsActive = true;
             cameraManager.ZoomOverrideEnabled = false;
@@ -87,7 +91,6 @@ namespace MistRidge
                 }
 
                 PlayerFacade playerFacade = playerManager.PlayerFacade(input);
-
                 displayManager.Display(input.DeviceNum, playerFacade.CharacterType);
             }
         }

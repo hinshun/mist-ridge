@@ -22,14 +22,17 @@ namespace MistRidge
         private Hashtable slideOutHashtable;
 
         private PlayerManager playerManager;
+        private DisplayManager displayManager;
         private CinematicSignal cinematicSignal;
 
         [PostInject]
         public void Init(
                 PlayerManager playerManager,
+                DisplayManager displayManager,
                 CinematicSignal cinematicSignal)
         {
             this.playerManager = playerManager;
+            this.displayManager = displayManager;
             this.cinematicSignal = cinematicSignal;
             this.cinematicSignal.Event += OnCinematicRequest;
         }
@@ -47,10 +50,13 @@ namespace MistRidge
                 slideValue - 25,
                 bottomBar.anchoredPosition3D.z
             );
+
+            displayManager.UpdateLayout(slideValue * 2.5f);
         }
 
         public override void SetActive(bool isActive)
         {
+            /* if (tweening || (isActive && gameObject.activeSelf) || (!isActive && !gameObject.activeSelf)) */
             if (tweening)
             {
                 return;

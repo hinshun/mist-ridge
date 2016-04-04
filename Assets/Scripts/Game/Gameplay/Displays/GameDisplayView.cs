@@ -10,6 +10,9 @@ namespace MistRidge
         private SprintDisplayView sprintDisplay;
 
         [SerializeField]
+        private RectTransform layoutTransform;
+
+        [SerializeField]
         private List<PlayerDisplayView> playerDisplays;
 
         public SprintDisplayView SprintDisplay
@@ -17,6 +20,14 @@ namespace MistRidge
             get
             {
                 return sprintDisplay;
+            }
+        }
+
+        public RectTransform LayoutTransform
+        {
+            get
+            {
+                return layoutTransform;
             }
         }
 

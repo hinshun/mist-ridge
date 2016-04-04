@@ -28,6 +28,12 @@ namespace MistRidge
             Container.Bind<DialogueManager>().ToSingle();
             Container.BindAllInterfacesToSingle<DialogueManager>();
 
+            Container.Bind<ReadySetGoManager>().ToSingle();
+            Container.BindAllInterfacesToSingle<ReadySetGoManager>();
+
+            Container.Bind<ScoreManager>().ToSingle();
+            Container.BindAllInterfacesToSingle<ScoreManager>();
+
             Container.Bind<GameDisplayView>().ToSinglePrefab(settings.gameDisplayPrefab);
             Container.Bind<CharacterSelectDisplayView>().ToSinglePrefab(settings.characterSelectDisplayPrefab);
             Container.Bind<CinematicDisplayView>().ToSinglePrefab(settings.cinematicDisplayPrefab);
@@ -36,6 +42,7 @@ namespace MistRidge
             Container.Bind<ScoreDisplayView>().ToSinglePrefab(settings.scoreDisplayPrefab);
 
             Container.Bind<DialogueManagerView>().ToSinglePrefab(settings.dialogueManagerPrefab);
+            Container.Bind<ReadySetGoManagerView>().ToSinglePrefab(settings.readySetGoManagerPrefab);
         }
 
         private void InstallSignals()
@@ -54,6 +61,7 @@ namespace MistRidge
         {
             Container.Bind<DisplayManager.Settings>().ToSingleInstance(settings.displayManagerSettings);
             Container.Bind<DialogueManager.Settings>().ToSingleInstance(settings.dialogueManagerSettings);
+            Container.Bind<ReadySetGoManager.Settings>().ToSingleInstance(settings.readySetGoManagerSettings);
         }
 
         [Serializable]
@@ -66,8 +74,10 @@ namespace MistRidge
             public GameObject readySetGoDisplayPrefab;
             public GameObject scoreDisplayPrefab;
             public GameObject dialogueManagerPrefab;
+            public GameObject readySetGoManagerPrefab;
             public DisplayManager.Settings displayManagerSettings;
             public DialogueManager.Settings dialogueManagerSettings;
+            public ReadySetGoManager.Settings readySetGoManagerSettings;
         }
     }
 }

@@ -60,8 +60,6 @@ namespace MistRidge
                 UpdateCharacterJoin(i, false);
                 UpdateCharacterSelect(i, false);
                 UpdateCharacterPlayerTag(i, false);
-
-                UpdateScorePlayer(i, 0, ScorePlacementType.None, CharacterType.None);
             }
 
             UpdateDialogue(false);
@@ -70,6 +68,10 @@ namespace MistRidge
 
             UpdateScoreTime(false, 0);
             UpdateScoreMenu(false);
+            UpdateScorePlayer(0, 0, ScorePlacementType.First, CharacterType.None);
+            UpdateScorePlayer(0, 0, ScorePlacementType.Second, CharacterType.None);
+            UpdateScorePlayer(0, 0, ScorePlacementType.Third, CharacterType.None);
+            UpdateScorePlayer(0, 0, ScorePlacementType.Fourth, CharacterType.None);
         }
 
         public void Display(int deviceNum, CharacterType characterType)
@@ -88,6 +90,16 @@ namespace MistRidge
         {
             gameDisplayCanvas.worldCamera = camera;
             gameDisplayCanvas.planeDistance = 1f;
+        }
+
+        public void UpdateLayout(float y)
+        {
+            RectTransform layoutTransform = gameDisplayView.LayoutTransform;
+            layoutTransform.anchoredPosition3D = new Vector3(
+                layoutTransform.anchoredPosition3D.x,
+                y,
+                layoutTransform.anchoredPosition3D.z
+            );
         }
 
         public void UpdateSprint(bool show)
@@ -341,8 +353,7 @@ namespace MistRidge
 
         public void UpdateScorePlayer(int deviceNum, int aetherCount, ScorePlacementType scorePlacementType, CharacterType characterType)
         {
-            if (scorePlacementType == ScorePlacementType.None
-                || characterType == CharacterType.None)
+            if (characterType == CharacterType.None)
             {
                 PlayerScoreDisplay(scorePlacementType).SetActive(false);
                 return;
