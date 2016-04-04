@@ -7,11 +7,16 @@ ModelImporter:
   fileIDToRecycleName:
     100000: pCube1
     100002: //RootNode
+    100004: ruinPillar_02:pCube2
     400000: pCube1
     400002: //RootNode
+    400004: ruinPillar_02:pCube2
     2300000: pCube1
+    2300002: ruinPillar_02:pCube2
     3300000: pCube1
+    3300002: ruinPillar_02:pCube2
     4300000: pCube1
+    4300002: ruinPillar_02:pCube2
   materials:
     importMaterials: 1
     materialName: 0

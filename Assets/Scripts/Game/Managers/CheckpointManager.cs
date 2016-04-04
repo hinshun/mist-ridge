@@ -64,7 +64,7 @@ namespace MistRidge
             checkpoint.Open();
             if (checkpoint.NextCheckpoint != null)
             {
-                mistManager.UpdateMistPosition(checkpoint.NextCheckpoint.CheckpointView.Position.y);
+                mistManager.UpdateMistPosition(checkpoint.CheckpointView.Position.y);
             }
             sprintManager.SetSprintNum(checkpoint.CheckpointNum + 1);
             sprintManager.UpdateSprintText();
