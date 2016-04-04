@@ -15,6 +15,8 @@ namespace MistRidge
         {
             InitExecutionOrder();
             InstallLevel();
+            InstallSignals();
+            InstallTutorial();
             InstallChunks();
             InstallCheckpoints();
             InstallSprints();
@@ -38,6 +40,18 @@ namespace MistRidge
         {
             Container.Bind<LevelManager>().ToSingle();
             Container.BindAllInterfacesToSingle<LevelManager>();
+        }
+
+        private void InstallSignals()
+        {
+            Container.BindSignal<TutorialSignal>();
+            Container.BindTrigger<TutorialSignal.Trigger>();
+        }
+
+        private void InstallTutorial()
+        {
+            Container.Bind<TutorialManager>().ToSingle();
+            Container.BindAllInterfacesToSingle<TutorialManager>();
         }
 
         private void InstallChunks()
@@ -106,6 +120,8 @@ namespace MistRidge
             Container.Bind<ChunkManager.Settings>().ToSingleInstance(settings.chunk.chunkManagerSettings);
 
             Container.Bind<SpiralChunkPlacingStrategy.Settings>().ToSingleInstance(settings.spiralChunkPlacingStrategySettings);
+            Container.Bind<LevelManager.Settings>().ToSingleInstance(settings.levelManagerSettings);
+            Container.Bind<TutorialManager.Settings>().ToSingleInstance(settings.tutorialManagerSettings);
         }
 
         [Serializable]
@@ -113,6 +129,8 @@ namespace MistRidge
         {
             public ChunkSettings chunk;
             public SpiralChunkPlacingStrategy.Settings spiralChunkPlacingStrategySettings;
+            public LevelManager.Settings levelManagerSettings;
+            public TutorialManager.Settings tutorialManagerSettings;
 
             [Serializable]
             public class ChunkSettings

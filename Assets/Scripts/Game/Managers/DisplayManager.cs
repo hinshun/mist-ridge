@@ -11,6 +11,10 @@ namespace MistRidge
         private readonly Settings settings;
         private readonly GameDisplayView gameDisplayView;
         private readonly CharacterSelectDisplayView characterSelectDisplayView;
+        private readonly CinematicDisplayView cinematicDisplayView;
+        private readonly DialogueDisplayView dialogueDisplayView;
+        private readonly ReadySetGoDisplayView readySetGoDisplayView;
+        private readonly ScoreDisplayView scoreDisplayView;
 
         private Canvas gameDisplayCanvas;
         private CanvasScaler gameDisplayScaler;
@@ -18,11 +22,19 @@ namespace MistRidge
         public DisplayManager(
                 Settings settings,
                 GameDisplayView gameDisplayView,
-                CharacterSelectDisplayView characterSelectDisplayView)
+                CharacterSelectDisplayView characterSelectDisplayView,
+                CinematicDisplayView cinematicDisplayView,
+                DialogueDisplayView dialogueDisplayView,
+                ReadySetGoDisplayView readySetGoDisplayView,
+                ScoreDisplayView scoreDisplayView)
         {
             this.settings = settings;
             this.gameDisplayView = gameDisplayView;
             this.characterSelectDisplayView = characterSelectDisplayView;
+            this.cinematicDisplayView = cinematicDisplayView;
+            this.dialogueDisplayView = dialogueDisplayView;
+            this.readySetGoDisplayView = readySetGoDisplayView ;
+            this.scoreDisplayView = scoreDisplayView;
         }
 
         public void Initialize()
@@ -38,17 +50,26 @@ namespace MistRidge
                 playerDisplay.Pointer.enabled = false;
             }
 
-            DisplayCharacterSelect(false);
-            DisplayCharacterStart(false);
+            UpdateCharacterSelect(false);
+            UpdateCharacterStart(false);
 
             for (int i = 0; i < 4; ++i)
             {
-                DisplayCharacter(i, CharacterType.None);
-                DisplayCharacterArrows(i, false);
-                DisplayCharacterJoin(i, false);
-                DisplayCharacterSelect(i, false);
-                DisplayCharacterPlayerTag(i, false);
+                UpdateCharacter(i, CharacterType.None);
+                UpdateCharacterArrows(i, false);
+                UpdateCharacterJoin(i, false);
+                UpdateCharacterSelect(i, false);
+                UpdateCharacterPlayerTag(i, false);
+
+                UpdateScorePlayer(i, 0, ScorePlacementType.None, CharacterType.None);
             }
+
+            UpdateDialogue(false);
+
+            UpdateReadySetGo(ReadySetGoType.None);
+
+            UpdateScoreTime(false, 0);
+            UpdateScoreBack(false);
         }
 
         public void Display(int deviceNum, CharacterType characterType)
@@ -214,12 +235,12 @@ namespace MistRidge
             }
         }
 
-        public void DisplayCharacterSelect(bool show)
+        public void UpdateCharacterSelect(bool show)
         {
             characterSelectDisplayView.SetActive(show);
         }
 
-        public void DisplayCharacter(int deviceNum, CharacterType characterType)
+        public void UpdateCharacter(int deviceNum, CharacterType characterType)
         {
             Image portrait = PlayerCharacterDisplay(deviceNum).Portrait;
             Image nameTag = PlayerCharacterDisplay(deviceNum).NameTag;
@@ -238,7 +259,7 @@ namespace MistRidge
             nameTag.sprite = characterPortrait.nameTag;
         }
 
-        public void DisplayCharacterArrows(int deviceNum, bool show)
+        public void UpdateCharacterArrows(int deviceNum, bool show)
         {
             Image arrowLeft = PlayerCharacterDisplay(deviceNum).ArrowLeft;
             Image arrowRight = PlayerCharacterDisplay(deviceNum).ArrowRight;
@@ -247,28 +268,109 @@ namespace MistRidge
             arrowRight.enabled = show;
         }
 
-        public void DisplayCharacterJoin(int deviceNum, bool show)
+        public void UpdateCharacterJoin(int deviceNum, bool show)
         {
             Image join = PlayerCharacterDisplay(deviceNum).Join;
             join.enabled = show;
         }
 
-        public void DisplayCharacterSelect(int deviceNum, bool show)
+        public void UpdateCharacterSelect(int deviceNum, bool show)
         {
             Image select = PlayerCharacterDisplay(deviceNum).Select;
             select.enabled = show;
         }
 
-        public void DisplayCharacterPlayerTag(int deviceNum, bool show)
+        public void UpdateCharacterPlayerTag(int deviceNum, bool show)
         {
             Image playerTag = PlayerCharacterDisplay(deviceNum).PlayerTag;
             playerTag.enabled = show;
         }
 
-        public void DisplayCharacterStart(bool show)
+        public void UpdateCharacterStart(bool show)
         {
             Image start = characterSelectDisplayView.Start;
             start.enabled = show;
+        }
+
+        public void UpdateCinematic(bool show)
+        {
+            cinematicDisplayView.SetActive(show);
+        }
+
+        public void UpdateDialogue(bool show)
+        {
+            dialogueDisplayView.SetActive(show);
+        }
+
+        public void UpdateDialogueText(string text)
+        {
+            dialogueDisplayView.Dialogue.text = text;
+        }
+
+        public void UpdateDialogueNext(bool show)
+        {
+            dialogueDisplayView.Next.enabled = show;
+        }
+
+        public void UpdateReadySetGo(ReadySetGoType readySetGoType)
+        {
+            readySetGoDisplayView.Ready.enabled = false;
+            readySetGoDisplayView.Set.enabled = false;
+            readySetGoDisplayView.Go.enabled = false;
+
+            switch(readySetGoType)
+            {
+                case ReadySetGoType.Ready:
+                    readySetGoDisplayView.Ready.enabled = false;
+                    break;
+
+                case ReadySetGoType.Set:
+                    readySetGoDisplayView.Ready.enabled = false;
+                    readySetGoDisplayView.Set.enabled = false;
+                    readySetGoDisplayView.Go.enabled = false;
+                    break;
+
+                case ReadySetGoType.Go:
+                    readySetGoDisplayView.Ready.enabled = false;
+                    readySetGoDisplayView.Set.enabled = false;
+                    readySetGoDisplayView.Go.enabled = false;
+
+                    break;
+            }
+        }
+
+        public void UpdateScorePlayer(int deviceNum, int aetherCount, ScorePlacementType scorePlacementType, CharacterType characterType)
+        {
+            if (scorePlacementType == ScorePlacementType.None
+                || characterType == CharacterType.None)
+            {
+                PlayerScoreDisplay(deviceNum).SetActive(false);
+                return;
+            }
+
+            Image background = PlayerScoreDisplay(deviceNum).Background;
+            Image crown = PlayerScoreDisplay(deviceNum).Crown;
+            Image portrait = PlayerScoreDisplay(deviceNum).Portrait;
+            Image playerTag = PlayerScoreDisplay(deviceNum).PlayerTag;
+            Text aetherText = PlayerScoreDisplay(deviceNum).AetherText;
+
+            crown.sprite = GetCrown(scorePlacementType);
+            portrait.sprite = GetScorePortrait(characterType);
+            playerTag.sprite = GetPlayerTag(deviceNum);
+            aetherText.text = aetherCount.ToString();
+
+            PlayerScoreDisplay(deviceNum).SetActive(true);
+        }
+
+        public void UpdateScoreTime(bool show, float seconds)
+        {
+            scoreDisplayView.Time.text = "Time: " + seconds + "s";
+            scoreDisplayView.Time.enabled = show;
+        }
+
+        public void UpdateScoreBack(bool show)
+        {
+            scoreDisplayView.Back.enabled = show;
         }
 
         private PlayerDisplayView PlayerDisplay(int deviceNum)
@@ -279,6 +381,11 @@ namespace MistRidge
         private PlayerCharacterDisplayView PlayerCharacterDisplay(int deviceNum)
         {
             return characterSelectDisplayView.PlayerCharacterDisplays[deviceNum];
+        }
+
+        private PlayerScoreDisplayView PlayerScoreDisplay(int deviceNum)
+        {
+            return scoreDisplayView.PlayerScoreDisplays[deviceNum];
         }
 
         private Portrait GetPortrait(CharacterType characterType)
@@ -311,15 +418,61 @@ namespace MistRidge
             return new CharacterPortrait();
         }
 
+        private Sprite GetScorePortrait(CharacterType characterType)
+        {
+            switch (characterType)
+            {
+                case CharacterType.Jack:
+                    return settings.jackScore;
+
+                case CharacterType.Jill:
+                    return settings.jillScore;
+            }
+
+            Debug.LogError("Failed to find valid character type for score portrait");
+            return new Sprite();
+        }
+
+        private Sprite GetCrown(ScorePlacementType scorePlacementType)
+        {
+            switch (scorePlacementType)
+            {
+                case ScorePlacementType.First:
+                    return settings.crownSprites[0];
+
+                case ScorePlacementType.Second:
+                    return settings.crownSprites[1];
+
+                case ScorePlacementType.Third:
+                    return settings.crownSprites[2];
+
+                case ScorePlacementType.Fourth:
+                    return settings.crownSprites[3];
+            }
+
+            Debug.LogError("Failed to find valid score placement type for crown");
+            return new Sprite();
+        }
+
+        private Sprite GetPlayerTag(int deviceNum)
+        {
+            return settings.playerTagSprites[deviceNum];
+        }
+
         [Serializable]
         public class Settings
         {
             public Portrait jack;
             public CharacterPortrait jackCharacter;
+            public Sprite jackScore;
+
             public Portrait jill;
             public CharacterPortrait jillCharacter;
+            public Sprite jillScore;
 
             public List<Sprite> rankSprites;
+            public List<Sprite> crownSprites;
+            public List<Sprite> playerTagSprites;
 
             public Backdrop deadBackdrop;
             public List<Backdrop> backdrops;

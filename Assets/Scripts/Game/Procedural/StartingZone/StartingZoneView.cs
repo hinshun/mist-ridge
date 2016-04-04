@@ -10,6 +10,9 @@ namespace MistRidge
         [SerializeField]
         private SpawnSpawnView normalSpawn;
 
+        [SerializeField]
+        private TurnipView turnipView;
+
         public SpawnSpawnView InitialSpawn
         {
             get
@@ -23,6 +26,14 @@ namespace MistRidge
             get
             {
                 return normalSpawn;
+            }
+        }
+
+        public TurnipView TurnipView
+        {
+            get
+            {
+                return turnipView;
             }
         }
     }

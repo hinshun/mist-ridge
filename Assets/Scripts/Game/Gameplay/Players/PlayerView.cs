@@ -62,23 +62,28 @@ namespace MistRidge
 
         private bool canJump;
         private bool canPickupItems;
-        private bool canControl;
 
         private Animator animator;
         private ItemPickupSignal.Trigger itemPickupTrigger;
         private ItemEffectSignal.Trigger itemEffectTrigger;
         private CheckpointSignal.Trigger checkpointTrigger;
+        private CinematicSignal.Trigger cinematicTrigger;
+        private PlayerControlSignal.Trigger playerControlTrigger;
         private Dictionary<CheckpointView, bool> checkpointsVisited;
 
         [PostInject]
         public void Init(
                 ItemPickupSignal.Trigger itemPickupTrigger,
                 ItemEffectSignal.Trigger itemEffectTrigger,
-                CheckpointSignal.Trigger checkpointTrigger)
+                CheckpointSignal.Trigger checkpointTrigger,
+                CinematicSignal.Trigger cinematicTrigger,
+                PlayerControlSignal.Trigger playerControlTrigger)
         {
             this.itemPickupTrigger = itemPickupTrigger;
             this.itemEffectTrigger = itemEffectTrigger;
             this.checkpointTrigger = checkpointTrigger;
+            this.cinematicTrigger = cinematicTrigger;
+            this.playerControlTrigger = playerControlTrigger;
         }
 
         public Vector3 Forward
@@ -159,18 +164,6 @@ namespace MistRidge
             }
         }
 
-        public bool CanControl
-        {
-            get
-            {
-                return canControl;
-            }
-            set
-            {
-                canControl = value;
-            }
-        }
-
         public SpriteRenderer PlayerCircle
         {
             get
@@ -202,6 +195,13 @@ namespace MistRidge
         public void PlayerAllowJump()
         {
             canJump = true;
+        }
+
+        public void PlayerGettingUp()
+        {
+            PlayerAllowJump();
+            playerControlTrigger.Fire(this, true);
+            cinematicTrigger.Fire(CinematicTransitionType.SlideOut);
         }
 
         public void PlayerJump()
@@ -261,7 +261,6 @@ namespace MistRidge
 
             canJump = true;
             canPickupItems = true;
-            canControl = true;
 
             IsDustTrailEmitting = false;
         }

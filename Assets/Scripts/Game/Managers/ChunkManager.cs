@@ -8,6 +8,7 @@ namespace MistRidge
     public class ChunkManager : IInitializable
     {
         private readonly Settings settings;
+        private readonly CinematicManager cinematicManager;
         private readonly CheckpointManager checkpointManager;
         private readonly SprintManager sprintManager;
         private readonly SprintFactory sprintFactory;
@@ -20,12 +21,14 @@ namespace MistRidge
 
         public ChunkManager(
                 Settings settings,
+                CinematicManager cinematicManager,
                 CheckpointManager checkpointManager,
                 SprintManager sprintManager,
                 SprintFactory sprintFactory,
                 ChunkFacadeFactory chunkFacadeFactory)
         {
             this.settings = settings;
+            this.cinematicManager = cinematicManager;
             this.checkpointManager = checkpointManager;
             this.sprintManager = sprintManager;
             this.sprintFactory = sprintFactory;
@@ -60,11 +63,13 @@ namespace MistRidge
         {
             chunkCount = CountChunks() + settings.peakChunkCount;
             startingChunkFacade = SpawnStartingChunkFacade();
+            cinematicManager.StartingZoneView = startingChunkFacade.ChunkView.GetComponentInChildren<StartingZoneView>();
+
             sprints = SpawnSprints();
             peakChunkFacades = SpawnPeakChunkFacades();
 
             sprintManager.SetSprintCount(sprints.Count);
-            sprintManager.UpdateSprintText();
+            /* sprintManager.UpdateSprintText(); */
         }
 
         private int CountChunks()

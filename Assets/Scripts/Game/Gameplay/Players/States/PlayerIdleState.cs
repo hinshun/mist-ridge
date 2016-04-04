@@ -21,7 +21,7 @@ namespace MistRidge
         {
             SetHorizontal();
 
-            if (playerView.CanJump && input.Mapping.Jump.WasPressed) {
+            if (stateMachine.Enabled && playerView.CanJump && input.Mapping.Jump.WasPressed) {
                 stateMachine.ChangeState(PlayerStateType.Jump);
                 return;
             }
@@ -31,7 +31,7 @@ namespace MistRidge
                 return;
             }
 
-            if (input.Mapping.Direction.Vector.magnitude > player.CurrentWalkThreshold)
+            if (stateMachine.Enabled && input.Mapping.Direction.Vector.magnitude > player.CurrentWalkThreshold)
             {
                 if (Mathf.Abs(playerView.Animator.GetFloat("Horizontal")) < 0.3f)
                 {

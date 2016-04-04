@@ -29,8 +29,8 @@ namespace MistRidge
 
         public override void EnterState()
         {
-            displayManager.DisplayCharacterSelect(false);
-
+            displayManager.UpdateCharacterSelect(false);
+            displayManager.UpdateCinematic(true);
         }
 
         public override void ExitState()

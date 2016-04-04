@@ -60,7 +60,7 @@ namespace MistRidge
         {
             tweening = false;
             cameraView.IsActive = false;
-            displayManager.DisplayCharacterSelect(false);
+            displayManager.UpdateCharacterSelect(false);
         }
 
         public override void ExitState()

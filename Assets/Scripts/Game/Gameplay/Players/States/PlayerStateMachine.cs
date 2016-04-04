@@ -63,6 +63,12 @@ namespace MistRidge
         }
 
         protected override void EarlyGlobalUpdate() {
+            if (!Enabled)
+            {
+                return;
+            }
+
+
             if (input.Mapping.Direction.Vector.magnitude == 0) {
                 return;
             }

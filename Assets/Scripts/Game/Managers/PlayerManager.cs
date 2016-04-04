@@ -13,6 +13,7 @@ namespace MistRidge
         private readonly SpawnManager spawnManager;
         private readonly DisplayManager displayManager;
         private readonly PlayerFacadeFactory playerFacadeFactory;
+        private readonly PlayerControlSignal playerControlSignal;
         private Dictionary<Input, PlayerFacade> playerFacades;
         private Dictionary<PlayerView, Input> playerViewMapping;
 
@@ -21,13 +22,15 @@ namespace MistRidge
                 PlayerContainerView playerContainerView,
                 SpawnManager spawnManager,
                 DisplayManager displayManager,
-                PlayerFacadeFactory playerFacadeFactory)
+                PlayerFacadeFactory playerFacadeFactory,
+                PlayerControlSignal playerControlSignal)
         {
             this.settings = settings;
             this.playerContainerView = playerContainerView;
             this.spawnManager = spawnManager;
             this.displayManager = displayManager;
             this.playerFacadeFactory = playerFacadeFactory;
+            this.playerControlSignal = playerControlSignal;
         }
 
         public PlayerFacade PlayerFacade(Input input)
@@ -47,6 +50,7 @@ namespace MistRidge
 
         public void Initialize()
         {
+            playerControlSignal.Event += OnPlayerControl;
             playerFacades = new Dictionary<Input, PlayerFacade>();
             playerViewMapping = new Dictionary<PlayerView, Input>();
         }
@@ -77,7 +81,7 @@ namespace MistRidge
                 playerFacades[input] = playerFacade;
                 playerViewMapping[playerFacade.PlayerView] = input;
 
-                displayManager.Display(input.DeviceNum, playerFacade.CharacterType);
+                /* displayManager.Display(input.DeviceNum, playerFacade.CharacterType); */
 
                 return playerFacade;
             }
@@ -95,6 +99,27 @@ namespace MistRidge
             {
                 return CharacterType.Jill;
             }
+        }
+
+        public void ChangePlayerControl(bool control)
+        {
+            foreach (PlayerFacade playerFacade in playerFacades.Values)
+            {
+                playerFacade.Control = control;
+            }
+        }
+
+        private void OnPlayerControl(PlayerView playerView, bool control)
+        {
+            Input input = Input(playerView);
+
+            if (!HasPlayerFacade(input))
+            {
+                return;
+            }
+
+            PlayerFacade playerFacade = PlayerFacade(input);
+            playerFacade.Control = control;
         }
 
         [Serializable]

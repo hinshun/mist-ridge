@@ -42,10 +42,6 @@ namespace MistRidge
                 case PlayerStateType.Floating:
                     playerState = container.Instantiate<PlayerFloatingState>();
                     break;
-
-                case PlayerStateType.Uncontrollable:
-                    playerState = container.Instantiate<PlayerUncontrollableState>();
-                    break;
             }
 
             if (playerState == null)

@@ -11,20 +11,20 @@ namespace MistRidge
         private readonly CameraView cameraView;
         private readonly CameraAnchorView cameraAnchorView;
         private readonly CameraOriginView cameraOriginView;
-        private readonly DeathManager deathManager;
+        private readonly CinematicManager cinematicManager;
 
         public CameraAnchorManager(
                 Settings settings,
                 CameraView cameraView,
                 CameraAnchorView cameraAnchorView,
                 CameraOriginView cameraOriginView,
-                DeathManager deathManager)
+                CinematicManager cinematicManager)
         {
             this.settings = settings;
             this.cameraView = cameraView;
             this.cameraAnchorView = cameraAnchorView;
             this.cameraOriginView = cameraOriginView;
-            this.deathManager = deathManager;
+            this.cinematicManager = cinematicManager;
         }
 
         public void Tick()
@@ -58,7 +58,7 @@ namespace MistRidge
 
         private Vector3 AnchorPosition()
         {
-            return CenterPoint(deathManager.AliveRelevantPlayerPositions);
+            return CenterPoint(cinematicManager.Positions);
         }
 
         private Quaternion AnchorRotation(Vector3 anchorPosition)

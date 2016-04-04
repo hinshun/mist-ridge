@@ -36,7 +36,7 @@ namespace MistRidge
                 {
                     stateMachine.MoveDirection = planarMoveDirection;
 
-                    if (input.Mapping.Direction.Vector == Vector2.zero)
+                    if (!stateMachine.Enabled || input.Mapping.Direction.Vector == Vector2.zero)
                     {
                         JumpHalt();
                         stateMachine.ChangeState(PlayerStateType.Halt);
@@ -49,16 +49,19 @@ namespace MistRidge
                 }
             }
 
-            planarMoveDirection = Vector3.MoveTowards(
-                planarMoveDirection,
-                planarMoveDirection + (stateMachine.LookDirection * player.CurrentJumpSpeed * input.Mapping.Direction.Vector.magnitude),
-                player.CurrentJumpAcceleration * playerController.DeltaTime
-            );
+            if (stateMachine.Enabled)
+            {
+                planarMoveDirection = Vector3.MoveTowards(
+                    planarMoveDirection,
+                    planarMoveDirection + (stateMachine.LookDirection * player.CurrentJumpSpeed * input.Mapping.Direction.Vector.magnitude),
+                    player.CurrentJumpAcceleration * playerController.DeltaTime
+                );
 
-            planarMoveDirection = Vector3.ClampMagnitude(
-                planarMoveDirection,
-                player.CurrentJumpSpeedLimit
-            );
+                planarMoveDirection = Vector3.ClampMagnitude(
+                    planarMoveDirection,
+                    player.CurrentJumpSpeedLimit
+                );
+            }
 
             verticalMoveDirection -= playerView.Up * player.CurrentGravity * playerController.DeltaTime;
 

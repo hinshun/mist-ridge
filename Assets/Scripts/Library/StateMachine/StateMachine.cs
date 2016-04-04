@@ -15,10 +15,24 @@ public abstract class StateMachine<TStateMachine, TState, TStateType, TStateFact
     protected TState lastState = null;
     protected readonly TStateFactory stateFactory;
 
+    private bool enabled;
+
     public StateMachine(
             TStateFactory stateFactory)
     {
         this.stateFactory = stateFactory;
+    }
+
+    public bool Enabled
+    {
+        get
+        {
+            return enabled;
+        }
+        set
+        {
+            enabled = value;
+        }
     }
 
     public void ChangeState(TStateType stateType)

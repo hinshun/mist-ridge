@@ -122,7 +122,7 @@ namespace MistRidge
             }
             else
             {
-                Debug.LogError("No ground found below player");
+                Debug.Log("No ground found below player");
             }
         }
 
@@ -318,7 +318,7 @@ namespace MistRidge
                 }
                 else
                 {
-                    Debug.LogError("Failed to flush against ground");
+                    Debug.Log("Failed to flush against ground");
                 }
             }
         }

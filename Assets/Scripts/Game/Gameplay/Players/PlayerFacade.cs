@@ -128,6 +128,18 @@ namespace MistRidge
             }
         }
 
+        public bool Control
+        {
+            get
+            {
+                return playerStateMachine.Enabled;
+            }
+            set
+            {
+                playerStateMachine.Enabled = value;
+            }
+        }
+
         public void ProbeGround()
         {
             playerController.ProbeGround();
@@ -152,12 +164,12 @@ namespace MistRidge
         public void Dance()
         {
             playerView.Animator.SetTrigger("StartDance");
-            playerStateMachine.ChangeState(PlayerStateType.Uncontrollable);
+            Control = false;
         }
 
         public void StopDance()
         {
-            playerView.CanControl = true;
+            Control = true;
             playerView.Animator.SetTrigger("StopDance");
         }
 

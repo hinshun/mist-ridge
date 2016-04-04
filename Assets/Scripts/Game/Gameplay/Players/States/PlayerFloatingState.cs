@@ -32,13 +32,13 @@ namespace MistRidge
             playerController.IsSlopeLimiting = false;
 
             playerView.CanJump = false;
-            playerView.CanControl = false;
+            stateMachine.Enabled = false;
         }
 
         public override void ExitState()
         {
             playerView.CanJump = true;
-            playerView.CanControl = true;
+            stateMachine.Enabled = true;
         }
     }
 }

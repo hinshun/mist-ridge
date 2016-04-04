@@ -23,21 +23,13 @@ namespace MistRidge
                     && playerController.FreefallAcquiringGround())
             {
                 playerView.Animator.SetBool("IsFreefalling", false);
-                playerView.CanControl = false;
+                stateMachine.Enabled = false;
             }
 
             if (playerController.AcquiringGround()) {
-                stateMachine.ChangeState(PlayerStateType.Uncontrollable);
+                stateMachine.Enabled = false;
+                stateMachine.ChangeState(PlayerStateType.Idle);
                 return;
-            }
-
-            if (input.Mapping.Direction.Vector != Vector2.zero)
-            {
-                stateMachine.MoveDirection = Vector3.MoveTowards(
-                    stateMachine.MoveDirection,
-                    stateMachine.LookDirection * player.CurrentFreefallSpeed * input.Mapping.Direction.Vector.magnitude,
-                    player.CurrentFreefallAcceleration * playerController.DeltaTime
-                );
             }
 
             stateMachine.MoveDirection = Vector3.MoveTowards(

@@ -6,6 +6,7 @@ namespace MistRidge
 {
     public class LevelManager : IInitializable
     {
+        private readonly Settings settings;
         private readonly GameStateSignal.Trigger gameStateTrigger;
         private readonly GameStateMachine gameStateMachine;
         private readonly SpawnManager spawnManager;
@@ -21,6 +22,7 @@ namespace MistRidge
         private readonly CameraAnchorManager cameraAnchorManager;
 
         public LevelManager(
+                Settings settings,
                 GameStateSignal.Trigger gameStateTrigger,
                 GameStateMachine gameStateMachine,
                 SpawnManager spawnManager,
@@ -35,6 +37,7 @@ namespace MistRidge
                 CameraManager cameraManager,
                 CameraAnchorManager cameraAnchorManager)
         {
+            this.settings = settings;
             this.gameStateTrigger = gameStateTrigger;
             this.gameStateMachine = gameStateMachine;
             this.spawnManager = spawnManager;
@@ -64,6 +67,9 @@ namespace MistRidge
                 PlayerFacade playerFacade = playerManager.SpawnPlayer(input);
                 deathManager.AddPlayer(input);
 
+                float randomFactor = Mathf.Pow(UnityEngine.Random.value * 2, 2) / 4;
+                playerFacade.Position += Vector3.up * randomFactor * settings.spawnAltitudeRange;
+
                 playerFacade.Freefall();
                 playerFacade.Player.Gravity = 1f;
                 playerFacade.MoveDirection = Vector3.zero;
@@ -83,6 +89,12 @@ namespace MistRidge
             mistManager.UpdateMistPosition(checkpointManager.CurrentCheckpoint.CheckpointView.Position.y);
 
             rankManager.IsActive = true;
+        }
+
+        [Serializable]
+        public class Settings
+        {
+            public float spawnAltitudeRange;
         }
     }
 }

@@ -80,8 +80,8 @@ namespace MistRidge
                     inputTypeMapping[input] = CharacterType.Jill;
                 }
                 inputSelectMapping.Add(input, SelectType.None);
-                displayManager.DisplayCharacterJoin(input.DeviceNum, true);
-                displayManager.DisplayCharacterPlayerTag(input.DeviceNum, true);
+                displayManager.UpdateCharacterJoin(input.DeviceNum, true);
+                displayManager.UpdateCharacterPlayerTag(input.DeviceNum, true);
             }
 
             if (gameManager.LastInput != null)
@@ -138,7 +138,7 @@ namespace MistRidge
         public override void EnterState()
         {
             tweening = false;
-            displayManager.DisplayCharacterSelect(true);
+            displayManager.UpdateCharacterSelect(true);
             cameraView.IsActive = false;
         }
 
@@ -163,24 +163,24 @@ namespace MistRidge
             switch (selectType)
             {
                 case SelectType.None:
-                    displayManager.DisplayCharacter(input.DeviceNum, characterType);
-                    displayManager.DisplayCharacterArrows(input.DeviceNum, true);
-                    displayManager.DisplayCharacterJoin(input.DeviceNum, false);
-                    displayManager.DisplayCharacterSelect(input.DeviceNum, true);
+                    displayManager.UpdateCharacter(input.DeviceNum, characterType);
+                    displayManager.UpdateCharacterArrows(input.DeviceNum, true);
+                    displayManager.UpdateCharacterJoin(input.DeviceNum, false);
+                    displayManager.UpdateCharacterSelect(input.DeviceNum, true);
 
                     inputSelectMapping[input] = SelectType.Join;
                     break;
 
                 case SelectType.Join:
-                    displayManager.DisplayCharacterArrows(input.DeviceNum, false);
-                    displayManager.DisplayCharacterJoin(input.DeviceNum, false);
-                    displayManager.DisplayCharacterSelect(input.DeviceNum, false);
+                    displayManager.UpdateCharacterArrows(input.DeviceNum, false);
+                    displayManager.UpdateCharacterJoin(input.DeviceNum, false);
+                    displayManager.UpdateCharacterSelect(input.DeviceNum, false);
 
                     inputSelectMapping[input] = SelectType.Select;
 
                     if (SelectPlayerCount >= settings.minStartPlayers)
                     {
-                        displayManager.DisplayCharacterStart(true);
+                        displayManager.UpdateCharacterStart(true);
                     }
 
                     break;
@@ -202,24 +202,24 @@ namespace MistRidge
                     break;
 
                 case SelectType.Join:
-                    displayManager.DisplayCharacter(input.DeviceNum, CharacterType.None);
-                    displayManager.DisplayCharacterArrows(input.DeviceNum, false);
-                    displayManager.DisplayCharacterJoin(input.DeviceNum, true);
-                    displayManager.DisplayCharacterSelect(input.DeviceNum, false);
+                    displayManager.UpdateCharacter(input.DeviceNum, CharacterType.None);
+                    displayManager.UpdateCharacterArrows(input.DeviceNum, false);
+                    displayManager.UpdateCharacterJoin(input.DeviceNum, true);
+                    displayManager.UpdateCharacterSelect(input.DeviceNum, false);
 
                     inputSelectMapping[input] = SelectType.None;
                     break;
 
                 case SelectType.Select:
-                    displayManager.DisplayCharacterArrows(input.DeviceNum, true);
-                    displayManager.DisplayCharacterJoin(input.DeviceNum, true);
-                    displayManager.DisplayCharacterSelect(input.DeviceNum, true);
+                    displayManager.UpdateCharacterArrows(input.DeviceNum, true);
+                    displayManager.UpdateCharacterJoin(input.DeviceNum, true);
+                    displayManager.UpdateCharacterSelect(input.DeviceNum, true);
 
                     inputSelectMapping[input] = SelectType.Join;
 
                     if (SelectPlayerCount < settings.minStartPlayers)
                     {
-                        displayManager.DisplayCharacterStart(false);
+                        displayManager.UpdateCharacterStart(false);
                     }
 
                     break;
@@ -238,7 +238,6 @@ namespace MistRidge
                         break;
                     }
 
-                    stateMachine.ChangeState(GameStateType.Play);
                     sceneLoader.Load(settings.levelSceneName);
                     break;
             }
@@ -266,7 +265,7 @@ namespace MistRidge
                     break;
             }
 
-            displayManager.DisplayCharacter(input.DeviceNum, inputTypeMapping[input]);
+            displayManager.UpdateCharacter(input.DeviceNum, inputTypeMapping[input]);
         }
 
         [Serializable]

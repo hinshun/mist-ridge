@@ -11,24 +11,26 @@ namespace MistRidge
         private readonly Camera camera;
         private readonly CameraView cameraView;
         private readonly CameraRigView cameraRigView;
-        private readonly DeathManager deathManager;
+        private readonly CinematicManager cinematicManager;
         private readonly DisplayManager displayManager;
 
         private Camera currentCamera;
+        private bool zoomOverrideEnabled;
+        private float zoomOverride;
 
         public CameraManager(
                 Settings settings,
                 Camera camera,
                 CameraView cameraView,
                 CameraRigView cameraRigView,
-                DeathManager deathManager,
+                CinematicManager cinematicManager,
                 DisplayManager displayManager)
         {
             this.settings = settings;
             this.camera = camera;
             this.cameraView = cameraView;
             this.cameraRigView = cameraRigView;
-            this.deathManager = deathManager;
+            this.cinematicManager = cinematicManager;
             this.displayManager = displayManager;
         }
 
@@ -42,6 +44,30 @@ namespace MistRidge
             {
                 currentCamera = value;
                 displayManager.UpdateCamera(value);
+            }
+        }
+
+        public bool ZoomOverrideEnabled
+        {
+            get
+            {
+                return zoomOverrideEnabled;
+            }
+            set
+            {
+                zoomOverrideEnabled = value;
+            }
+        }
+
+        public float ZoomOverride
+        {
+            get
+            {
+                return zoomOverride;
+            }
+            set
+            {
+                zoomOverride = value;
             }
         }
 
@@ -72,8 +98,13 @@ namespace MistRidge
 
         private Vector3 ZoomPosition()
         {
-            float zoom = CameraZoomForEncapsulation(deathManager.AliveRelevantPlayerPositions);
+            float zoom = CameraZoomForEncapsulation(cinematicManager.Positions);
             float cappedZoom = Mathf.Max(zoom, settings.minZoom);
+
+            if (zoomOverrideEnabled)
+            {
+                cappedZoom = zoomOverride;
+            }
 
             return new Vector3(
                 cameraView.LocalPosition.x,
@@ -82,18 +113,18 @@ namespace MistRidge
             );
         }
 
-        private float CameraZoomForEncapsulation(List<Vector3> playerPositions)
+        private float CameraZoomForEncapsulation(List<Vector3> positions)
         {
-            if (playerPositions.Count == 0)
+            if (positions.Count == 0)
             {
                 return 0f;
             }
 
             float zoom, xMax, yMax;
             zoom = xMax = yMax = 0f;
-            foreach (Vector3 playerPosition in playerPositions)
+            foreach (Vector3 position in positions)
             {
-                Vector3 relativePosition = cameraRigView.transform.InverseTransformPoint(playerPosition);
+                Vector3 relativePosition = cameraRigView.transform.InverseTransformPoint(position);
 
                 float xBound = Mathf.Abs(relativePosition.x);
                 float yBound = Mathf.Abs(relativePosition.y);

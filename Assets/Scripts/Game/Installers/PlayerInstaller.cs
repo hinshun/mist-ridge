@@ -37,6 +37,12 @@ namespace MistRidge
 
             Container.BindSignal<CheckpointActionSignal>();
             Container.BindTrigger<CheckpointActionSignal.Trigger>();
+
+            Container.BindSignal<CinematicSignal>();
+            Container.BindTrigger<CinematicSignal.Trigger>();
+
+            Container.BindSignal<PlayerControlSignal>();
+            Container.BindTrigger<PlayerControlSignal.Trigger>();
         }
 
         private void InstallPlayerFacade(DiContainer subContainer, CharacterType characterType, Input input)
@@ -84,6 +90,9 @@ namespace MistRidge
             Container.Bind<CameraAnchorManager>().ToSingle();
             Container.BindAllInterfacesToSingle<CameraAnchorManager>();
 
+            Container.Bind<CameraRigManager>().ToSingle();
+            Container.BindAllInterfacesToSingle<CameraRigManager>();
+
             Container.Bind<CameraManager>().ToSingle();
             Container.BindAllInterfacesToSingle<CameraManager>();
         }
@@ -125,6 +134,7 @@ namespace MistRidge
             Container.Bind<Grounding.Settings>().ToSingleInstance(settings.player.collision.groundingSettings);
 
             Container.Bind<CameraAnchorManager.Settings>().ToSingleInstance(settings.camera.anchorSettings);
+            Container.Bind<CameraRigManager.Settings>().ToSingleInstance(settings.camera.rigSettings);
             Container.Bind<CameraManager.Settings>().ToSingleInstance(settings.camera.cameraSettings);
         }
 
@@ -161,6 +171,7 @@ namespace MistRidge
             {
                 public GameObject cameraPrefab;
                 public CameraAnchorManager.Settings anchorSettings;
+                public CameraRigManager.Settings rigSettings;
                 public CameraManager.Settings cameraSettings;
             }
         }

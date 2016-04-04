@@ -14,6 +14,7 @@ namespace MistRidge
         private readonly DisplayManager displayManager;
         private readonly CheckpointActionSignal.Trigger checkpointActionTrigger;
 
+        private bool isTutorial;
         private bool isActive;
         private Dictionary<PlayerFacade, float> deathTimers;
         private Dictionary<PlayerFacade, bool> playerDeaths;
@@ -43,6 +44,18 @@ namespace MistRidge
             set
             {
                 isActive = value;
+            }
+        }
+
+        public bool IsTutorial
+        {
+            get
+            {
+                return isTutorial;
+            }
+            set
+            {
+                isTutorial = value;
             }
         }
 
@@ -137,6 +150,7 @@ namespace MistRidge
         public void Initialize()
         {
             isActive = false;
+            isTutorial = true;
             deathTimers = new Dictionary<PlayerFacade, float>();
             playerDeaths = new Dictionary<PlayerFacade, bool>();
         }
@@ -234,7 +248,7 @@ namespace MistRidge
             displayManager.UpdatePointer(input.DeviceNum, Vector2.zero);
             displayManager.UpdateRank(input.DeviceNum, -1);
 
-            if (AlivePlayerCount == 0)
+            if (isTutorial || AlivePlayerCount == 0)
             {
                 checkpointActionTrigger.Fire(CheckpointAction.Respawn);
             }
