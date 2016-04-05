@@ -55,6 +55,14 @@ namespace MistRidge
             this.itemEffectSignal = itemEffectSignal;
         }
 
+        public PlayerView PlayerView
+        {
+            get
+            {
+                return playerView;
+            }
+        }
+
         public bool IsAlive
         {
             get
@@ -461,11 +469,6 @@ namespace MistRidge
             ResetPlayerProperties();
             ResetPlayerMaterials(input.DeviceNum);
             itemEffectSignal.Event += OnItemEffect;
-        }
-
-        public void AddAether(int aetherCount)
-        {
-            aetherManager.AddAether(playerView, aetherCount);
         }
 
         public void AfterImage()

@@ -124,12 +124,7 @@ namespace MistRidge
             checkpointManager.CurrentCheckpoint = this;
 
             RespawnPlayers();
-
-            List<PlayerFacade> alivePlayerFacades = deathManager.AlivePlayerFacades;
-            foreach (PlayerFacade playerFacade in alivePlayerFacades)
-            {
-                playerFacade.StopDance();
-            }
+            playerManager.ChangePlayerControl(true);
 
             chunkFacade.CheckpointWallView.SetActive(false);
         }
@@ -147,12 +142,12 @@ namespace MistRidge
 
         public void OnCheckpointArrival(PlayerView playerView)
         {
-            aetherManager.AddAether(playerView, AetherAward);
+            aetherManager.AddAether(CheckpointView, playerView, AetherAward);
             aetherPosition += 1;
 
             Input input = playerManager.Input(playerView);
             PlayerFacade playerFacade = playerManager.PlayerFacade(input);
-            playerFacade.Dance();
+            playerFacade.Victory();
 
             Finish();
         }

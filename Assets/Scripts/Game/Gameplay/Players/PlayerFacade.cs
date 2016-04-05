@@ -161,16 +161,9 @@ namespace MistRidge
             IsAlive = false;
         }
 
-        public void Dance()
+        public void Victory()
         {
-            playerView.Animator.SetTrigger("StartDance");
-            Control = false;
-        }
-
-        public void StopDance()
-        {
-            Control = true;
-            playerView.Animator.SetTrigger("StopDance");
+            playerView.Animator.SetTrigger("Victory");
         }
 
         public void SetPlayerCircle(Sprite playerCircle)

@@ -48,6 +48,12 @@ namespace MistRidge
 
         private void InstallSignals()
         {
+            Container.BindSignal<ItemGainSignal>();
+            Container.BindTrigger<ItemGainSignal.Trigger>();
+
+            Container.BindSignal<AetherGainSignal>();
+            Container.BindTrigger<AetherGainSignal.Trigger>();
+
             Container.BindSignal<MenuSignal>();
             Container.BindTrigger<MenuSignal.Trigger>();
 

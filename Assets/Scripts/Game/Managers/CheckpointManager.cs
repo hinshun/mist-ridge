@@ -61,7 +61,6 @@ namespace MistRidge
 
         public void FinishCheckpoint(Checkpoint checkpoint)
         {
-            checkpoint.Open();
             if (checkpoint.NextCheckpoint != null)
             {
                 mistManager.UpdateMistPosition(checkpoint.CheckpointView.Position.y);
@@ -73,6 +72,11 @@ namespace MistRidge
             {
                 gameStateTrigger.Fire(GameStateType.End);
             }
+        }
+
+        public void ProceedCheckpoint(Checkpoint checkpoint)
+        {
+            checkpoint.Open();
         }
 
         private void OnCheckpointArrival(CheckpointView checkpointView, PlayerView playerView)

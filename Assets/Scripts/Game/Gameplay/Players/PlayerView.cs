@@ -188,6 +188,7 @@ namespace MistRidge
             if (!checkpointsVisited.ContainsKey(checkpointView))
             {
                 checkpointsVisited[checkpointView] = true;
+                playerControlTrigger.Fire(this, false);
                 checkpointTrigger.Fire(checkpointView, this);
             }
         }

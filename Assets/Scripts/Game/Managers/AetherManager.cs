@@ -9,19 +9,23 @@ namespace MistRidge
     {
         private readonly PlayerManager playerManager;
         private readonly DisplayManager displayManager;
+        private readonly AetherGainSignal aetherGainSignal;
 
         private Dictionary<PlayerView, int> playerAethers;
 
         public AetherManager(
                 PlayerManager playerManager,
-                DisplayManager displayManager)
+                DisplayManager displayManager,
+                AetherGainSignal aetherGainSignal)
         {
             this.playerManager = playerManager;
             this.displayManager = displayManager;
+            this.aetherGainSignal = aetherGainSignal;
         }
 
         public void Initialize()
         {
+            aetherGainSignal.Event += OnAetherGain;
             playerAethers = new Dictionary<PlayerView, int>();
         }
 
@@ -50,15 +54,28 @@ namespace MistRidge
             return playerAethers[playerView];
         }
 
-        public void AddAether(PlayerView playerView, int aetherCount)
+        public void AddAether(CheckpointView checkpointView, PlayerView playerView, int aetherCount)
+        {
+            ParticleTargetRequest particleTargetRequest = new ParticleTargetRequest()
+            {
+                particleSystem = checkpointView.AetherAward,
+                particleCount = aetherCount,
+                targetTransform = playerView.transform,
+                particleTargetType = ParticleTargetType.Aether,
+                playerView = playerView,
+            };
+
+            checkpointView.ParticleTargetView.Target(particleTargetRequest);
+        }
+
+        public void OnAetherGain(PlayerView playerView)
         {
             if (!playerAethers.ContainsKey(playerView))
             {
                 playerAethers.Add(playerView, 0);
             }
 
-            playerAethers[playerView] += aetherCount;
-
+            playerAethers[playerView]++;
             Input input = playerManager.Input(playerView);
             displayManager.UpdateAether(input.DeviceNum, playerAethers[playerView]);
         }

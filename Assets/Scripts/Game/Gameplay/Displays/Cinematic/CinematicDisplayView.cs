@@ -53,6 +53,7 @@ namespace MistRidge
             );
 
             displayManager.UpdateLayout(slideValue * 2.5f);
+            displayManager.UpdateSprintLayout(30 - (slideValue * 2.4f));
         }
 
         public override void SetActive(bool isActive)

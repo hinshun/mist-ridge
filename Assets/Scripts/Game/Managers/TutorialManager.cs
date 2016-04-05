@@ -62,6 +62,15 @@ namespace MistRidge
 
         private void StartTutorial()
         {
+            if (!settings.tutorialEnabled)
+            {
+                deathManager.IsTutorial = false;
+                EnablePlayerDisplays();
+                /* readySetGoManager.Countdown(); */
+
+                return;
+            }
+
             displayManager.UpdateCinematic(true);
             deathManager.IsActive = false;
             cameraManager.ZoomOverride = settings.zoomOverride;
@@ -80,7 +89,13 @@ namespace MistRidge
             cameraManager.ZoomOverrideEnabled = false;
             cameraRigManager.ResetRig();
             cinematicManager.CinematicType = CinematicType.None;
+            EnablePlayerDisplays();
 
+            readySetGoManager.Countdown();
+        }
+
+        private void EnablePlayerDisplays()
+        {
             foreach (Input input in inputManager.Inputs)
             {
                 if (!playerManager.HasPlayerFacade(input))
@@ -91,13 +106,12 @@ namespace MistRidge
                 PlayerFacade playerFacade = playerManager.PlayerFacade(input);
                 displayManager.Display(input.DeviceNum, playerFacade.CharacterType);
             }
-
-            readySetGoManager.Countdown();
         }
 
         [Serializable]
         public class Settings
         {
+            public bool tutorialEnabled;
             public float zoomOverride;
             public Vector3 rigPosition;
         }

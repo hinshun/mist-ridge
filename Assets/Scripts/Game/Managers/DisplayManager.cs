@@ -108,6 +108,17 @@ namespace MistRidge
             sprintDisplay.SetActive(show);
         }
 
+        public void UpdateSprintLayout(float y)
+        {
+            RectTransform layoutTransform = gameDisplayView.SprintDisplay.LayoutTransform;
+
+            layoutTransform.anchoredPosition3D = new Vector3(
+                layoutTransform.anchoredPosition3D.x,
+                y,
+                layoutTransform.anchoredPosition3D.z
+            );
+        }
+
         public void UpdateSprintText(int current, int total)
         {
             Text sprintText = gameDisplayView.SprintDisplay.SprintText;
