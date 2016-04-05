@@ -23,7 +23,7 @@ namespace Zenject
     {
         public static List<TypeValuePair> CreateTypeValueList(IEnumerable<object> args)
         {
-            Assert.That(!args.ContainsItem(null));
+            /* Assert.That(!args.ContainsItem(null)); */
             return args.Select(x => new TypeValuePair(x.GetType(), x)).ToList();
         }
 

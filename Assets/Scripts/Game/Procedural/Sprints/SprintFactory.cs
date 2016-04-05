@@ -40,8 +40,19 @@ namespace MistRidge
         public Sprint Create(SprintRequest sprintRequest)
         {
             List<ChunkFacade> chunkFacades = SpawnChunkFacades(sprintRequest);
-            Checkpoint checkpoint = SpawnCheckpoint(sprintRequest);
-            Sprint sprint = container.Instantiate<Sprint>(chunkFacades, checkpoint);
+
+            Checkpoint checkpoint = null;
+
+            if (!sprintRequest.checkpointOverride)
+            {
+                checkpoint = SpawnCheckpoint(sprintRequest);
+            }
+
+            List<TypeValuePair> args = new List<TypeValuePair>();
+            args.Add(InstantiateUtil.CreateTypePair<List<ChunkFacade>>(chunkFacades));
+            args.Add(InstantiateUtil.CreateTypePair<Checkpoint>(checkpoint));
+            Sprint sprint = container.InstantiateExplicit<Sprint>(args);
+
             sprint.Initialize();
 
             return sprint;
@@ -54,7 +65,9 @@ namespace MistRidge
             int chunkNum = sprintRequest.startChunkNum;
             int endChunkNum = chunkNum - sprintRequest.chunkCount;
 
-            for (; chunkNum > endChunkNum + 1; --chunkNum)
+            int offset = sprintRequest.checkpointOverride ? 0 : 1;
+
+            for (; chunkNum > endChunkNum + offset; --chunkNum)
             {
                 ChunkRequest chunkRequest = new ChunkRequest()
                 {

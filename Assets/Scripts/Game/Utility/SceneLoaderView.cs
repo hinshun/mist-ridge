@@ -28,6 +28,11 @@ namespace MistRidge
             }
         }
 
+        public void OnlyFadeOut()
+        {
+            sceneLoader.OnlyFadeOut();
+        }
+
         private IEnumerator LoadScene(string sceneName)
         {
             AsyncOperation async = SceneManager.LoadSceneAsync(sceneName);

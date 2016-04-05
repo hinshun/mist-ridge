@@ -13,6 +13,7 @@ namespace MistRidge
         private readonly AetherGainSignal aetherGainSignal;
 
         private Dictionary<PlayerView, int> playerAethers;
+        private float gameTimer;
 
         public AetherManager(
                 Settings settings,
@@ -26,29 +27,48 @@ namespace MistRidge
             this.aetherGainSignal = aetherGainSignal;
         }
 
+        public float GameTimer
+        {
+            get
+            {
+                return gameTimer;
+            }
+            set
+            {
+                gameTimer = value;
+            }
+        }
+
         public void Initialize()
         {
             aetherGainSignal.Event += OnAetherGain;
             playerAethers = new Dictionary<PlayerView, int>();
         }
 
-        public PlayerView LeadPlayerView
+        public Dictionary<PlayerView, ScorePlacementType> Placements
         {
             get
             {
-                PlayerView leadPlayerView = null;
-                int maxAethers = 0;
+                List<PlayerView> playerViews = new List<PlayerView>();
+                playerViews.AddRange(playerAethers.Keys);
 
-                foreach (KeyValuePair<PlayerView, int> entry in playerAethers)
+                playerViews.Sort((a, b) => playerAethers[b].CompareTo(playerAethers[a]));
+
+                Dictionary<PlayerView, ScorePlacementType> placements = new Dictionary<PlayerView, ScorePlacementType>();
+
+                ScorePlacementType[] orderedPlacements = new ScorePlacementType[] {
+                    ScorePlacementType.First,
+                    ScorePlacementType.Second,
+                    ScorePlacementType.Third,
+                    ScorePlacementType.Fourth,
+                };
+
+                for (int i = 0; i < playerViews.Count; ++i)
                 {
-                    if (entry.Value > maxAethers)
-                    {
-                        leadPlayerView = entry.Key;
-                        maxAethers = entry.Value;
-                    }
+                    placements.Add(playerViews[i], orderedPlacements[i]);
                 }
 
-                return leadPlayerView;
+                return placements;
             }
         }
 

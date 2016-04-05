@@ -40,6 +40,7 @@ namespace MistRidge
                 .ToList();
 
             List<ChunkFeature> unfittedChunkIndices = GetUnfittedChunkIndices(chunkRequest, chunkFeatures);
+
             foreach (ChunkFeature chunkFeature in unfittedChunkIndices)
             {
                 chunkFeatures.Remove(chunkFeature);
@@ -120,7 +121,7 @@ namespace MistRidge
                     };
 
 
-                    if (chained && nextChunkRequest.chunkNum == chunkRequest.sprintEndChunkNum)
+                    if (chained && nextChunkRequest.chunkNum != 0 && nextChunkRequest.chunkNum == chunkRequest.sprintEndChunkNum)
                     {
                         unfittedChunkIndices.Add(chunkFeature);
                         break;

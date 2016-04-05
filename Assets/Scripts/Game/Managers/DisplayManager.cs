@@ -76,6 +76,12 @@ namespace MistRidge
 
         public void Display(int deviceNum, CharacterType characterType)
         {
+            if (characterType == CharacterType.None)
+            {
+                PlayerDisplay(deviceNum).SetActive(false);
+                return;
+            }
+
             UpdateBackdrop(deviceNum, BackdropHealth.Alive);
             UpdateNameTag(deviceNum, characterType);
             UpdatePortraitImage(deviceNum, characterType, PortraitEmotion.Neutral);
@@ -354,10 +360,13 @@ namespace MistRidge
             PlayerScoreDisplay(scorePlacementType).SetActive(true);
         }
 
-        public void UpdateScoreTime(bool show, float seconds)
+        public void UpdateScoreTime(bool show, int seconds)
         {
             ScoreTimeDisplayView scoreTimeDisplayView = scoreDisplayView.ScoreTimeDisplayView;
-            scoreTimeDisplayView.Time.text = "Time: " + seconds + "s";
+
+            int minutes = seconds / 60;
+            scoreTimeDisplayView.Time.text = minutes + "m " + (seconds % 60) + "s";
+
             scoreDisplayView.SetActive(show);
         }
 

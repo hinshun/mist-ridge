@@ -7,6 +7,7 @@ namespace MistRidge
 {
     public class ChunkManager : IInitializable
     {
+        private readonly DiContainer container;
         private readonly Settings settings;
         private readonly CinematicManager cinematicManager;
         private readonly CheckpointManager checkpointManager;
@@ -15,11 +16,18 @@ namespace MistRidge
         private readonly ChunkFacadeFactory chunkFacadeFactory;
 
         private int chunkCount;
+
         private List<Sprint> sprints;
         private ChunkFacade startingChunkFacade;
-        private List<ChunkFacade> peakChunkFacades;
+        private ChunkFacade peakChunkFacade;
+        private PeakZoneView peakZoneView;
+        private Checkpoint peakCheckpoint;
+
+        private Sprint lastSprint;
+        private Sprint secondLastSprint;
 
         public ChunkManager(
+                DiContainer container,
                 Settings settings,
                 CinematicManager cinematicManager,
                 CheckpointManager checkpointManager,
@@ -27,6 +35,7 @@ namespace MistRidge
                 SprintFactory sprintFactory,
                 ChunkFacadeFactory chunkFacadeFactory)
         {
+            this.container = container;
             this.settings = settings;
             this.cinematicManager = cinematicManager;
             this.checkpointManager = checkpointManager;
@@ -59,6 +68,14 @@ namespace MistRidge
             }
         }
 
+        public ChunkFacade PeakChunkFacade
+        {
+            get
+            {
+                return peakChunkFacade;
+            }
+        }
+
         public void Initialize()
         {
             chunkCount = CountChunks() + settings.peakChunkCount;
@@ -66,10 +83,17 @@ namespace MistRidge
             cinematicManager.StartingZoneView = startingChunkFacade.ChunkView.GetComponentInChildren<StartingZoneView>();
 
             sprints = SpawnSprints();
-            peakChunkFacades = SpawnPeakChunkFacades();
-
             sprintManager.SetSprintCount(sprints.Count);
-            /* sprintManager.UpdateSprintText(); */
+
+            peakChunkFacade = SpawnPeakChunkFacades();
+            peakZoneView = peakChunkFacade.ChunkView.GetComponentInChildren<PeakZoneView>();
+
+            cinematicManager.PeakZoneView = peakZoneView;
+            peakCheckpoint = SpawnPeakCheckpoint();
+            checkpointManager.LastCheckpoint = peakCheckpoint;
+
+            lastSprint.Checkpoint = peakCheckpoint;
+            secondLastSprint.Checkpoint.NextCheckpoint = lastSprint.Checkpoint;
         }
 
         private int CountChunks()
@@ -87,18 +111,24 @@ namespace MistRidge
         private List<Sprint> SpawnSprints()
         {
             List<Sprint> sprints = new List<Sprint>();
-            Sprint lastSprint = null;
+            lastSprint = null;
 
             int currentChunkNum = chunkCount - 1;
 
-            foreach(SprintRequest sprintRequest in settings.sprintRequests)
+            foreach (SprintRequest sprintRequest in settings.sprintRequests)
             {
                 SprintRequest currentSprintRequest = new SprintRequest()
                 {
                     chunkCount = sprintRequest.chunkCount,
                     startChunkNum = currentChunkNum,
                     totalChunkCount = chunkCount,
+                    checkpointOverride = false
                 };
+
+                if (sprints.Count == settings.sprintRequests.Count - 1)
+                {
+                    currentSprintRequest.checkpointOverride = true;
+                }
 
                 currentChunkNum -= sprintRequest.chunkCount;
 
@@ -111,6 +141,11 @@ namespace MistRidge
                 else
                 {
                     lastSprint.Checkpoint.NextCheckpoint = sprint.Checkpoint;
+                }
+
+                if (sprints.Count == settings.sprintRequests.Count - 1)
+                {
+                    secondLastSprint = lastSprint;
                 }
                 lastSprint = sprint;
 
@@ -136,9 +171,9 @@ namespace MistRidge
             return chunkFacade;
         }
 
-        private List<ChunkFacade> SpawnPeakChunkFacades()
+        private ChunkFacade SpawnPeakChunkFacades()
         {
-            List<ChunkFacade> peakChunkFacades = new List<ChunkFacade>();
+            ChunkFacade peakChunkFacade = null;
 
             for (int chunkNum = settings.peakChunkCount - 1; chunkNum >= 0; --chunkNum)
             {
@@ -153,10 +188,27 @@ namespace MistRidge
                 ChunkFacade chunkFacade = chunkFacadeFactory.Create(chunkRequest);
                 chunkFacade.Name = "Peak";
 
-                peakChunkFacades.Add(chunkFacade);
+                if (chunkNum == 0)
+                {
+                    peakChunkFacade = chunkFacade;
+                }
             }
 
-            return peakChunkFacades;
+            return peakChunkFacade;
+        }
+
+        private Checkpoint SpawnPeakCheckpoint()
+        {
+            int checkpointNum = settings.sprintRequests.Count - 1;
+            Checkpoint checkpoint = container.Instantiate<Checkpoint>(checkpointNum, peakChunkFacade);
+            checkpoint.Initialize();
+
+            checkpoint.CheckpointView.Position = peakZoneView.PeakCheckpointTransform.position;
+            checkpoint.CheckpointView.Parent = peakZoneView.PeakCheckpointTransform;
+
+            checkpointManager.AddCheckpoint(checkpoint);
+
+            return checkpoint;
         }
 
         [Serializable]

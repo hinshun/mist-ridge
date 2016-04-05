@@ -14,6 +14,7 @@ namespace MistRidge
         private readonly CheckpointActionSignal checkpointActionSignal;
         private readonly GameStateSignal.Trigger gameStateTrigger;
 
+        private bool finishedLastCheckpoint;
         private Checkpoint lastCheckpoint;
         private Checkpoint currentCheckpoint;
         private Dictionary<CheckpointView, Checkpoint> checkpointMapping;
@@ -46,8 +47,29 @@ namespace MistRidge
             }
         }
 
+        public Checkpoint LastCheckpoint
+        {
+            get
+            {
+                return lastCheckpoint;
+            }
+            set
+            {
+                lastCheckpoint = value;
+            }
+        }
+
+        public bool FinishedLastCheckpoint
+        {
+            get
+            {
+                return finishedLastCheckpoint;
+            }
+        }
+
         public void Initialize()
         {
+            finishedLastCheckpoint = false;
             checkpointMapping = new Dictionary<CheckpointView, Checkpoint>();
             checkpointSignal.Event += OnCheckpointArrival;
             checkpointActionSignal.Event += OnCheckpointAction;
@@ -55,17 +77,24 @@ namespace MistRidge
 
         public void Tick()
         {
-            currentCheckpoint.Tick();
+            if (currentCheckpoint != null)
+            {
+                currentCheckpoint.Tick();
+            }
         }
 
         public void AddCheckpoint(Checkpoint checkpoint)
         {
-            lastCheckpoint = checkpoint;
             checkpointMapping.Add(checkpoint.CheckpointView, checkpoint);
         }
 
         public void FinishCheckpoint(Checkpoint checkpoint)
         {
+            if (finishedLastCheckpoint)
+            {
+                return;
+            }
+
             currentCheckpoint = checkpoint;
             mistManager.UpdateMistPosition(currentCheckpoint.CheckpointView.Position.y);
 
@@ -77,14 +106,13 @@ namespace MistRidge
 
             if (checkpoint == lastCheckpoint)
             {
-                checkpoint.WaitingForRespawn = false;
-                gameStateTrigger.Fire(GameStateType.End);
+                finishedLastCheckpoint = true;
             }
         }
 
-        public void ProceedCheckpoint(Checkpoint checkpoint)
+        public void FinishGame()
         {
-            checkpoint.Open();
+            gameStateTrigger.Fire(GameStateType.End);
         }
 
         private void OnCheckpointArrival(CheckpointView checkpointView, PlayerView playerView)

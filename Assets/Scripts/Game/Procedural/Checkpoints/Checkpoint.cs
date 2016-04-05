@@ -145,9 +145,17 @@ namespace MistRidge
                 return;
             }
 
+
             if (deathManager.DeadPlayerCount == 0)
             {
                 waitingForRespawn = false;
+
+                if (checkpointManager.FinishedLastCheckpoint)
+                {
+                    checkpointManager.FinishGame();
+                    return;
+                }
+
                 Open();
             }
         }
@@ -160,6 +168,11 @@ namespace MistRidge
 
         public void RespawnPlayers()
         {
+            if (waitingForRespawn)
+            {
+                return;
+            }
+
             foreach (Input input in inputManager.Inputs)
             {
                 if (!playerManager.HasPlayerFacade(input))
@@ -170,7 +183,10 @@ namespace MistRidge
                 PlayerFacade playerFacade = playerManager.PlayerFacade(input);
                 deathManager.Respawn(playerFacade);
 
-                waitingForRespawn = true;
+                if (!deathManager.IsTutorial)
+                {
+                    waitingForRespawn = true;
+                }
             }
         }
 

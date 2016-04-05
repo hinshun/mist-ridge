@@ -19,6 +19,7 @@ namespace MistRidge
         private readonly CameraView cameraView;
         private readonly CameraManager cameraManager;
         private readonly CameraAnchorManager cameraAnchorManager;
+        private readonly AetherManager aetherManager;
 
         public LevelManager(
                 Settings settings,
@@ -33,7 +34,8 @@ namespace MistRidge
                 MistManager mistManager,
                 CameraView cameraView,
                 CameraManager cameraManager,
-                CameraAnchorManager cameraAnchorManager)
+                CameraAnchorManager cameraAnchorManager,
+                AetherManager aetherManager)
         {
             this.settings = settings;
             this.gameStateTrigger = gameStateTrigger;
@@ -48,6 +50,7 @@ namespace MistRidge
             this.cameraView = cameraView;
             this.cameraManager = cameraManager;
             this.cameraAnchorManager = cameraAnchorManager;
+            this.aetherManager = aetherManager;
         }
 
         public void Initialize()
@@ -86,6 +89,8 @@ namespace MistRidge
             mistManager.UpdateMistPosition(spawnManager.CurrentSpawnView.Position.y);
 
             rankManager.IsActive = true;
+
+            aetherManager.GameTimer = Time.time;
         }
 
         [Serializable]

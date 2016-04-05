@@ -12,6 +12,7 @@ namespace MistRidge
 
         private CinematicType cinematicType;
         private StartingZoneView startingZoneView;
+        private PeakZoneView peakZoneView;
 
         public CinematicManager(
                 SpawnManager spawnManager,
@@ -45,6 +46,18 @@ namespace MistRidge
             }
         }
 
+        public PeakZoneView PeakZoneView
+        {
+            get
+            {
+                return peakZoneView;
+            }
+            set
+            {
+                peakZoneView = value;
+            }
+        }
+
         public void Initialize()
         {
             cinematicType = CinematicType.None;
@@ -73,7 +86,10 @@ namespace MistRidge
                         return turnipPositions;
 
                     case CinematicType.PeakZone:
-                        return new List<Vector3>();
+                        List<Vector3> peakPositions = new List<Vector3>();
+                        peakPositions.Add(peakZoneView.PeakTransform.position);
+
+                        return peakPositions;
                 }
 
                 return new List<Vector3>();

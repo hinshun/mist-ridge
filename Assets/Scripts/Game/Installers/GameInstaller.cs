@@ -62,6 +62,9 @@ namespace MistRidge
 
             Container.BindSignal<GameStateSignal>();
             Container.BindTrigger<GameStateSignal.Trigger>();
+
+            Container.BindSignal<SceneLoadSignal>();
+            Container.BindTrigger<SceneLoadSignal.Trigger>();
         }
 
         private void InstallInput()
@@ -104,6 +107,7 @@ namespace MistRidge
             Container.Bind<AetherManager.Settings>().ToSingleInstance(settings.aetherManagerSettings);
 
             Container.Bind<GameReadyState.Settings>().ToSingleInstance(settings.game.gameReadyStateSettings);
+            Container.Bind<GameEndState.Settings>().ToSingleInstance(settings.game.gameEndStateSettings);
         }
 
         [Serializable]
@@ -121,6 +125,7 @@ namespace MistRidge
             public class GameSettings
             {
                 public GameReadyState.Settings gameReadyStateSettings;
+                public GameEndState.Settings gameEndStateSettings;
             }
         }
     }
