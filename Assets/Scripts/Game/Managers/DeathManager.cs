@@ -101,6 +101,14 @@ namespace MistRidge
             }
         }
 
+        public int DeadPlayerCount
+        {
+            get
+            {
+                return DeadPlayerFacades.Count;
+            }
+        }
+
         public int AlivePlayerCount
         {
             get
@@ -246,8 +254,6 @@ namespace MistRidge
 
         public void Kill(PlayerFacade playerFacade)
         {
-            Debug.Log("Killed: " + playerFacade.Input.DeviceNum);
-
             Input input = playerManager.Input(playerFacade.PlayerView);
 
             playerDeaths[playerFacade] = true;
@@ -269,7 +275,6 @@ namespace MistRidge
 
         public void Respawn(PlayerFacade playerFacade)
         {
-            Debug.Log("Respawning: " + playerFacade.Input.DeviceNum + " and death value: " + playerDeaths[playerFacade]);
             if (!playerDeaths[playerFacade])
             {
                 return;

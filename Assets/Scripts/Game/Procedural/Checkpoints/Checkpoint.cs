@@ -5,7 +5,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class Checkpoint : IInitializable
+    public class Checkpoint : IInitializable, ITickable
     {
         private readonly int checkpointNum;
         private readonly ChunkFacade chunkFacade;
@@ -14,8 +14,10 @@ namespace MistRidge
         private readonly AetherManager aetherManager;
         private readonly InputManager inputManager;
         private readonly PlayerManager playerManager;
+        private readonly ReadySetGoManager readySetGoManager;
         private readonly DeathManager deathManager;
 
+        private bool waitingForRespawn;
         private int aetherPosition;
         private Checkpoint nextCheckpoint;
 
@@ -27,6 +29,7 @@ namespace MistRidge
                 AetherManager aetherManager,
                 InputManager inputManager,
                 PlayerManager playerManager,
+                ReadySetGoManager readySetGoManager,
                 DeathManager deathManager)
         {
             this.checkpointNum = checkpointNum;
@@ -36,7 +39,20 @@ namespace MistRidge
             this.aetherManager = aetherManager;
             this.inputManager = inputManager;
             this.playerManager = playerManager;
+            this.readySetGoManager = readySetGoManager;
             this.deathManager = deathManager;
+        }
+
+        public bool WaitingForRespawn
+        {
+            get
+            {
+                return waitingForRespawn;
+            }
+            set
+            {
+                waitingForRespawn = value;
+            }
         }
 
         public int CheckpointNum
@@ -117,18 +133,28 @@ namespace MistRidge
 
         public void Initialize()
         {
-            chunkFacade.Name = "Checkpoint";
+            waitingForRespawn = false;
             aetherPosition = 0;
+            chunkFacade.Name = "Checkpoint";
+        }
+
+        public void Tick()
+        {
+            if (!waitingForRespawn)
+            {
+                return;
+            }
+
+            if (deathManager.DeadPlayerCount == 0)
+            {
+                waitingForRespawn = false;
+                Open();
+            }
         }
 
         public void Open()
         {
-            spawnManager.CurrentSpawnView = SpawnView;
-            checkpointManager.CurrentCheckpoint = this;
-
-            RespawnPlayers();
-            playerManager.ChangePlayerControl(true);
-
+            readySetGoManager.Countdown();
             chunkFacade.CheckpointWallView.SetActive(false);
         }
 
@@ -143,6 +169,8 @@ namespace MistRidge
 
                 PlayerFacade playerFacade = playerManager.PlayerFacade(input);
                 deathManager.Respawn(playerFacade);
+
+                waitingForRespawn = true;
             }
         }
 

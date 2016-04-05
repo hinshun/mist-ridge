@@ -5,7 +5,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class CheckpointManager : IInitializable
+    public class CheckpointManager : IInitializable, ITickable
     {
         private readonly SpawnManager spawnManager;
         private readonly MistManager mistManager;
@@ -53,6 +53,11 @@ namespace MistRidge
             checkpointActionSignal.Event += OnCheckpointAction;
         }
 
+        public void Tick()
+        {
+            currentCheckpoint.Tick();
+        }
+
         public void AddCheckpoint(Checkpoint checkpoint)
         {
             lastCheckpoint = checkpoint;
@@ -61,15 +66,18 @@ namespace MistRidge
 
         public void FinishCheckpoint(Checkpoint checkpoint)
         {
-            if (checkpoint.NextCheckpoint != null)
-            {
-                mistManager.UpdateMistPosition(checkpoint.CheckpointView.Position.y);
-            }
-            sprintManager.SetSprintNum(checkpoint.CheckpointNum + 1);
+            currentCheckpoint = checkpoint;
+            mistManager.UpdateMistPosition(currentCheckpoint.CheckpointView.Position.y);
+
+            sprintManager.SetSprintNum(currentCheckpoint.CheckpointNum + 1);
             sprintManager.UpdateSprintText();
+
+            spawnManager.CurrentSpawnView = currentCheckpoint.SpawnView;
+            currentCheckpoint.RespawnPlayers();
 
             if (checkpoint == lastCheckpoint)
             {
+                checkpoint.WaitingForRespawn = false;
                 gameStateTrigger.Fire(GameStateType.End);
             }
         }

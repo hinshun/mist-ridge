@@ -109,6 +109,7 @@ namespace MistRidge
         public void OnGoInFadeComplete()
         {
             displayManager.UpdateCinematic(false);
+            displayManager.UpdateSprint(false);
             iTween.ValueTo(readySetGoDisplayView.gameObject, goOutHashtable);
         }
 
