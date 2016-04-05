@@ -78,6 +78,11 @@ namespace MistRidge
 
         public void Initialize()
         {
+            ResetVariables();
+        }
+
+        public void ResetVariables()
+        {
             chunkCount = CountChunks() + settings.peakChunkCount;
             startingChunkFacade = SpawnStartingChunkFacade();
             cinematicManager.StartingZoneView = startingChunkFacade.ChunkView.GetComponentInChildren<StartingZoneView>();

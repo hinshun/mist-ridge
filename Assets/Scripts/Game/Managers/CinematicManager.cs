@@ -60,6 +60,11 @@ namespace MistRidge
 
         public void Initialize()
         {
+            ResetVariables();
+        }
+
+        public void ResetVariables()
+        {
             cinematicType = CinematicType.None;
         }
 

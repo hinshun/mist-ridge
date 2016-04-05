@@ -4,7 +4,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class Player : IInitializable
+    public class Player : IInitializable, IDisposable
     {
         private readonly Settings settings;
         private readonly Input input;
@@ -471,6 +471,11 @@ namespace MistRidge
             ResetPlayerProperties();
             ResetPlayerMaterials(input.DeviceNum);
             itemEffectSignal.Event += OnItemEffect;
+        }
+
+        public void Dispose()
+        {
+            itemEffectSignal.Event -= OnItemEffect;
         }
 
         public void AfterImage()

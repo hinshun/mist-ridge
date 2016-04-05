@@ -4,7 +4,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class TutorialManager : IInitializable
+    public class TutorialManager : IInitializable, IDisposable
     {
         private readonly Settings settings;
         private readonly TutorialSignal tutorialSignal;
@@ -44,6 +44,11 @@ namespace MistRidge
         public void Initialize()
         {
             tutorialSignal.Event += OnTutorialEvent;
+        }
+
+        public void Dispose()
+        {
+            tutorialSignal.Event -= OnTutorialEvent;
         }
 
         private void OnTutorialEvent(TutorialType tutorialType)
@@ -87,7 +92,7 @@ namespace MistRidge
             deathManager.IsTutorial = false;
             deathManager.IsActive = true;
             cameraManager.ZoomOverrideEnabled = false;
-            cameraRigManager.ResetRig();
+            cameraRigManager.ResetVariables();
             cinematicManager.CinematicType = CinematicType.None;
             EnablePlayerDisplays();
 

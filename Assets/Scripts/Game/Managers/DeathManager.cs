@@ -5,7 +5,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class DeathManager : IInitializable, ITickable
+    public class DeathManager : IInitializable, IDisposable, ITickable
     {
         private readonly Settings settings;
         private readonly Camera camera;
@@ -163,9 +163,19 @@ namespace MistRidge
 
         public void Initialize()
         {
+            ResetVariables();
+            respawnSignal.Event += OnPlayerRespawn;
+        }
+
+        public void Dispose()
+        {
+            respawnSignal.Event -= OnPlayerRespawn;
+        }
+
+        public void ResetVariables()
+        {
             isActive = false;
             isTutorial = true;
-            respawnSignal.Event += OnPlayerRespawn;
             deathTimers = new Dictionary<PlayerFacade, float>();
             playerDeaths = new Dictionary<PlayerFacade, bool>();
         }

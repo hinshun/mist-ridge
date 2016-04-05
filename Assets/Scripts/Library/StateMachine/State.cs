@@ -30,6 +30,11 @@ public abstract class State<TStateMachine, TState, TStateType, TStateFactory>
         // Do Nothing
     }
 
+    public virtual void Dispose()
+    {
+        // Do Nothing
+    }
+
     public virtual void Update()
     {
         // Do Nothing

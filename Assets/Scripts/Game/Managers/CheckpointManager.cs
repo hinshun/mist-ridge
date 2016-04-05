@@ -5,7 +5,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class CheckpointManager : IInitializable, ITickable
+    public class CheckpointManager : IInitializable, IDisposable, ITickable
     {
         private readonly SpawnManager spawnManager;
         private readonly MistManager mistManager;
@@ -69,10 +69,21 @@ namespace MistRidge
 
         public void Initialize()
         {
-            finishedLastCheckpoint = false;
-            checkpointMapping = new Dictionary<CheckpointView, Checkpoint>();
+            ResetVariables();
             checkpointSignal.Event += OnCheckpointArrival;
             checkpointActionSignal.Event += OnCheckpointAction;
+        }
+
+        public void Dispose()
+        {
+            checkpointSignal.Event -= OnCheckpointArrival;
+            checkpointActionSignal.Event -= OnCheckpointAction;
+        }
+
+        public void ResetVariables()
+        {
+            finishedLastCheckpoint = false;
+            checkpointMapping = new Dictionary<CheckpointView, Checkpoint>();
         }
 
         public void Tick()
@@ -131,7 +142,14 @@ namespace MistRidge
             switch (checkpointAction)
             {
                 case CheckpointAction.Finish:
-                    CurrentCheckpoint.NextCheckpoint.Finish();
+                    if (!finishedLastCheckpoint && CurrentCheckpoint.NextCheckpoint == null)
+                    {
+                        CurrentCheckpoint.Finish();
+                    }
+                    else
+                    {
+                        CurrentCheckpoint.NextCheckpoint.Finish();
+                    }
                     return;
 
                 case CheckpointAction.Respawn:

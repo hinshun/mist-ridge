@@ -136,5 +136,10 @@ namespace MistRidge
                     break;
             }
         }
+
+        private void OnDestroy()
+        {
+            this.cinematicSignal.Event -= OnCinematicRequest;
+        }
     }
 }

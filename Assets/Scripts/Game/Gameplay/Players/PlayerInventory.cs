@@ -37,6 +37,11 @@ namespace MistRidge
             itemPickupSignal.Event += OnItemPickup;
         }
 
+        public void Dispose()
+        {
+            itemPickupSignal.Event -= OnItemPickup;
+        }
+
         public void Tick()
         {
             if (item != null)

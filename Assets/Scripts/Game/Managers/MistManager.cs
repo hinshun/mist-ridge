@@ -11,6 +11,7 @@ namespace MistRidge
         private readonly MistContainerView mistContainerView;
 
         private bool isActive;
+        private Vector3 initialPosition;
         private Vector3 targetPosition;
 
         public MistManager(
@@ -38,8 +39,15 @@ namespace MistRidge
 
         public void Initialize()
         {
+            initialPosition = mistContainerView.Position;
+
+            ResetVariables();
+        }
+
+        public void ResetVariables()
+        {
             IsActive = false;
-            targetPosition = mistContainerView.Position;
+            targetPosition = initialPosition;
         }
 
         public void Tick()

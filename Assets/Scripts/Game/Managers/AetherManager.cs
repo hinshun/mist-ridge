@@ -5,7 +5,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class AetherManager : IInitializable
+    public class AetherManager : IInitializable, IDisposable
     {
         private readonly Settings settings;
         private readonly PlayerManager playerManager;
@@ -42,6 +42,16 @@ namespace MistRidge
         public void Initialize()
         {
             aetherGainSignal.Event += OnAetherGain;
+            ResetVariables();
+        }
+
+        public void Dispose()
+        {
+            aetherGainSignal.Event -= OnAetherGain;
+        }
+
+        public void ResetVariables()
+        {
             playerAethers = new Dictionary<PlayerView, int>();
         }
 

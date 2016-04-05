@@ -6,7 +6,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class PlayerManager : IInitializable, ITickable
+    public class PlayerManager : IInitializable, IDisposable, ITickable
     {
         private readonly Settings settings;
         private readonly PlayerContainerView playerContainerView;
@@ -51,6 +51,29 @@ namespace MistRidge
         public void Initialize()
         {
             playerControlSignal.Event += OnPlayerControl;
+            ResetVariables();
+        }
+
+        public void Dispose()
+        {
+            playerControlSignal.Event -= OnPlayerControl;
+        }
+
+        public void ResetVariables()
+        {
+            if (playerFacades != null)
+            {
+                foreach (PlayerFacade playerFacade in playerFacades.Values)
+                {
+                    playerFacade.Dispose();
+                }
+            }
+
+            foreach (Transform child in playerContainerView.transform)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
+
             playerFacades = new Dictionary<Input, PlayerFacade>();
             playerViewMapping = new Dictionary<PlayerView, Input>();
         }

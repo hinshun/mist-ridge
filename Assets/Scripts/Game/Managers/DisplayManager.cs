@@ -42,6 +42,11 @@ namespace MistRidge
             gameDisplayCanvas = gameDisplayView.GetComponent<Canvas>();
             gameDisplayScaler = gameDisplayView.GetComponent<CanvasScaler>();
 
+            ResetVariables();
+        }
+
+        public void ResetVariables()
+        {
             UpdateSprint(false);
 
             foreach (PlayerDisplayView playerDisplay in gameDisplayView.PlayerDisplays)

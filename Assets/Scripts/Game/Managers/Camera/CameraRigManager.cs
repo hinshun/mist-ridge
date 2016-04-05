@@ -38,6 +38,11 @@ namespace MistRidge
         public void Initialize()
         {
             initialRigPosition = cameraRigView.LocalPosition;
+            ResetVariables();
+        }
+
+        public void ResetVariables()
+        {
             rigPosition = initialRigPosition;
         }
 
@@ -55,10 +60,6 @@ namespace MistRidge
             );
         }
 
-        public void ResetRig()
-        {
-            rigPosition = initialRigPosition;
-        }
 
         [Serializable]
         public class Settings

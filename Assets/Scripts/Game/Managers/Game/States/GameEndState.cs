@@ -13,11 +13,17 @@ namespace MistRidge
         private readonly InputManager inputManager;
         private readonly AetherManager aetherManager;
         private readonly PlayerManager playerManager;
+        private readonly DialogueManager dialogueManager;
         private readonly DeathManager deathManager;
         private readonly CameraManager cameraManager;
         private readonly CameraRigManager cameraRigManager;
         private readonly CinematicManager cinematicManager;
         private readonly DisplayManager displayManager;
+        private readonly MistManager mistManager;
+        private readonly RankManager rankManager;
+        private readonly SpawnManager spawnManager;
+
+        private bool menuShown;
 
         public GameEndState(
                 Settings settings,
@@ -26,11 +32,15 @@ namespace MistRidge
                 InputManager inputManager,
                 AetherManager aetherManager,
                 PlayerManager playerManager,
+                DialogueManager dialogueManager,
                 DeathManager deathManager,
                 CameraManager cameraManager,
                 CameraRigManager cameraRigManager,
                 CinematicManager cinematicManager,
                 DisplayManager displayManager,
+                MistManager mistManager,
+                RankManager rankManager,
+                SpawnManager spawnManager,
                 GameStateMachine stateMachine)
             : base(stateMachine)
         {
@@ -40,23 +50,49 @@ namespace MistRidge
             this.inputManager = inputManager;
             this.aetherManager = aetherManager;
             this.playerManager = playerManager;
+            this.dialogueManager = dialogueManager;
             this.deathManager = deathManager;
             this.cameraManager = cameraManager;
             this.cameraRigManager = cameraRigManager;
             this.cinematicManager = cinematicManager;
             this.displayManager = displayManager;
+            this.mistManager = mistManager;
+            this.rankManager = rankManager;
+            this.spawnManager = spawnManager;
 
             stateType = GameStateType.End;
         }
 
         public override void Initialize()
         {
+            ResetVariables();
             sceneLoadSignal.Event += OnSceneLoad;
+        }
+
+        /* public override void Dispose() */
+        /* { */
+        /*     sceneLoadSignal.Event -= OnSceneLoad; */
+        /* } */
+
+        public void ResetVariables()
+        {
+            menuShown = false;
         }
 
         public override void Update()
         {
-            // Do Nothing
+            if (!menuShown)
+            {
+                return;
+            }
+
+            foreach(Input input in inputManager.Inputs)
+            {
+                if (input.Mapping.MenuWasPressed)
+                {
+                    ResetGame();
+                }
+            }
         }
 
         public override void EnterState()
@@ -102,6 +138,8 @@ namespace MistRidge
 
             displayManager.UpdateScoreTime(true, Mathf.FloorToInt(Time.time - aetherManager.GameTimer));
             displayManager.UpdateScoreMenu(true);
+
+            menuShown = true;
         }
 
         private void DisablePlayerDisplays()
@@ -118,9 +156,32 @@ namespace MistRidge
             }
         }
 
+        private void ResetGame()
+        {
+            ResetVariables();
+
+            cameraManager.ResetVariables();
+            cameraRigManager.ResetVariables();
+            dialogueManager.ResetVariables();
+            stateMachine.GameReadyState.ResetVariables();
+            aetherManager.ResetVariables();
+            cinematicManager.ResetVariables();
+            deathManager.ResetVariables();
+            displayManager.ResetVariables();
+            mistManager.ResetVariables();
+            playerManager.ResetVariables();
+            rankManager.ResetVariables();
+            spawnManager.CurrentSpawnView = null;
+
+            displayManager.UpdateCinematic(false);
+            stateMachine.ChangeState(GameStateType.Start);
+            sceneLoader.Load(settings.startMenuSceneName);
+        }
+
         [Serializable]
         public class Settings
         {
+            public string startMenuSceneName;
             public float zoomOverride;
             public Vector3 rigPosition;
         }
