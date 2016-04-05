@@ -12,12 +12,13 @@ namespace MistRidge
         private RectTransform topBar;
 
         [SerializeField]
-        private RectTransform  bottomBar;
+        private RectTransform bottomBar;
 
         [SerializeField]
         private float slideTime;
 
         private bool tweening;
+        private bool active;
         private Hashtable slideInHashtable;
         private Hashtable slideOutHashtable;
 
@@ -56,13 +57,13 @@ namespace MistRidge
 
         public override void SetActive(bool isActive)
         {
-            /* if (tweening || (isActive && gameObject.activeSelf) || (!isActive && !gameObject.activeSelf)) */
-            if (tweening)
+            if (tweening || active == isActive)
             {
                 return;
             }
 
             tweening = true;
+            active = isActive;
 
             if (isActive)
             {
@@ -104,6 +105,7 @@ namespace MistRidge
         private void Awake()
         {
             tweening = false;
+            active = false;
 
             slideInHashtable = new Hashtable();
             slideInHashtable.Add("from", 0);

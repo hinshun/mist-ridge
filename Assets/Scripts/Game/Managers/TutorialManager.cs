@@ -75,8 +75,6 @@ namespace MistRidge
 
         private void EndTutorial()
         {
-            displayManager.UpdateCinematic(false);
-
             deathManager.IsTutorial = false;
             deathManager.IsActive = true;
             cameraManager.ZoomOverrideEnabled = false;
@@ -93,6 +91,8 @@ namespace MistRidge
                 PlayerFacade playerFacade = playerManager.PlayerFacade(input);
                 displayManager.Display(input.DeviceNum, playerFacade.CharacterType);
             }
+
+            readySetGoManager.Countdown();
         }
 
         [Serializable]

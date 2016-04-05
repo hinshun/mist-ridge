@@ -1,30 +1,41 @@
 using UnityEngine;
+using UnityStandardAssets.ImageEffects;
 using System;
 using System.Collections.Generic;
 using Zenject;
 
 namespace MistRidge
 {
-    public class CameraAnchorManager : ITickable
+    public class CameraAnchorManager : IInitializable, ITickable
     {
         private readonly Settings settings;
+        private readonly Camera camera;
         private readonly CameraView cameraView;
         private readonly CameraAnchorView cameraAnchorView;
         private readonly CameraOriginView cameraOriginView;
         private readonly CinematicManager cinematicManager;
 
+        private GlobalFog globalFog;
+
         public CameraAnchorManager(
                 Settings settings,
+                Camera camera,
                 CameraView cameraView,
                 CameraAnchorView cameraAnchorView,
                 CameraOriginView cameraOriginView,
                 CinematicManager cinematicManager)
         {
             this.settings = settings;
+            this.camera = camera;
             this.cameraView = cameraView;
             this.cameraAnchorView = cameraAnchorView;
             this.cameraOriginView = cameraOriginView;
             this.cinematicManager = cinematicManager;
+        }
+
+        public void Initialize()
+        {
+            globalFog = camera.GetComponent<GlobalFog>();
         }
 
         public void Tick()
@@ -41,6 +52,8 @@ namespace MistRidge
                 anchorPosition,
                 settings.centeringSpeed * Time.deltaTime
             );
+
+            globalFog.height = cameraAnchorView.Position.y + settings.cameraFogOffset;
 
             cameraAnchorView.Rotation = Quaternion.Lerp(
                 cameraAnchorView.Rotation,
@@ -103,6 +116,7 @@ namespace MistRidge
         {
             public float centeringSpeed;
             public float rotationSpeed;
+            public float cameraFogOffset;
         }
     }
 }

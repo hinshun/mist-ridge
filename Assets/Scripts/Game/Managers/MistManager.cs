@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityStandardAssets.ImageEffects;
 using System;
 using Zenject;
 
@@ -8,7 +7,6 @@ namespace MistRidge
     public class MistManager : IInitializable, ITickable
     {
         private readonly Settings settings;
-        private readonly Camera camera;
         private readonly MistView mistView;
         private readonly MistContainerView mistContainerView;
 
@@ -17,12 +15,10 @@ namespace MistRidge
 
         public MistManager(
                 Settings settings,
-                Camera camera,
                 MistView mistView,
                 MistContainerView mistContainerView)
         {
             this.settings = settings;
-            this.camera = camera;
             this.mistView = mistView;
             this.mistContainerView = mistContainerView;
         }
@@ -59,13 +55,6 @@ namespace MistRidge
                 settings.mistSpeed * Time.deltaTime
             );
 
-            GlobalFog globalFog = camera.GetComponent<GlobalFog>();
-            globalFog.height = Mathf.Lerp(
-                globalFog.height,
-                mistContainerView.Position.y + settings.cameraFogOffset,
-                settings.mistSpeed * Time.deltaTime
-            );
-
             mistContainerView.LocalScale = new Vector3(
                 mistContainerView.LocalScale.x,
                 mistContainerView.Position.y,
@@ -84,7 +73,6 @@ namespace MistRidge
             public GameObject mistContainerPrefab;
             public float mistSpeed;
             public float mistOffset;
-            public float cameraFogOffset;
         }
     }
 }

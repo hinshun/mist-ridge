@@ -64,7 +64,7 @@ namespace MistRidge
 
             UpdateDialogue(false);
 
-            UpdateReadySetGo(ReadySetGoType.None);
+            readySetGoDisplayView.Reset();
 
             UpdateScoreTime(false, 0);
             UpdateScoreMenu(false);
@@ -322,33 +322,6 @@ namespace MistRidge
         public void UpdateDialogueNext(bool show)
         {
             dialogueDisplayView.Next.enabled = show;
-        }
-
-        public void UpdateReadySetGo(ReadySetGoType readySetGoType)
-        {
-            readySetGoDisplayView.Ready.enabled = false;
-            readySetGoDisplayView.Set.enabled = false;
-            readySetGoDisplayView.Go.enabled = false;
-
-            switch(readySetGoType)
-            {
-                case ReadySetGoType.Ready:
-                    readySetGoDisplayView.Ready.enabled = false;
-                    break;
-
-                case ReadySetGoType.Set:
-                    readySetGoDisplayView.Ready.enabled = false;
-                    readySetGoDisplayView.Set.enabled = false;
-                    readySetGoDisplayView.Go.enabled = false;
-                    break;
-
-                case ReadySetGoType.Go:
-                    readySetGoDisplayView.Ready.enabled = false;
-                    readySetGoDisplayView.Set.enabled = false;
-                    readySetGoDisplayView.Go.enabled = false;
-
-                    break;
-            }
         }
 
         public void UpdateScorePlayer(int deviceNum, int aetherCount, ScorePlacementType scorePlacementType, CharacterType characterType)
