@@ -11,7 +11,9 @@ namespace MistRidge
         private readonly Camera camera;
         private readonly InputManager inputManager;
         private readonly PlayerManager playerManager;
+        private readonly SpawnManager spawnManager;
         private readonly DisplayManager displayManager;
+        private readonly RespawnSignal respawnSignal;
         private readonly CheckpointActionSignal.Trigger checkpointActionTrigger;
 
         private bool isTutorial;
@@ -24,14 +26,18 @@ namespace MistRidge
                 Camera camera,
                 InputManager inputManager,
                 PlayerManager playerManager,
+                SpawnManager spawnManager,
                 DisplayManager displayManager,
+                RespawnSignal respawnSignal,
                 CheckpointActionSignal.Trigger checkpointActionTrigger)
         {
             this.settings = settings;
             this.camera = camera;
             this.inputManager = inputManager;
             this.playerManager = playerManager;
+            this.spawnManager = spawnManager;
             this.displayManager = displayManager;
+            this.respawnSignal = respawnSignal;
             this.checkpointActionTrigger = checkpointActionTrigger;
         }
 
@@ -151,6 +157,7 @@ namespace MistRidge
         {
             isActive = false;
             isTutorial = true;
+            respawnSignal.Event += OnPlayerRespawn;
             deathTimers = new Dictionary<PlayerFacade, float>();
             playerDeaths = new Dictionary<PlayerFacade, bool>();
         }
@@ -239,6 +246,8 @@ namespace MistRidge
 
         public void Kill(PlayerFacade playerFacade)
         {
+            Debug.Log("Killed: " + playerFacade.Input.DeviceNum);
+
             Input input = playerManager.Input(playerFacade.PlayerView);
 
             playerDeaths[playerFacade] = true;
@@ -260,11 +269,43 @@ namespace MistRidge
 
         public void Respawn(PlayerFacade playerFacade)
         {
+            Debug.Log("Respawning: " + playerFacade.Input.DeviceNum + " and death value: " + playerDeaths[playerFacade]);
+            if (!playerDeaths[playerFacade])
+            {
+                return;
+            }
+
+            PlayerView playerView = playerFacade.PlayerView;
+            Transform spawnTransform = spawnManager.CurrentSpawnView.SpawnTransform(playerFacade.Input.DeviceNum);
+
+            ParticleTargetRequest particleTargetRequest = new ParticleTargetRequest()
+            {
+                particleSystem = playerView.Respawn,
+                particleCount = 1,
+                targetTime = Mathf.Sqrt((playerView.Position - spawnTransform.position).magnitude) * settings.respawnTargetFactor,
+                targetTransform = spawnTransform,
+                particleTargetType = ParticleTargetType.Respawn,
+                playerFacade = playerFacade,
+            };
+
+            spawnManager.CurrentSpawnView.ParticleTargetView.Target(particleTargetRequest);
+        }
+
+        private void OnPlayerRespawn(PlayerFacade playerFacade)
+        {
+            if (!playerDeaths[playerFacade])
+            {
+                return;
+            }
+
             Input input = playerManager.Input(playerFacade.PlayerView);
 
             playerDeaths[playerFacade] = false;
             displayManager.UpdateBackdrop(input.DeviceNum, BackdropHealth.Alive);
             displayManager.UpdatePortraitImage(input.DeviceNum, playerFacade.CharacterType, PortraitEmotion.Neutral);
+            playerFacade.Position = spawnManager.CurrentSpawnView.SpawnPoint(playerFacade.Input.DeviceNum);
+            playerFacade.MoveDirection = Vector3.zero;
+
             playerFacade.Respawn();
         }
 
@@ -311,6 +352,7 @@ namespace MistRidge
             public float displacementWeight;
             public float altitudeWeight;
             public float deathTimeLimit;
+            public float respawnTargetFactor;
         }
     }
 }

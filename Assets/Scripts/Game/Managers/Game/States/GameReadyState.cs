@@ -217,7 +217,7 @@ namespace MistRidge
 
                 case SelectType.Select:
                     displayManager.UpdateCharacterArrows(input.DeviceNum, true);
-                    displayManager.UpdateCharacterJoin(input.DeviceNum, true);
+                    displayManager.UpdateCharacterJoin(input.DeviceNum, false);
                     displayManager.UpdateCharacterSelect(input.DeviceNum, true);
 
                     inputSelectMapping[input] = SelectType.Join;

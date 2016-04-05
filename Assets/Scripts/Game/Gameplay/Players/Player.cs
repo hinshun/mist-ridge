@@ -72,7 +72,9 @@ namespace MistRidge
             set
             {
                 isAlive = value;
-                playerView.SetActive(value);
+                playerView.enabled = value;
+                playerView.PlayerCircle.enabled = value;
+                playerView.MeshTransform.gameObject.SetActive(value);
             }
         }
 

@@ -55,6 +55,9 @@ namespace MistRidge
         private int afterImageParticleCount;
 
         [SerializeField]
+        private ParticleSystem respawn;
+
+        [SerializeField]
         private SpriteRenderer playerCircle;
 
         private Hashtable itemFlashInHashtable;
@@ -121,6 +124,14 @@ namespace MistRidge
             {
                 ParticleSystem.EmissionModule emission = dustTrail.emission;
                 emission.enabled = value;
+            }
+        }
+
+        public ParticleSystem Respawn
+        {
+            get
+            {
+                return respawn;
             }
         }
 

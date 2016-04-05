@@ -7,13 +7,17 @@ namespace MistRidge
 {
     public class CinematicManager : IInitializable
     {
+        private readonly SpawnManager spawnManager;
         private readonly DeathManager deathManager;
 
         private CinematicType cinematicType;
         private StartingZoneView startingZoneView;
 
-        public CinematicManager(DeathManager deathManager)
+        public CinematicManager(
+                SpawnManager spawnManager,
+                DeathManager deathManager)
         {
+            this.spawnManager = spawnManager;
             this.deathManager = deathManager;
         }
 
@@ -53,7 +57,14 @@ namespace MistRidge
                 switch(cinematicType)
                 {
                     case CinematicType.None:
-                        return deathManager.AliveRelevantPlayerPositions;
+                        List<Vector3> positions = deathManager.AliveRelevantPlayerPositions;
+
+                        if (positions.Count == 0)
+                        {
+                            positions.Add(spawnManager.CurrentSpawnView.Position);
+                        }
+
+                        return positions;
 
                     case CinematicType.StartingZone:
                         List<Vector3> turnipPositions = new List<Vector3>();

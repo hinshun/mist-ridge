@@ -12,6 +12,7 @@ namespace MistRidge
         private readonly SpawnManager spawnManager;
         private readonly CheckpointManager checkpointManager;
         private readonly AetherManager aetherManager;
+        private readonly InputManager inputManager;
         private readonly PlayerManager playerManager;
         private readonly DeathManager deathManager;
 
@@ -24,6 +25,7 @@ namespace MistRidge
                 SpawnManager spawnManager,
                 CheckpointManager checkpointManager,
                 AetherManager aetherManager,
+                InputManager inputManager,
                 PlayerManager playerManager,
                 DeathManager deathManager)
         {
@@ -32,6 +34,7 @@ namespace MistRidge
             this.spawnManager = spawnManager;
             this.checkpointManager = checkpointManager;
             this.aetherManager = aetherManager;
+            this.inputManager = inputManager;
             this.playerManager = playerManager;
             this.deathManager = deathManager;
         }
@@ -131,11 +134,14 @@ namespace MistRidge
 
         public void RespawnPlayers()
         {
-            List<PlayerFacade> deadPlayerFacades = deathManager.DeadPlayerFacades;
-            foreach (PlayerFacade playerFacade in deadPlayerFacades)
+            foreach (Input input in inputManager.Inputs)
             {
-                playerFacade.Position = spawnManager.CurrentSpawnView.SpawnPoint(playerFacade.Input.DeviceNum);
-                playerFacade.MoveDirection = Vector3.zero;
+                if (!playerManager.HasPlayerFacade(input))
+                {
+                    continue;
+                }
+
+                PlayerFacade playerFacade = playerManager.PlayerFacade(input);
                 deathManager.Respawn(playerFacade);
             }
         }

@@ -2,11 +2,12 @@ using UnityEngine;
 
 namespace MistRidge
 {
-    public struct ParticleTargetRequest
+    public struct ParticleTargetFulfillment
     {
-        public ParticleSystem particleSystem;
+        public bool tweening;
+
+        public ParticleSystem.Particle[] particles;
         public int particleCount;
-        public float targetTime;
         public Transform targetTransform;
 
         public ParticleTargetType particleTargetType;

@@ -54,6 +54,9 @@ namespace MistRidge
             Container.BindSignal<AetherGainSignal>();
             Container.BindTrigger<AetherGainSignal.Trigger>();
 
+            Container.BindSignal<RespawnSignal>();
+            Container.BindTrigger<RespawnSignal.Trigger>();
+
             Container.BindSignal<MenuSignal>();
             Container.BindTrigger<MenuSignal.Trigger>();
 
@@ -98,6 +101,7 @@ namespace MistRidge
         {
             Container.Bind<Generator.Settings>().ToSingleInstance(settings.generatorSettings);
             Container.Bind<PoolManager.Settings>().ToSingleInstance(settings.poolManagerSettings);
+            Container.Bind<AetherManager.Settings>().ToSingleInstance(settings.aetherManagerSettings);
 
             Container.Bind<GameReadyState.Settings>().ToSingleInstance(settings.game.gameReadyStateSettings);
         }
@@ -110,6 +114,7 @@ namespace MistRidge
             public GameObject sceneLoaderPrefab;
             public Generator.Settings generatorSettings;
             public PoolManager.Settings poolManagerSettings;
+            public AetherManager.Settings aetherManagerSettings;
             public GameSettings game;
 
             [Serializable]

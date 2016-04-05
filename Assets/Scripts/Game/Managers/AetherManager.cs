@@ -7,6 +7,7 @@ namespace MistRidge
 {
     public class AetherManager : IInitializable
     {
+        private readonly Settings settings;
         private readonly PlayerManager playerManager;
         private readonly DisplayManager displayManager;
         private readonly AetherGainSignal aetherGainSignal;
@@ -14,10 +15,12 @@ namespace MistRidge
         private Dictionary<PlayerView, int> playerAethers;
 
         public AetherManager(
+                Settings settings,
                 PlayerManager playerManager,
                 DisplayManager displayManager,
                 AetherGainSignal aetherGainSignal)
         {
+            this.settings = settings;
             this.playerManager = playerManager;
             this.displayManager = displayManager;
             this.aetherGainSignal = aetherGainSignal;
@@ -60,6 +63,7 @@ namespace MistRidge
             {
                 particleSystem = checkpointView.AetherAward,
                 particleCount = aetherCount,
+                targetTime = settings.aetherTargetTime,
                 targetTransform = playerView.transform,
                 particleTargetType = ParticleTargetType.Aether,
                 playerView = playerView,
@@ -78,6 +82,12 @@ namespace MistRidge
             playerAethers[playerView]++;
             Input input = playerManager.Input(playerView);
             displayManager.UpdateAether(input.DeviceNum, playerAethers[playerView]);
+        }
+
+        [Serializable]
+        public class Settings
+        {
+            public float aetherTargetTime;
         }
     }
 }
