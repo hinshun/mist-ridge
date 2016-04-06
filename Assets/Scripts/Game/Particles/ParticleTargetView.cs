@@ -56,6 +56,7 @@ namespace MistRidge
                 tweening = true,
                 particles = new ParticleSystem.Particle[particleTargetRequest.particleCount],
                 particleCount = particleTargetRequest.particleCount,
+                fulfilledParticleCount = 0,
                 targetTransform = particleTargetRequest.targetTransform,
                 particleTargetType = particleTargetRequest.particleTargetType,
                 playerView = particleTargetRequest.playerView,
@@ -96,7 +97,7 @@ namespace MistRidge
             switch(particleTargetType)
             {
                 case ParticleTargetType.Aether:
-                    OnAttractAether(particles, particleCount, targetTransform, playerView);
+                    OnAttractAether(particleSystem, particles, particleCount, targetTransform, playerView);
                     break;
 
                 case ParticleTargetType.Respawn:
@@ -118,9 +119,15 @@ namespace MistRidge
             particleSystem.Clear();
 
             ParticleTargetType particleTargetType = particleTargetFulfillment.particleTargetType;
+            int particleCount = particleTargetFulfillment.particleCount;
+            int fulfilledParticleCount = particleTargetFulfillment.fulfilledParticleCount;
 
             switch(particleTargetType)
             {
+                case ParticleTargetType.Aether:
+                    OnAetherEnd(particleTargetFulfillment.playerView, particleCount - fulfilledParticleCount);
+                    break;
+
                 case ParticleTargetType.Respawn:
                     OnRespawnEnd(particleTargetFulfillment.playerFacade);
                     break;
@@ -139,16 +146,21 @@ namespace MistRidge
             targetHashtable.Add("oncomplete", "OnTargetEnd");
         }
 
-        private void OnAttractAether(ParticleSystem.Particle[] particles, int particleCount, Transform targetTransform, PlayerView playerView)
+        private void OnAttractAether(ParticleSystem particleSystem, ParticleSystem.Particle[] particles, int particleCount, Transform targetTransform, PlayerView playerView)
         {
+            ParticleTargetFulfillment particleTargetFulfillment = targetMapping[particleSystem];
+
             for (int i = 0; i < particleCount; ++i)
             {
                 if (particles[i].lifetime >= 0 && (particles[i].position - targetTransform.position).magnitude < 1)
                 {
                     particles[i].lifetime = -1;
+                    particleTargetFulfillment.fulfilledParticleCount++;
                     aetherGainTrigger.Fire(playerView);
                 }
             }
+
+            targetMapping[particleSystem] = particleTargetFulfillment;
         }
 
         private void OnAttractRespawn(ParticleSystem.Particle[] particles, int particleCount, Transform targetTransform, PlayerFacade playerFacade)
@@ -160,6 +172,14 @@ namespace MistRidge
                     particles[i].lifetime = -1;
                     respawnTrigger.Fire(playerFacade);
                 }
+            }
+        }
+
+        private void OnAetherEnd(PlayerView playerView, int aetherCount)
+        {
+            for (int i = 0; i < aetherCount; ++i)
+            {
+                aetherGainTrigger.Fire(playerView);
             }
         }
 

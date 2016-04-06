@@ -8,6 +8,7 @@ namespace MistRidge
 
         public ParticleSystem.Particle[] particles;
         public int particleCount;
+        public int fulfilledParticleCount;
         public Transform targetTransform;
 
         public ParticleTargetType particleTargetType;
