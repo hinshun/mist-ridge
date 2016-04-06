@@ -195,6 +195,14 @@ namespace MistRidge
             }
         }
 
+        public bool CanUseItems
+        {
+            get
+            {
+                return !isBubbleTrapped;
+            }
+        }
+
         public SpriteRenderer PlayerCircle
         {
             get

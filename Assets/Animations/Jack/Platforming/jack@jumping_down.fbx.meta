@@ -193,7 +193,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.83524907
+      - time: 0.5395969
         functionName: PlayerAllowJump
         data: 
         objectReferenceParameter: {instanceID: 0}

@@ -66,6 +66,7 @@ namespace MistRidge
             timer = Time.time;
             nextChange = UnityEngine.Random.Range(minChangeTime, maxChangeTime);
 
+            playerView.PlayerAllowJump();
             playerView.IsDustTrailEmitting = false;
         }
 

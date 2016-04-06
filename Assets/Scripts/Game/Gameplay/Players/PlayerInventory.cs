@@ -56,7 +56,7 @@ namespace MistRidge
             {
                 if (item.IsUsable())
                 {
-                    if (input.Mapping.UseItem.WasPressed)
+                    if (playerView.CanUseItems && input.Mapping.UseItem.WasPressed)
                     {
                         SpawnParticle();
                         item.Use();

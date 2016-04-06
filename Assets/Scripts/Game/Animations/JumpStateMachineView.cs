@@ -11,8 +11,22 @@ namespace MistRidge
 
         public override void OnStateMachineEnter(Animator animator, int stateMachinePathHash)
         {
-            playerView = animator.GetComponent<PlayerView>();
+            if (playerView == null)
+            {
+                playerView = animator.GetComponent<PlayerView>();
+            }
+
             playerView.IsDustTrailEmitting = false;
+        }
+
+        public override void OnStateMachineExit(Animator animator, int stateMachinePathHash)
+        {
+            if (playerView == null)
+            {
+                playerView = animator.GetComponent<PlayerView>();
+            }
+
+            playerView.CanJump = true;
         }
     }
 }

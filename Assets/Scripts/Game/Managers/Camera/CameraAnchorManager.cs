@@ -53,6 +53,15 @@ namespace MistRidge
                 settings.centeringSpeed * Time.deltaTime
             );
 
+            if (cameraAnchorView.Position.y > settings.snowHeight)
+            {
+                cameraAnchorView.Snow.Play();
+            }
+            else
+            {
+                cameraAnchorView.Snow.Stop();
+            }
+
             globalFog.height = cameraAnchorView.Position.y + settings.cameraFogOffset;
 
             cameraAnchorView.Rotation = Quaternion.Lerp(
@@ -114,6 +123,7 @@ namespace MistRidge
         [Serializable]
         public class Settings
         {
+            public float snowHeight;
             public float centeringSpeed;
             public float rotationSpeed;
             public float cameraFogOffset;
