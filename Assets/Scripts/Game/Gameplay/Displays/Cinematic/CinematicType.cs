@@ -3,7 +3,9 @@ namespace MistRidge
     public enum CinematicType
     {
         None,
-        StartingZone,
+        Turnip,
+        TurnipAndPlayer,
+        TurnipAndLantern,
         PeakZone,
     }
 }

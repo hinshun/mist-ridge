@@ -15,7 +15,7 @@ namespace MistRidge
             this.tutorialTrigger = tutorialTrigger;
         }
 
-        public void OnTutorialTrigger()
+        public void OnTutorialTrigger(PlayerView playerView)
         {
             if (tutorialTriggered)
             {
@@ -23,7 +23,7 @@ namespace MistRidge
             }
 
             tutorialTriggered = true;
-            tutorialTrigger.Fire(TutorialType.Start);
+            tutorialTrigger.Fire(TutorialType.Start, playerView);
         }
 
         private void Awake()

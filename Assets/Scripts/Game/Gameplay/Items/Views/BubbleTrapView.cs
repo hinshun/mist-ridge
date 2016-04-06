@@ -42,6 +42,8 @@ namespace MistRidge
         private PlayerView playerView;
         private Vector3 finalScale;
 
+        private Transform initialParent;
+
         public float Height
         {
             get
@@ -63,8 +65,9 @@ namespace MistRidge
             activated = false;
             trapped = false;
             popping = false;
-
             playerView = null;
+
+            Parent = initialParent;
             LocalScale = initialScale;
         }
 
@@ -149,6 +152,8 @@ namespace MistRidge
             activated = false;
             trapped = false;
             popping = false;
+
+            initialParent = Parent;
 
             moveHashtable = new Hashtable();
             moveHashtable.Add("name", "moveTween" + GetInstanceID());

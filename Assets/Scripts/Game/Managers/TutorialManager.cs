@@ -51,12 +51,12 @@ namespace MistRidge
             tutorialSignal.Event -= OnTutorialEvent;
         }
 
-        private void OnTutorialEvent(TutorialType tutorialType)
+        private void OnTutorialEvent(TutorialType tutorialType, PlayerView playerView)
         {
             switch(tutorialType)
             {
                 case TutorialType.Start:
-                    StartTutorial();
+                    StartTutorial(playerView);
                     break;
 
                 case TutorialType.End:
@@ -65,7 +65,7 @@ namespace MistRidge
             }
         }
 
-        private void StartTutorial()
+        private void StartTutorial(PlayerView playerView)
         {
             if (!settings.tutorialEnabled)
             {
@@ -81,7 +81,8 @@ namespace MistRidge
             cameraManager.ZoomOverride = settings.zoomOverride;
             cameraManager.ZoomOverrideEnabled = true;
             cameraRigManager.RigPosition = settings.rigPosition;
-            cinematicManager.CinematicType = CinematicType.StartingZone;
+            cinematicManager.TriggerPlayerView = playerView;
+            cinematicManager.CinematicType = CinematicType.Turnip;
 
             TurnipView turnipView = cinematicManager.StartingZoneView.TurnipView;
             turnipView.Alert();

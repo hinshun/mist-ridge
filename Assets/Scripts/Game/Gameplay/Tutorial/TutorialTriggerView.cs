@@ -15,7 +15,9 @@ namespace MistRidge
                 return;
             }
 
-            tutorialView.OnTutorialTrigger();
+            PlayerView playerView = other.GetComponent<PlayerView>();
+
+            tutorialView.OnTutorialTrigger(playerView);
         }
     }
 }

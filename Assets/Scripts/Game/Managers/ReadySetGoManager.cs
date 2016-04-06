@@ -8,8 +8,10 @@ namespace MistRidge
     public class ReadySetGoManager : IInitializable
     {
         private readonly Settings settings;
-        private ReadySetGoDisplayView readySetGoDisplayView;
+        private readonly PlayerManager playerManager;
         private readonly DisplayManager displayManager;
+
+        private ReadySetGoDisplayView readySetGoDisplayView;
 
         private Hashtable readyInHashtable;
         private Hashtable readyOutHashtable;
@@ -20,10 +22,12 @@ namespace MistRidge
 
         public ReadySetGoManager(
                 Settings settings,
+                PlayerManager playerManager,
                 ReadySetGoDisplayView readySetGoDisplayView,
                 DisplayManager displayManager)
         {
             this.settings = settings;
+            this.playerManager = playerManager;
             this.readySetGoDisplayView = readySetGoDisplayView;
             this.displayManager = displayManager;
         }
@@ -108,6 +112,8 @@ namespace MistRidge
 
         public void OnGoInFadeComplete()
         {
+            playerManager.ChangePlayerControl(true);
+
             displayManager.UpdateCinematic(false);
             displayManager.UpdateSprint(false);
             iTween.ValueTo(readySetGoDisplayView.gameObject, goOutHashtable);

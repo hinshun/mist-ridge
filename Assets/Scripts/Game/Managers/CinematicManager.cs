@@ -13,6 +13,7 @@ namespace MistRidge
         private CinematicType cinematicType;
         private StartingZoneView startingZoneView;
         private PeakZoneView peakZoneView;
+        private PlayerView triggerPlayerView;
 
         public CinematicManager(
                 SpawnManager spawnManager,
@@ -20,6 +21,18 @@ namespace MistRidge
         {
             this.spawnManager = spawnManager;
             this.deathManager = deathManager;
+        }
+
+        public PlayerView TriggerPlayerView
+        {
+            get
+            {
+                return triggerPlayerView;
+            }
+            set
+            {
+                triggerPlayerView = value;
+            }
         }
 
         public CinematicType CinematicType
@@ -84,11 +97,20 @@ namespace MistRidge
 
                         return positions;
 
-                    case CinematicType.StartingZone:
-                        List<Vector3> turnipPositions = new List<Vector3>();
-                        turnipPositions.Add(startingZoneView.TurnipView.Position);
+                    case CinematicType.Turnip:
+                        return GetTurnipPositions();
 
-                        return turnipPositions;
+                    case CinematicType.TurnipAndPlayer:
+                        List<Vector3> turnipPlayerPositions = GetTurnipPositions();
+                        turnipPlayerPositions.Add(triggerPlayerView.Position);
+
+                        return turnipPlayerPositions;
+
+                    case CinematicType.TurnipAndLantern:
+                        List<Vector3> turnipLanternPositions = GetTurnipPositions();
+                        turnipLanternPositions.Add(startingZoneView.NormalSpawn.Position);
+
+                        return turnipLanternPositions;
 
                     case CinematicType.PeakZone:
                         List<Vector3> peakPositions = new List<Vector3>();
@@ -99,6 +121,14 @@ namespace MistRidge
 
                 return new List<Vector3>();
             }
+        }
+
+        private List<Vector3> GetTurnipPositions()
+        {
+            List<Vector3> positions = new List<Vector3>();
+            positions.Add(startingZoneView.TurnipView.Position);
+
+            return positions;
         }
     }
 }

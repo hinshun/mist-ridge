@@ -12,6 +12,8 @@ namespace MistRidge
         private readonly DialogueSignal dialogueSignal;
         private readonly DialogueStateSignal dialogueStateSignal;
         private readonly DialogueManagerView dialogueManagerView;
+        private readonly CinematicManager cinematicManager;
+        private readonly CameraManager cameraManager;
         private readonly DisplayManager displayManager;
         private readonly InputManager inputManager;
         private readonly TutorialSignal.Trigger tutorialTrigger;
@@ -28,6 +30,8 @@ namespace MistRidge
                 DialogueSignal dialogueSignal,
                 DialogueStateSignal dialogueStateSignal,
                 DialogueManagerView dialogueManagerView,
+                CinematicManager cinematicManager,
+                CameraManager cameraManager,
                 DisplayManager displayManager,
                 InputManager inputManager,
                 TutorialSignal.Trigger tutorialTrigger)
@@ -36,6 +40,8 @@ namespace MistRidge
             this.dialogueSignal = dialogueSignal;
             this.dialogueStateSignal = dialogueStateSignal;
             this.dialogueManagerView = dialogueManagerView;
+            this.cinematicManager = cinematicManager;
+            this.cameraManager = cameraManager;
             this.displayManager = displayManager;
             this.inputManager = inputManager;
             this.tutorialTrigger = tutorialTrigger;
@@ -139,9 +145,44 @@ namespace MistRidge
             textHashtable["to"] = dialogue.text.Length;
             textHashtable["time"] = dialogue.text.Length * settings.textSpeed;
 
+            HandleDialogue(dialogue);
+
             iTween.ValueTo(dialogueManagerView.gameObject, textHashtable);
             displayManager.UpdateDialogueText("");
             displayManager.UpdateDialogue(true);
+        }
+
+        private void HandleDialogue(Dialogue dialogue)
+        {
+            displayManager.UpdateSprint(false);
+
+            DialogueEvent dialogueEvent = dialogue.dialogueEvent;
+            float zoomOverride = dialogue.zoomOverride;
+
+            switch (dialogueEvent)
+            {
+                case DialogueEvent.ZoomToPlayer:
+                    cinematicManager.CinematicType = CinematicType.TurnipAndPlayer;
+                    cameraManager.ZoomOverride = zoomOverride;
+                    break;
+
+                case DialogueEvent.ZoomToTurnip:
+                    cinematicManager.CinematicType = CinematicType.Turnip;
+                    cameraManager.ZoomOverride = zoomOverride;
+                    break;
+
+                case DialogueEvent.ShowLantern:
+                    cinematicManager.CinematicType = CinematicType.TurnipAndLantern;
+                    cameraManager.ZoomOverride = zoomOverride;
+                    displayManager.UpdateSprint(true);
+                    break;
+
+                case DialogueEvent.ShowPowerUp:
+                    cinematicManager.CinematicType = CinematicType.Turnip;
+                    cameraManager.ZoomOverride = zoomOverride;
+                    Debug.Log("show powerup");
+                    break;
+            }
         }
 
         private void OnDialogueEnd()
@@ -151,7 +192,7 @@ namespace MistRidge
 
             if (dialogueType == DialogueType.TurnipTutorial)
             {
-                tutorialTrigger.Fire(TutorialType.End);
+                tutorialTrigger.Fire(TutorialType.End, null);
             }
         }
 
