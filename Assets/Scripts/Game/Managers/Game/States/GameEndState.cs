@@ -8,6 +8,7 @@ namespace MistRidge
     public class GameEndState : GameBaseState
     {
         private readonly Settings settings;
+        private readonly Generator generator;
         private readonly SceneLoadSignal sceneLoadSignal;
         private readonly SceneLoader sceneLoader;
         private readonly InputManager inputManager;
@@ -27,6 +28,7 @@ namespace MistRidge
 
         public GameEndState(
                 Settings settings,
+                Generator generator,
                 SceneLoadSignal sceneLoadSignal,
                 SceneLoader sceneLoader,
                 InputManager inputManager,
@@ -45,6 +47,7 @@ namespace MistRidge
             : base(stateMachine)
         {
             this.settings = settings;
+            this.generator = generator;
             this.sceneLoadSignal = sceneLoadSignal;
             this.sceneLoader = sceneLoader;
             this.inputManager = inputManager;
@@ -172,6 +175,7 @@ namespace MistRidge
             playerManager.ResetVariables();
             rankManager.ResetVariables();
             spawnManager.CurrentSpawnView = null;
+            generator.ResetVariables();
 
             displayManager.UpdateCinematic(false);
             stateMachine.ChangeState(GameStateType.Start);
