@@ -106,7 +106,6 @@ namespace MistRidge
                 return;
             }
 
-            currentCheckpoint = checkpoint;
             mistManager.UpdateMistPosition(currentCheckpoint.CheckpointView.Position.y);
 
             sprintManager.SetSprintNum(currentCheckpoint.CheckpointNum + 1);
@@ -142,14 +141,8 @@ namespace MistRidge
             switch (checkpointAction)
             {
                 case CheckpointAction.Finish:
-                    if (!finishedLastCheckpoint && CurrentCheckpoint.NextCheckpoint == null)
-                    {
-                        CurrentCheckpoint.Finish();
-                    }
-                    else
-                    {
-                        CurrentCheckpoint.NextCheckpoint.Finish();
-                    }
+                    CurrentCheckpoint.Finish();
+
                     return;
 
                 case CheckpointAction.Respawn:

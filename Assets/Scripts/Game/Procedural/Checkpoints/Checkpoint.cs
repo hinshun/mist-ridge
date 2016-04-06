@@ -18,6 +18,7 @@ namespace MistRidge
         private readonly DeathManager deathManager;
 
         private bool waitingForRespawn;
+        private bool finished;
         private int aetherPosition;
         private Checkpoint nextCheckpoint;
 
@@ -134,6 +135,7 @@ namespace MistRidge
         public void Initialize()
         {
             waitingForRespawn = false;
+            finished = false;
             aetherPosition = 0;
             chunkFacade.Name = "Checkpoint";
         }
@@ -144,7 +146,6 @@ namespace MistRidge
             {
                 return;
             }
-
 
             if (deathManager.DeadPlayerCount == 0)
             {
@@ -204,9 +205,15 @@ namespace MistRidge
 
         public void Finish()
         {
-            if (aetherPosition == deathManager.AlivePlayerCount)
+            if (!finished)
             {
-                checkpointManager.FinishCheckpoint(this);
+                checkpointManager.CurrentCheckpoint = this;
+
+                if (aetherPosition == deathManager.AlivePlayerCount)
+                {
+                    finished = true;
+                    checkpointManager.FinishCheckpoint(this);
+                }
             }
         }
     }
