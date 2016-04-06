@@ -9,12 +9,26 @@ namespace MistRidge
         private readonly Chunk chunk;
         private readonly ChunkView chunkView;
 
+        private ChunkFacade previousChunkFacade;
+
         public ChunkFacade(
                 Chunk chunk,
                 ChunkView chunkView)
         {
             this.chunk = chunk;
             this.chunkView = chunkView;
+        }
+
+        public ChunkFacade PreviousChunkFacade
+        {
+            get
+            {
+                return previousChunkFacade;
+            }
+            set
+            {
+                previousChunkFacade = value;
+            }
         }
 
         public Transform Parent

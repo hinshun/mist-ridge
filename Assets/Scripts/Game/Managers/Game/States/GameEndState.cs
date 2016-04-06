@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Zenject;
 
@@ -17,6 +18,7 @@ namespace MistRidge
         private readonly DialogueManager dialogueManager;
         private readonly DeathManager deathManager;
         private readonly CameraManager cameraManager;
+        private readonly CameraAnchorManager cameraAnchorManager;
         private readonly CameraRigManager cameraRigManager;
         private readonly CinematicManager cinematicManager;
         private readonly DisplayManager displayManager;
@@ -25,6 +27,11 @@ namespace MistRidge
         private readonly SpawnManager spawnManager;
 
         private bool menuShown;
+
+        private Vector3[] path;
+        private Hashtable spiralHashtable;
+        private Hashtable bloomHashtable;
+        private Hashtable bloomSteadyHashtable;
 
         public GameEndState(
                 Settings settings,
@@ -37,6 +44,7 @@ namespace MistRidge
                 DialogueManager dialogueManager,
                 DeathManager deathManager,
                 CameraManager cameraManager,
+                CameraAnchorManager cameraAnchorManager,
                 CameraRigManager cameraRigManager,
                 CinematicManager cinematicManager,
                 DisplayManager displayManager,
@@ -56,6 +64,7 @@ namespace MistRidge
             this.dialogueManager = dialogueManager;
             this.deathManager = deathManager;
             this.cameraManager = cameraManager;
+            this.cameraAnchorManager = cameraAnchorManager;
             this.cameraRigManager = cameraRigManager;
             this.cinematicManager = cinematicManager;
             this.displayManager = displayManager;
@@ -68,14 +77,26 @@ namespace MistRidge
 
         public override void Initialize()
         {
-            ResetVariables();
             sceneLoadSignal.Event += OnSceneLoad;
-        }
 
-        /* public override void Dispose() */
-        /* { */
-        /*     sceneLoadSignal.Event -= OnSceneLoad; */
-        /* } */
+            spiralHashtable = new Hashtable();
+            spiralHashtable.Add("easetype", iTween.EaseType.easeInOutSine);
+
+            bloomHashtable = new Hashtable();
+            bloomHashtable.Add("from", 0);
+            bloomHashtable.Add("to", 1);
+            bloomHashtable.Add("time", settings.bloomTime);
+            bloomHashtable.Add("onupdate", "OnBloom");
+            bloomHashtable.Add("oncomplete", "OnBloomComplete");
+
+            bloomSteadyHashtable = new Hashtable();
+            bloomSteadyHashtable.Add("from", 0);
+            bloomSteadyHashtable.Add("to", 1);
+            bloomSteadyHashtable.Add("time", settings.bloomSteadyTime);
+            bloomSteadyHashtable.Add("onupdate", "OnBloomSteady");
+
+            ResetVariables();
+        }
 
         public void ResetVariables()
         {
@@ -102,6 +123,7 @@ namespace MistRidge
         {
             deathManager.IsActive = false;
             sceneLoader.OnlyFade();
+            ComputeSpiralPath();
         }
 
         public override void ExitState()
@@ -109,12 +131,46 @@ namespace MistRidge
             cinematicManager.CinematicType = CinematicType.None;
         }
 
+        public void OnBloomComplete()
+        {
+            PeakView peakView = stateMachine.ChunkManager.PeakZoneView.PeakView;
+            iTween.ValueTo(peakView.gameObject, bloomSteadyHashtable);
+        }
+
+        private void ComputeSpiralPath()
+        {
+            ChunkManager chunkManager = stateMachine.ChunkManager;
+
+            path = new Vector3[chunkManager.ChunkCount - 1];
+
+            int i = 0;
+            ChunkFacade previousChunkFacade = chunkManager.PeakChunkFacade.PreviousChunkFacade;
+
+            while (previousChunkFacade != null)
+            {
+                if (previousChunkFacade.PreviousChunkFacade == null)
+                {
+                    StartingZoneView startingZoneView = previousChunkFacade.ChunkView.GetComponentInChildren<StartingZoneView>();
+                    path[i] = startingZoneView.NormalSpawn.Position;
+                }
+                else
+                {
+                    path[i] = previousChunkFacade.ChunkView.Position + (Vector3.up * previousChunkFacade.ChunkView.ChunkFeatureView.EntryAltitude);
+                }
+
+                i++;
+                previousChunkFacade = previousChunkFacade.PreviousChunkFacade;
+            }
+        }
+
         private void OnSceneLoad()
         {
             displayManager.UpdateSprint(false);
             DisablePlayerDisplays();
+            cameraManager.ResetCamera();
             cameraManager.ZoomOverride = settings.zoomOverride;
             cameraManager.ZoomOverrideEnabled = true;
+            cameraAnchorManager.ResetAnchor();
             cameraRigManager.RigPosition = settings.rigPosition;
             cinematicManager.CinematicType = CinematicType.PeakZone;
 
@@ -143,6 +199,20 @@ namespace MistRidge
             displayManager.UpdateScoreMenu(true);
 
             menuShown = true;
+
+            SpiralCamera();
+        }
+
+        private void SpiralCamera()
+        {
+            spiralHashtable["path"] = path;
+            spiralHashtable["time"] = path.Length * settings.spiralTimePerChunk;
+
+            PeakView peakView = stateMachine.ChunkManager.PeakZoneView.PeakView;
+            peakView.GameEndState = this;
+
+            iTween.MoveTo(peakView.gameObject, spiralHashtable);
+            iTween.ValueTo(peakView.gameObject, bloomHashtable);
         }
 
         private void DisablePlayerDisplays()
@@ -186,6 +256,12 @@ namespace MistRidge
         public class Settings
         {
             public string startMenuSceneName;
+
+            public float spiralTimePerChunk;
+
+            public float bloomTime;
+            public float bloomSteadyTime;
+
             public float zoomOverride;
             public Vector3 rigPosition;
         }

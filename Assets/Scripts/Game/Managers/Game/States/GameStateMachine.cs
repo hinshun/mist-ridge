@@ -7,6 +7,8 @@ namespace MistRidge
     public class GameStateMachine : StateMachine<GameStateMachine, GameBaseState, GameStateType, GameStateFactory>
     {
         private GameReadyState gameReadyState;
+        private GameEndState gameEndState;
+        private ChunkManager chunkManager;
 
         public GameStateMachine(
                 GameStateFactory stateFactory)
@@ -28,11 +30,37 @@ namespace MistRidge
             }
         }
 
+        public GameEndState GameEndState
+        {
+            get
+            {
+                return gameEndState;
+            }
+        }
+
+        public ChunkManager ChunkManager
+        {
+            get
+            {
+                return chunkManager;
+            }
+            set
+            {
+                chunkManager = value;
+            }
+        }
+
         protected override void ChangedState(GameStateType stateType)
         {
-            if (stateType == GameStateType.Ready)
+            switch(stateType)
             {
-                gameReadyState = state as GameReadyState;
+                case GameStateType.Ready:
+                    gameReadyState = state as GameReadyState;
+                    break;
+
+                case GameStateType.End:
+                    gameEndState = state as GameEndState;
+                    break;
             }
         }
 

@@ -14,11 +14,13 @@ namespace MistRidge
         private readonly SprintManager sprintManager;
         private readonly SprintFactory sprintFactory;
         private readonly ChunkFacadeFactory chunkFacadeFactory;
+        private readonly GameStateMachine gameStateMachine;
 
         private int chunkCount;
 
         private List<Sprint> sprints;
         private ChunkFacade startingChunkFacade;
+        private List<ChunkFacade> peakChunkFacades;
         private ChunkFacade peakChunkFacade;
         private PeakZoneView peakZoneView;
         private Checkpoint peakCheckpoint;
@@ -33,7 +35,8 @@ namespace MistRidge
                 CheckpointManager checkpointManager,
                 SprintManager sprintManager,
                 SprintFactory sprintFactory,
-                ChunkFacadeFactory chunkFacadeFactory)
+                ChunkFacadeFactory chunkFacadeFactory,
+                GameStateMachine gameStateMachine)
         {
             this.container = container;
             this.settings = settings;
@@ -42,6 +45,7 @@ namespace MistRidge
             this.sprintManager = sprintManager;
             this.sprintFactory = sprintFactory;
             this.chunkFacadeFactory = chunkFacadeFactory;
+            this.gameStateMachine = gameStateMachine;
         }
 
         public int ChunkCount
@@ -76,6 +80,14 @@ namespace MistRidge
             }
         }
 
+        public PeakZoneView PeakZoneView
+        {
+            get
+            {
+                return peakZoneView;
+            }
+        }
+
         public void Initialize()
         {
             ResetVariables();
@@ -90,7 +102,8 @@ namespace MistRidge
             sprints = SpawnSprints();
             sprintManager.SetSprintCount(sprints.Count);
 
-            peakChunkFacade = SpawnPeakChunkFacades();
+            peakChunkFacades = SpawnPeakChunkFacades();
+            peakChunkFacade = peakChunkFacades[peakChunkFacades.Count - 1];
             peakZoneView = peakChunkFacade.ChunkView.GetComponentInChildren<PeakZoneView>();
 
             cinematicManager.PeakZoneView = peakZoneView;
@@ -99,6 +112,10 @@ namespace MistRidge
 
             lastSprint.Checkpoint = peakCheckpoint;
             secondLastSprint.Checkpoint.NextCheckpoint = lastSprint.Checkpoint;
+
+            LinkChunks();
+
+            gameStateMachine.ChunkManager = this;
         }
 
         private int CountChunks()
@@ -176,9 +193,9 @@ namespace MistRidge
             return chunkFacade;
         }
 
-        private ChunkFacade SpawnPeakChunkFacades()
+        private List<ChunkFacade> SpawnPeakChunkFacades()
         {
-            ChunkFacade peakChunkFacade = null;
+            List<ChunkFacade> peakChunkFacades = new List<ChunkFacade>();
 
             for (int chunkNum = settings.peakChunkCount - 1; chunkNum >= 0; --chunkNum)
             {
@@ -193,13 +210,10 @@ namespace MistRidge
                 ChunkFacade chunkFacade = chunkFacadeFactory.Create(chunkRequest);
                 chunkFacade.Name = "Peak";
 
-                if (chunkNum == 0)
-                {
-                    peakChunkFacade = chunkFacade;
-                }
+                peakChunkFacades.Add(chunkFacade);
             }
 
-            return peakChunkFacade;
+            return peakChunkFacades;
         }
 
         private Checkpoint SpawnPeakCheckpoint()
@@ -214,6 +228,26 @@ namespace MistRidge
             checkpointManager.AddCheckpoint(checkpoint);
 
             return checkpoint;
+        }
+
+        private void LinkChunks()
+        {
+            ChunkFacade previousChunkFacade = startingChunkFacade;
+
+            foreach (Sprint sprint in sprints)
+            {
+                foreach (ChunkFacade chunkFacade in sprint.ChunkFacades)
+                {
+                    chunkFacade.PreviousChunkFacade = previousChunkFacade;
+                    previousChunkFacade = chunkFacade;
+                }
+            }
+
+            foreach (ChunkFacade chunkFacade in peakChunkFacades)
+            {
+                chunkFacade.PreviousChunkFacade = previousChunkFacade;
+                previousChunkFacade = chunkFacade;
+            }
         }
 
         [Serializable]
