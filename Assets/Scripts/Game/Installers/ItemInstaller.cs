@@ -33,6 +33,7 @@ namespace MistRidge
         private void InstallSettings()
         {
             Container.Bind<ItemManager.Settings>().ToSingleInstance(settings.itemManagerSettings);
+            Container.Bind<BubbleTrapItem.Settings>().ToSingleInstance(settings.bubbleTrapItemSettings);
         }
 
         [Serializable]
@@ -40,6 +41,7 @@ namespace MistRidge
         {
             public ItemEffectSettings itemEffects;
             public ItemManager.Settings itemManagerSettings;
+            public BubbleTrapItem.Settings bubbleTrapItemSettings;
 
             [Serializable]
             public class ItemEffectSettings

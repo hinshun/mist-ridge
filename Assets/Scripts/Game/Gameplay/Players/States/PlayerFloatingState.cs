@@ -25,6 +25,7 @@ namespace MistRidge
         public override void EnterState()
         {
             playerView.Animator.SetTrigger("StartFloating");
+            playerView.Animator.SetBool("IsFloating", true);
 
             stateMachine.MoveDirection = Vector3.zero;
 
@@ -37,6 +38,8 @@ namespace MistRidge
 
         public override void ExitState()
         {
+            playerView.Animator.SetBool("IsFloating", false);
+
             playerView.CanJump = true;
             stateMachine.Enabled = true;
         }

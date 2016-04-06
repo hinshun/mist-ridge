@@ -128,6 +128,7 @@ namespace MistRidge
 
             Container.Bind<Player.Settings>().ToSingleInstance(settings.player.playerSettings);
             Container.Bind<PlayerController.Settings>().ToSingleInstance(settings.player.controllerSettings);
+            Container.Bind<PlayerInventory.Settings>().ToSingleInstance(settings.player.inventorySettings);
             Container.Bind<PlayerStateMachine.Settings>().ToSingleInstance(settings.player.stateMachineSettings);
             Container.Bind<PlayerFacadeFactory.Settings>().ToSingleInstance(settings.player.facadeFactorySettings);
 
@@ -155,6 +156,7 @@ namespace MistRidge
                 public CollisionSettings collision;
                 public Player.Settings playerSettings;
                 public PlayerController.Settings controllerSettings;
+                public PlayerInventory.Settings inventorySettings;
                 public PlayerStateMachine.Settings stateMachineSettings;
                 public PlayerFacadeFactory.Settings facadeFactorySettings;
 

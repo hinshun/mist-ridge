@@ -60,11 +60,15 @@ namespace MistRidge
         [SerializeField]
         private SpriteRenderer playerCircle;
 
+        [SerializeField]
+        private ParticleSystem itemUse;
+
         private Hashtable itemFlashInHashtable;
         private Hashtable itemFlashOutHashtable;
 
         private bool canJump;
         private bool canPickupItems;
+        private bool isBubbleTrapped;
 
         private Animator animator;
         private ItemPickupSignal.Trigger itemPickupTrigger;
@@ -87,6 +91,14 @@ namespace MistRidge
             this.checkpointTrigger = checkpointTrigger;
             this.cinematicTrigger = cinematicTrigger;
             this.playerControlTrigger = playerControlTrigger;
+        }
+
+        public bool IsBubbleTrapped
+        {
+            get
+            {
+                return isBubbleTrapped;
+            }
         }
 
         public Vector3 Forward
@@ -132,6 +144,14 @@ namespace MistRidge
             get
             {
                 return respawn;
+            }
+        }
+
+        public ParticleSystem ItemUse
+        {
+            get
+            {
+                return itemUse;
             }
         }
 
@@ -241,16 +261,23 @@ namespace MistRidge
 
         public void BubbleTrapped()
         {
+            isBubbleTrapped = true;
             itemEffectTrigger.Fire(ItemType.BubbleTrap, ItemStage.Start);
         }
 
         public void BubbleTrapRelease()
         {
+            isBubbleTrapped = false;
             itemEffectTrigger.Fire(ItemType.BubbleTrap, ItemStage.End);
         }
 
         private void Awake()
         {
+            canJump = true;
+            canPickupItems = true;
+            isBubbleTrapped = false;
+            IsDustTrailEmitting = false;
+
             animator = GetComponent<Animator>();
             checkpointsVisited = new Dictionary<CheckpointView, bool>();
 
@@ -269,11 +296,6 @@ namespace MistRidge
             itemFlashOutHashtable.Add("time", itemFlashTime);
             itemFlashOutHashtable.Add("onupdate", "ItemFlash");
             itemFlashOutHashtable.Add("onupdatetarget", gameObject);
-
-            canJump = true;
-            canPickupItems = true;
-
-            IsDustTrailEmitting = false;
         }
 
         private void ItemFlash(Color color)

@@ -16,7 +16,7 @@ namespace MistRidge
         private float spawnDelay = 5f;
 
         [SerializeField]
-        private MeshRenderer meshRenderer;
+        private GameObject orb;
 
         private float spawnTimer;
         private bool pickable;
@@ -46,14 +46,14 @@ namespace MistRidge
         private void EnablePickable()
         {
             pickable = true;
-            meshRenderer.enabled = pickable;
+            orb.SetActive(pickable);
             pickupCollider.enabled = pickable;
         }
 
         private void DisablePickable()
         {
             pickable = false;
-            meshRenderer.enabled = pickable;
+            orb.SetActive(pickable);
             pickupCollider.enabled = pickable;
         }
 

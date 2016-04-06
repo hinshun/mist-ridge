@@ -30,12 +30,15 @@ namespace MistRidge
         [SerializeField]
         private Vector3 initialScale;
 
+        private bool activated;
+        private bool trapped;
+        private bool popping;
+
         private Hashtable moveHashtable;
         private Hashtable scaleHashtable;
         private Hashtable trappedHashtable;
         private Hashtable destroyHashtable;
-        private bool activated;
-        private bool trapped;
+
         private PlayerView playerView;
         private Vector3 finalScale;
 
@@ -59,6 +62,8 @@ namespace MistRidge
         {
             activated = false;
             trapped = false;
+            popping = false;
+
             playerView = null;
             LocalScale = initialScale;
         }
@@ -69,32 +74,31 @@ namespace MistRidge
                 (transform.position + landingPosition) / 2 + (Vector3.up * throwHeight),
                 landingPosition
             };
+
             moveHashtable["path"] = path;
-            trappedHashtable["position"] = landingPosition + (Vector3.up * height);
+
             iTween.MoveTo(gameObject, moveHashtable);
             iTween.ScaleTo(gameObject, scaleHashtable);
         }
 
-        private void SetupTrap()
-        {
-            activated = true;
-        }
-
-        private void Pop()
+        public void Pop()
         {
             activated = false;
             trapped = false;
+            popping = false;
 
             if (playerView != null)
             {
                 playerView.Parent = Parent;
+                playerView.LocalScale = new Vector3(1, 1, 1);
                 playerView.BubbleTrapRelease();
             }
 
+            LocalScale = initialScale;
             Destroy();
         }
 
-        public void OnTriggerEnter(Collider other)
+        public void OnTriggerStay(Collider other)
         {
             if (!activated || !other.CompareTag("Player"))
             {
@@ -109,16 +113,19 @@ namespace MistRidge
                     return;
                 }
 
+                popping = true;
+
                 iTween.ScaleTo(gameObject, destroyHashtable);
                 return;
             }
 
             playerView = other.GetComponent<PlayerView>();
-            if (playerView == null)
+            if (playerView == null || playerView.IsBubbleTrapped)
             {
                 return;
             }
 
+            iTween.StopByName("moveTween" + GetInstanceID());
             playerView.BubbleTrapped();
             trapped = true;
 
@@ -126,32 +133,40 @@ namespace MistRidge
             playerView.Parent = transform;
             playerView.LocalPosition = Vector3.zero;
 
+            trappedHashtable["position"] = Position + (Vector3.up * height);
             iTween.MoveTo(gameObject, trappedHashtable);
+        }
+
+        private void SetupTrap()
+        {
+            activated = true;
         }
 
         private void Awake()
         {
             finalScale = LocalScale;
 
+            activated = false;
+            trapped = false;
+            popping = false;
+
             moveHashtable = new Hashtable();
+            moveHashtable.Add("name", "moveTween" + GetInstanceID());
             moveHashtable.Add("time", throwTime);
 
             scaleHashtable = new Hashtable();
             scaleHashtable.Add("time", scaleTime);
             scaleHashtable.Add("scale", finalScale);
             scaleHashtable.Add("oncomplete", "SetupTrap");
-            scaleHashtable.Add("oncompletetarget", gameObject);
 
             trappedHashtable = new Hashtable();
             trappedHashtable.Add("time", duration);
             trappedHashtable.Add("oncomplete", "Pop");
-            trappedHashtable.Add("oncompletetarget", gameObject);
 
             destroyHashtable = new Hashtable();
             destroyHashtable.Add("time", popTime);
             destroyHashtable.Add("scale", popScale);
             destroyHashtable.Add("oncomplete", "Pop");
-            destroyHashtable.Add("oncompletetarget", gameObject);
         }
     }
 }

@@ -6,6 +6,7 @@ namespace MistRidge
 {
     public class PlayerInventory : IInitializable, ITickable
     {
+        private readonly Settings settings;
         private readonly Input input;
         private readonly Player player;
         private readonly PlayerView playerView;
@@ -14,8 +15,12 @@ namespace MistRidge
         private readonly ItemPickupSignal itemPickupSignal;
 
         private IItem item;
+        private ItemType itemType;
+        private ParticleSystem itemParticleSystem;
+        private ParticleSystemRenderer itemRenderer;
 
         public PlayerInventory(
+                Settings settings,
                 Input input,
                 Player player,
                 PlayerView playerView,
@@ -23,6 +28,7 @@ namespace MistRidge
                 DisplayManager displayManager,
                 ItemPickupSignal itemPickupSignal)
         {
+            this.settings = settings;
             this.input = input;
             this.player = player;
             this.playerView = playerView;
@@ -33,8 +39,10 @@ namespace MistRidge
 
         public void Initialize()
         {
-            this.playerView.CanPickupItems = true;
             itemPickupSignal.Event += OnItemPickup;
+            this.playerView.CanPickupItems = true;
+            itemParticleSystem = playerView.ItemUse;
+            itemRenderer = itemParticleSystem.GetComponent<ParticleSystemRenderer>();
         }
 
         public void Dispose()
@@ -50,6 +58,7 @@ namespace MistRidge
                 {
                     if (input.Mapping.UseItem.WasPressed)
                     {
+                        SpawnParticle();
                         item.Use();
                     }
                 }
@@ -64,14 +73,43 @@ namespace MistRidge
             }
         }
 
+        private void SpawnParticle()
+        {
+            switch (itemType)
+            {
+                case ItemType.Aether:
+                    itemRenderer.material = settings.aetherItem;
+                    break;
+
+                case ItemType.Quickness:
+                    itemRenderer.material = settings.quicknessItem;
+                    break;
+
+                case ItemType.BubbleTrap:
+                    itemRenderer.material = settings.bubbleTrapItem;
+                    break;
+            }
+
+            itemParticleSystem.Emit(1);
+        }
+
         private void OnItemPickup(ItemType itemType)
         {
+            this.itemType = itemType;
             playerView.CanPickupItems = false;
 
             ItemDrop itemDrop = itemManager.PickItemDrop(itemType, player);
             displayManager.UpdateItem(input.DeviceNum, itemDrop);
 
             item = itemManager.NewItem(itemDrop, player);
+        }
+
+        [Serializable]
+        public class Settings
+        {
+            public Material aetherItem;
+            public Material quicknessItem;
+            public Material bubbleTrapItem;
         }
     }
 }
