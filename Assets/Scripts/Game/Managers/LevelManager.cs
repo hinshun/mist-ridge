@@ -62,7 +62,7 @@ namespace MistRidge
 
             gameStateTrigger.Fire(GameStateType.Play);
 
-            foreach (Input input in gameStateMachine.GameReadyState.JoinedInputs)
+            foreach (Input input in gameStateMachine.GameReadyState.SelectedInputs)
             {
                 PlayerFacade playerFacade = playerManager.SpawnPlayer(input, gameStateMachine.GameReadyState.ChosenCharacterType(input));
                 deathManager.AddPlayer(input);

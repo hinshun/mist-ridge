@@ -16,6 +16,7 @@ namespace MistRidge
         private readonly GameManager gameManager;
 
         private bool tweening;
+        private bool starting;
         private List<CharacterType> characterTypes;
         private Dictionary<Input, CharacterType> inputTypeMapping;
         private Dictionary<Input, SelectType> inputSelectMapping;
@@ -42,7 +43,7 @@ namespace MistRidge
             stateType = GameStateType.Ready;
         }
 
-        public List<Input> JoinedInputs
+        public List<Input> SelectedInputs
         {
             get
             {
@@ -51,6 +52,24 @@ namespace MistRidge
                 foreach (KeyValuePair<Input, SelectType> inputSelect in inputSelectMapping)
                 {
                     if (inputSelect.Value == SelectType.Select)
+                    {
+                        joinedInputs.Add(inputSelect.Key);
+                    }
+                }
+
+                return joinedInputs;
+            }
+        }
+
+        public List<Input> JoinedInputs
+        {
+            get
+            {
+                List<Input> joinedInputs = new List<Input>();
+
+                foreach (KeyValuePair<Input, SelectType> inputSelect in inputSelectMapping)
+                {
+                    if (inputSelect.Value == SelectType.Join)
                     {
                         joinedInputs.Add(inputSelect.Key);
                     }
@@ -72,6 +91,9 @@ namespace MistRidge
 
         public void ResetVariables()
         {
+            tweening = false;
+            starting = false;
+
             inputTypeMapping = new Dictionary<Input, CharacterType>();
             inputSelectMapping = new Dictionary<Input, SelectType>();
 
@@ -129,6 +151,7 @@ namespace MistRidge
         public override void EnterState()
         {
             tweening = false;
+            starting = false;
             displayManager.UpdateCharacterSelect(true);
             cameraView.IsActive = false;
 
@@ -144,6 +167,14 @@ namespace MistRidge
         }
 
         private int SelectPlayerCount
+        {
+            get
+            {
+                return SelectedInputs.Count;
+            }
+        }
+
+        private int JoinedPlayerCount
         {
             get
             {
@@ -174,12 +205,16 @@ namespace MistRidge
 
                     inputSelectMapping[input] = SelectType.Select;
 
-                    if (SelectPlayerCount >= settings.minStartPlayers)
-                    {
-                        displayManager.UpdateCharacterStart(true);
-                    }
-
                     break;
+            }
+
+            if (JoinedPlayerCount > 0 || SelectPlayerCount < settings.minStartPlayers)
+            {
+                displayManager.UpdateCharacterStart(false);
+            }
+            else
+            {
+                displayManager.UpdateCharacterStart(true);
             }
         }
 
@@ -204,6 +239,7 @@ namespace MistRidge
                     displayManager.UpdateCharacterSelect(input.DeviceNum, false);
 
                     inputSelectMapping[input] = SelectType.None;
+
                     break;
 
                 case SelectType.Select:
@@ -213,12 +249,16 @@ namespace MistRidge
 
                     inputSelectMapping[input] = SelectType.Join;
 
-                    if (SelectPlayerCount < settings.minStartPlayers)
-                    {
-                        displayManager.UpdateCharacterStart(false);
-                    }
-
                     break;
+            }
+
+            if (JoinedPlayerCount > 0 || SelectPlayerCount < settings.minStartPlayers)
+            {
+                displayManager.UpdateCharacterStart(false);
+            }
+            else
+            {
+                displayManager.UpdateCharacterStart(true);
             }
         }
 
@@ -229,11 +269,12 @@ namespace MistRidge
             switch (selectType)
             {
                 case SelectType.Select:
-                    if (SelectPlayerCount < settings.minStartPlayers)
+                    if (starting || JoinedPlayerCount > 0 || SelectPlayerCount < settings.minStartPlayers)
                     {
                         break;
                     }
 
+                    starting = true;
                     sceneLoader.Load(settings.levelSceneName);
                     break;
             }
