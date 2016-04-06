@@ -9,7 +9,8 @@ namespace MistRidge
     {
         private readonly SprintView sprintView;
         private readonly List<ChunkFacade> chunkFacades;
-        private readonly Checkpoint checkpoint;
+
+        private Checkpoint checkpoint;
 
         public Sprint(
                 SprintView sprintView,
@@ -26,6 +27,10 @@ namespace MistRidge
             get
             {
                 return checkpoint;
+            }
+            set
+            {
+                checkpoint = value;
             }
         }
 
@@ -44,7 +49,10 @@ namespace MistRidge
                 chunkFacade.Parent = sprintView.transform;
             }
 
-            checkpoint.Parent = sprintView.transform;
+            if (checkpoint != null)
+            {
+                checkpoint.Parent = sprintView.transform;
+            }
         }
     }
 }

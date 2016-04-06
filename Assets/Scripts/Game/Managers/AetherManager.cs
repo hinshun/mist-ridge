@@ -5,43 +5,80 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class AetherManager : IInitializable
+    public class AetherManager : IInitializable, IDisposable
     {
+        private readonly Settings settings;
         private readonly PlayerManager playerManager;
         private readonly DisplayManager displayManager;
+        private readonly AetherGainSignal aetherGainSignal;
 
         private Dictionary<PlayerView, int> playerAethers;
+        private float gameTimer;
 
         public AetherManager(
+                Settings settings,
                 PlayerManager playerManager,
-                DisplayManager displayManager)
+                DisplayManager displayManager,
+                AetherGainSignal aetherGainSignal)
         {
+            this.settings = settings;
             this.playerManager = playerManager;
             this.displayManager = displayManager;
+            this.aetherGainSignal = aetherGainSignal;
+        }
+
+        public float GameTimer
+        {
+            get
+            {
+                return gameTimer;
+            }
+            set
+            {
+                gameTimer = value;
+            }
         }
 
         public void Initialize()
         {
+            aetherGainSignal.Event += OnAetherGain;
+            ResetVariables();
+        }
+
+        public void Dispose()
+        {
+            aetherGainSignal.Event -= OnAetherGain;
+        }
+
+        public void ResetVariables()
+        {
             playerAethers = new Dictionary<PlayerView, int>();
         }
 
-        public PlayerView LeadPlayerView
+        public Dictionary<PlayerView, ScorePlacementType> Placements
         {
             get
             {
-                PlayerView leadPlayerView = null;
-                int maxAethers = 0;
+                List<PlayerView> playerViews = new List<PlayerView>();
+                playerViews.AddRange(playerAethers.Keys);
 
-                foreach (KeyValuePair<PlayerView, int> entry in playerAethers)
+                playerViews.Sort((a, b) => playerAethers[b].CompareTo(playerAethers[a]));
+
+                Dictionary<PlayerView, ScorePlacementType> placements = new Dictionary<PlayerView, ScorePlacementType>();
+
+                ScorePlacementType[] orderedPlacements = new ScorePlacementType[] {
+                    ScorePlacementType.First,
+                    ScorePlacementType.Second,
+                    ScorePlacementType.Third,
+                    ScorePlacementType.Fourth,
+                };
+
+                for (int i = 0; i < playerViews.Count; ++i)
                 {
-                    if (entry.Value > maxAethers)
-                    {
-                        leadPlayerView = entry.Key;
-                        maxAethers = entry.Value;
-                    }
+                    placements.Add(playerViews[i], orderedPlacements[i]);
                 }
 
-                return leadPlayerView;
+                return placements;
             }
         }
 
@@ -50,17 +87,37 @@ namespace MistRidge
             return playerAethers[playerView];
         }
 
-        public void AddAether(PlayerView playerView, int aetherCount)
+        public void AddAether(CheckpointView checkpointView, PlayerView playerView, int aetherCount)
+        {
+            ParticleTargetRequest particleTargetRequest = new ParticleTargetRequest()
+            {
+                particleSystem = checkpointView.AetherAward,
+                particleCount = aetherCount,
+                targetTime = settings.aetherTargetTime,
+                targetTransform = playerView.transform,
+                particleTargetType = ParticleTargetType.Aether,
+                playerView = playerView,
+            };
+
+            checkpointView.ParticleTargetView.Target(particleTargetRequest);
+        }
+
+        public void OnAetherGain(PlayerView playerView)
         {
             if (!playerAethers.ContainsKey(playerView))
             {
                 playerAethers.Add(playerView, 0);
             }
 
-            playerAethers[playerView] += aetherCount;
-
+            playerAethers[playerView]++;
             Input input = playerManager.Input(playerView);
             displayManager.UpdateAether(input.DeviceNum, playerAethers[playerView]);
+        }
+
+        [Serializable]
+        public class Settings
+        {
+            public float aetherTargetTime;
         }
     }
 }

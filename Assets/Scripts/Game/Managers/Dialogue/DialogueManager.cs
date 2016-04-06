@@ -6,7 +6,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class DialogueManager : IInitializable, ITickable
+    public class DialogueManager : IInitializable, IDisposable, ITickable
     {
         private readonly Settings settings;
         private readonly DialogueSignal dialogueSignal;
@@ -43,8 +43,7 @@ namespace MistRidge
 
         public void Initialize()
         {
-            dialogueIndex = 0;
-            dialogueType = DialogueType.None;
+            ResetVariables();
             dialogueSignal.Event += OnDialogue;
             dialogueStateSignal.Event += OnDialogueState;
             dialogueManagerView.DialogueManager = this;
@@ -53,6 +52,18 @@ namespace MistRidge
             textHashtable.Add("delay", settings.textDelay);
             textHashtable.Add("onupdate", "OnUpdateText");
             textHashtable.Add("oncomplete", "OnFinishText");
+        }
+
+        public void Dispose()
+        {
+            dialogueSignal.Event -= OnDialogue;
+            dialogueStateSignal.Event -= OnDialogueState;
+        }
+
+        public void ResetVariables()
+        {
+            dialogueIndex = 0;
+            dialogueType = DialogueType.None;
         }
 
         public void Tick()

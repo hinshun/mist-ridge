@@ -42,6 +42,11 @@ namespace MistRidge
             gameDisplayCanvas = gameDisplayView.GetComponent<Canvas>();
             gameDisplayScaler = gameDisplayView.GetComponent<CanvasScaler>();
 
+            ResetVariables();
+        }
+
+        public void ResetVariables()
+        {
             UpdateSprint(false);
 
             foreach (PlayerDisplayView playerDisplay in gameDisplayView.PlayerDisplays)
@@ -64,7 +69,7 @@ namespace MistRidge
 
             UpdateDialogue(false);
 
-            UpdateReadySetGo(ReadySetGoType.None);
+            readySetGoDisplayView.Reset();
 
             UpdateScoreTime(false, 0);
             UpdateScoreMenu(false);
@@ -76,6 +81,12 @@ namespace MistRidge
 
         public void Display(int deviceNum, CharacterType characterType)
         {
+            if (characterType == CharacterType.None)
+            {
+                PlayerDisplay(deviceNum).SetActive(false);
+                return;
+            }
+
             UpdateBackdrop(deviceNum, BackdropHealth.Alive);
             UpdateNameTag(deviceNum, characterType);
             UpdatePortraitImage(deviceNum, characterType, PortraitEmotion.Neutral);
@@ -106,6 +117,17 @@ namespace MistRidge
         {
             SprintDisplayView sprintDisplay = gameDisplayView.SprintDisplay;
             sprintDisplay.SetActive(show);
+        }
+
+        public void UpdateSprintLayout(float y)
+        {
+            RectTransform layoutTransform = gameDisplayView.SprintDisplay.LayoutTransform;
+
+            layoutTransform.anchoredPosition3D = new Vector3(
+                layoutTransform.anchoredPosition3D.x,
+                y,
+                layoutTransform.anchoredPosition3D.z
+            );
         }
 
         public void UpdateSprintText(int current, int total)
@@ -324,33 +346,6 @@ namespace MistRidge
             dialogueDisplayView.Next.enabled = show;
         }
 
-        public void UpdateReadySetGo(ReadySetGoType readySetGoType)
-        {
-            readySetGoDisplayView.Ready.enabled = false;
-            readySetGoDisplayView.Set.enabled = false;
-            readySetGoDisplayView.Go.enabled = false;
-
-            switch(readySetGoType)
-            {
-                case ReadySetGoType.Ready:
-                    readySetGoDisplayView.Ready.enabled = false;
-                    break;
-
-                case ReadySetGoType.Set:
-                    readySetGoDisplayView.Ready.enabled = false;
-                    readySetGoDisplayView.Set.enabled = false;
-                    readySetGoDisplayView.Go.enabled = false;
-                    break;
-
-                case ReadySetGoType.Go:
-                    readySetGoDisplayView.Ready.enabled = false;
-                    readySetGoDisplayView.Set.enabled = false;
-                    readySetGoDisplayView.Go.enabled = false;
-
-                    break;
-            }
-        }
-
         public void UpdateScorePlayer(int deviceNum, int aetherCount, ScorePlacementType scorePlacementType, CharacterType characterType)
         {
             if (characterType == CharacterType.None)
@@ -370,10 +365,13 @@ namespace MistRidge
             PlayerScoreDisplay(scorePlacementType).SetActive(true);
         }
 
-        public void UpdateScoreTime(bool show, float seconds)
+        public void UpdateScoreTime(bool show, int seconds)
         {
             ScoreTimeDisplayView scoreTimeDisplayView = scoreDisplayView.ScoreTimeDisplayView;
-            scoreTimeDisplayView.Time.text = "Time: " + seconds + "s";
+
+            int minutes = seconds / 60;
+            scoreTimeDisplayView.Time.text = minutes + "m " + (seconds % 60) + "s";
+
             scoreDisplayView.SetActive(show);
         }
 

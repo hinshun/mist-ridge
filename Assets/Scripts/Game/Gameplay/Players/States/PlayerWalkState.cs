@@ -19,7 +19,7 @@ namespace MistRidge
 
         public override void Update()
         {
-            if (playerView.CanJump && input.Mapping.Jump.WasPressed)
+            if (stateMachine.Enabled && playerView.CanJump && input.Mapping.Jump.WasPressed)
             {
                 base.Update();
                 stateMachine.ChangeState(PlayerStateType.Jump);
@@ -33,7 +33,7 @@ namespace MistRidge
                 return;
             }
 
-            if (input.Mapping.Direction.Vector.magnitude > player.CurrentWalkThreshold)
+            if (stateMachine.Enabled && input.Mapping.Direction.Vector.magnitude > player.CurrentWalkThreshold)
             {
                 SetHorizontal();
 

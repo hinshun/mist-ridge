@@ -15,9 +15,10 @@ namespace MistRidge
         [SerializeField]
         private float dropDistance;
 
-        private BoxCollider boxCollider;
-
+        private Vector3 initialPosition;
         private Hashtable fallHashtable;
+        private BoxCollider boxCollider;
+        private MeshRenderer meshRenderer;
 
         private void OnTriggerEnter(Collider other)
         {
@@ -26,24 +27,34 @@ namespace MistRidge
                 return;
             }
 
-            iTween.MoveTo(gameObject, fallHashtable);
+            iTween.ValueTo(gameObject, fallHashtable);
         }
 
-        private void FallEnd()
+        private void FallEnd(float time)
         {
-            Destroy(gameObject);
+            Position = Vector3.Lerp(
+                initialPosition,
+                initialPosition - (Vector3.up * dropDistance),
+                time
+            );
+
+            meshRenderer.material.color = new Color(1, 1, 1, 1 - time);
         }
 
         private void Awake()
         {
+            initialPosition = Position;
             boxCollider = GetComponent<BoxCollider>();
+            meshRenderer = GetComponent<MeshRenderer>();
 
             fallHashtable = new Hashtable();
-            fallHashtable.Add("delay", delay);
+            fallHashtable.Add("from", 0);
+            fallHashtable.Add("to", 1);
             fallHashtable.Add("time", time);
-            fallHashtable.Add("position", Position - (Vector3.up * dropDistance));
+            fallHashtable.Add("delay", delay);
             fallHashtable.Add("oncomplete", "FallEnd");
-            fallHashtable.Add("oncompletetarget", gameObject);
+
+            /* fallHashtable.Add("position", Position - (Vector3.up * dropDistance)); */
         }
     }
 }

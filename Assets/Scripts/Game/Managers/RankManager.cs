@@ -37,6 +37,11 @@ namespace MistRidge
 
         public void Initialize()
         {
+            ResetVariables();
+        }
+
+        public void ResetVariables()
+        {
             isActive = false;
         }
 

@@ -4,7 +4,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class TutorialManager : IInitializable
+    public class TutorialManager : IInitializable, IDisposable
     {
         private readonly Settings settings;
         private readonly TutorialSignal tutorialSignal;
@@ -46,6 +46,11 @@ namespace MistRidge
             tutorialSignal.Event += OnTutorialEvent;
         }
 
+        public void Dispose()
+        {
+            tutorialSignal.Event -= OnTutorialEvent;
+        }
+
         private void OnTutorialEvent(TutorialType tutorialType)
         {
             switch(tutorialType)
@@ -62,6 +67,15 @@ namespace MistRidge
 
         private void StartTutorial()
         {
+            if (!settings.tutorialEnabled)
+            {
+                deathManager.IsTutorial = false;
+                EnablePlayerDisplays();
+                /* readySetGoManager.Countdown(); */
+
+                return;
+            }
+
             displayManager.UpdateCinematic(true);
             deathManager.IsActive = false;
             cameraManager.ZoomOverride = settings.zoomOverride;
@@ -75,14 +89,18 @@ namespace MistRidge
 
         private void EndTutorial()
         {
-            displayManager.UpdateCinematic(false);
-
             deathManager.IsTutorial = false;
             deathManager.IsActive = true;
             cameraManager.ZoomOverrideEnabled = false;
-            cameraRigManager.ResetRig();
+            cameraRigManager.ResetVariables();
             cinematicManager.CinematicType = CinematicType.None;
+            EnablePlayerDisplays();
 
+            readySetGoManager.Countdown();
+        }
+
+        private void EnablePlayerDisplays()
+        {
             foreach (Input input in inputManager.Inputs)
             {
                 if (!playerManager.HasPlayerFacade(input))
@@ -98,6 +116,7 @@ namespace MistRidge
         [Serializable]
         public class Settings
         {
+            public bool tutorialEnabled;
             public float zoomOverride;
             public Vector3 rigPosition;
         }

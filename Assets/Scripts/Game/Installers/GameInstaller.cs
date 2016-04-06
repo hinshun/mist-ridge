@@ -48,11 +48,23 @@ namespace MistRidge
 
         private void InstallSignals()
         {
+            Container.BindSignal<ItemGainSignal>();
+            Container.BindTrigger<ItemGainSignal.Trigger>();
+
+            Container.BindSignal<AetherGainSignal>();
+            Container.BindTrigger<AetherGainSignal.Trigger>();
+
+            Container.BindSignal<RespawnSignal>();
+            Container.BindTrigger<RespawnSignal.Trigger>();
+
             Container.BindSignal<MenuSignal>();
             Container.BindTrigger<MenuSignal.Trigger>();
 
             Container.BindSignal<GameStateSignal>();
             Container.BindTrigger<GameStateSignal.Trigger>();
+
+            Container.BindSignal<SceneLoadSignal>();
+            Container.BindTrigger<SceneLoadSignal.Trigger>();
         }
 
         private void InstallInput()
@@ -92,8 +104,10 @@ namespace MistRidge
         {
             Container.Bind<Generator.Settings>().ToSingleInstance(settings.generatorSettings);
             Container.Bind<PoolManager.Settings>().ToSingleInstance(settings.poolManagerSettings);
+            Container.Bind<AetherManager.Settings>().ToSingleInstance(settings.aetherManagerSettings);
 
             Container.Bind<GameReadyState.Settings>().ToSingleInstance(settings.game.gameReadyStateSettings);
+            Container.Bind<GameEndState.Settings>().ToSingleInstance(settings.game.gameEndStateSettings);
         }
 
         [Serializable]
@@ -104,12 +118,14 @@ namespace MistRidge
             public GameObject sceneLoaderPrefab;
             public Generator.Settings generatorSettings;
             public PoolManager.Settings poolManagerSettings;
+            public AetherManager.Settings aetherManagerSettings;
             public GameSettings game;
 
             [Serializable]
             public class GameSettings
             {
                 public GameReadyState.Settings gameReadyStateSettings;
+                public GameEndState.Settings gameEndStateSettings;
             }
         }
     }

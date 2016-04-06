@@ -5,16 +5,19 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class Checkpoint : IInitializable
+    public class Checkpoint : IInitializable, ITickable
     {
         private readonly int checkpointNum;
         private readonly ChunkFacade chunkFacade;
         private readonly SpawnManager spawnManager;
         private readonly CheckpointManager checkpointManager;
         private readonly AetherManager aetherManager;
+        private readonly InputManager inputManager;
         private readonly PlayerManager playerManager;
+        private readonly ReadySetGoManager readySetGoManager;
         private readonly DeathManager deathManager;
 
+        private bool waitingForRespawn;
         private int aetherPosition;
         private Checkpoint nextCheckpoint;
 
@@ -24,7 +27,9 @@ namespace MistRidge
                 SpawnManager spawnManager,
                 CheckpointManager checkpointManager,
                 AetherManager aetherManager,
+                InputManager inputManager,
                 PlayerManager playerManager,
+                ReadySetGoManager readySetGoManager,
                 DeathManager deathManager)
         {
             this.checkpointNum = checkpointNum;
@@ -32,8 +37,22 @@ namespace MistRidge
             this.spawnManager = spawnManager;
             this.checkpointManager = checkpointManager;
             this.aetherManager = aetherManager;
+            this.inputManager = inputManager;
             this.playerManager = playerManager;
+            this.readySetGoManager = readySetGoManager;
             this.deathManager = deathManager;
+        }
+
+        public bool WaitingForRespawn
+        {
+            get
+            {
+                return waitingForRespawn;
+            }
+            set
+            {
+                waitingForRespawn = value;
+            }
         }
 
         public int CheckpointNum
@@ -114,45 +133,71 @@ namespace MistRidge
 
         public void Initialize()
         {
-            chunkFacade.Name = "Checkpoint";
+            waitingForRespawn = false;
             aetherPosition = 0;
+            chunkFacade.Name = "Checkpoint";
+        }
+
+        public void Tick()
+        {
+            if (!waitingForRespawn)
+            {
+                return;
+            }
+
+
+            if (deathManager.DeadPlayerCount == 0)
+            {
+                waitingForRespawn = false;
+
+                if (checkpointManager.FinishedLastCheckpoint)
+                {
+                    checkpointManager.FinishGame();
+                    return;
+                }
+
+                Open();
+            }
         }
 
         public void Open()
         {
-            spawnManager.CurrentSpawnView = SpawnView;
-            checkpointManager.CurrentCheckpoint = this;
-
-            RespawnPlayers();
-
-            List<PlayerFacade> alivePlayerFacades = deathManager.AlivePlayerFacades;
-            foreach (PlayerFacade playerFacade in alivePlayerFacades)
-            {
-                playerFacade.StopDance();
-            }
-
+            readySetGoManager.Countdown();
             chunkFacade.CheckpointWallView.SetActive(false);
         }
 
         public void RespawnPlayers()
         {
-            List<PlayerFacade> deadPlayerFacades = deathManager.DeadPlayerFacades;
-            foreach (PlayerFacade playerFacade in deadPlayerFacades)
+            if (waitingForRespawn)
             {
-                playerFacade.Position = spawnManager.CurrentSpawnView.SpawnPoint(playerFacade.Input.DeviceNum);
-                playerFacade.MoveDirection = Vector3.zero;
+                return;
+            }
+
+            foreach (Input input in inputManager.Inputs)
+            {
+                if (!playerManager.HasPlayerFacade(input))
+                {
+                    continue;
+                }
+
+                PlayerFacade playerFacade = playerManager.PlayerFacade(input);
                 deathManager.Respawn(playerFacade);
+
+                if (!deathManager.IsTutorial)
+                {
+                    waitingForRespawn = true;
+                }
             }
         }
 
         public void OnCheckpointArrival(PlayerView playerView)
         {
-            aetherManager.AddAether(playerView, AetherAward);
+            aetherManager.AddAether(CheckpointView, playerView, AetherAward);
             aetherPosition += 1;
 
             Input input = playerManager.Input(playerView);
             PlayerFacade playerFacade = playerManager.PlayerFacade(input);
-            playerFacade.Dance();
+            playerFacade.Victory();
 
             Finish();
         }

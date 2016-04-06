@@ -5,7 +5,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class CheckpointManager : IInitializable
+    public class CheckpointManager : IInitializable, IDisposable, ITickable
     {
         private readonly SpawnManager spawnManager;
         private readonly MistManager mistManager;
@@ -14,6 +14,7 @@ namespace MistRidge
         private readonly CheckpointActionSignal checkpointActionSignal;
         private readonly GameStateSignal.Trigger gameStateTrigger;
 
+        private bool finishedLastCheckpoint;
         private Checkpoint lastCheckpoint;
         private Checkpoint currentCheckpoint;
         private Dictionary<CheckpointView, Checkpoint> checkpointMapping;
@@ -46,33 +47,83 @@ namespace MistRidge
             }
         }
 
+        public Checkpoint LastCheckpoint
+        {
+            get
+            {
+                return lastCheckpoint;
+            }
+            set
+            {
+                lastCheckpoint = value;
+            }
+        }
+
+        public bool FinishedLastCheckpoint
+        {
+            get
+            {
+                return finishedLastCheckpoint;
+            }
+        }
+
         public void Initialize()
         {
-            checkpointMapping = new Dictionary<CheckpointView, Checkpoint>();
+            ResetVariables();
             checkpointSignal.Event += OnCheckpointArrival;
             checkpointActionSignal.Event += OnCheckpointAction;
         }
 
+        public void Dispose()
+        {
+            checkpointSignal.Event -= OnCheckpointArrival;
+            checkpointActionSignal.Event -= OnCheckpointAction;
+        }
+
+        public void ResetVariables()
+        {
+            finishedLastCheckpoint = false;
+            checkpointMapping = new Dictionary<CheckpointView, Checkpoint>();
+        }
+
+        public void Tick()
+        {
+            if (currentCheckpoint != null)
+            {
+                currentCheckpoint.Tick();
+            }
+        }
+
         public void AddCheckpoint(Checkpoint checkpoint)
         {
-            lastCheckpoint = checkpoint;
             checkpointMapping.Add(checkpoint.CheckpointView, checkpoint);
         }
 
         public void FinishCheckpoint(Checkpoint checkpoint)
         {
-            checkpoint.Open();
-            if (checkpoint.NextCheckpoint != null)
+            if (finishedLastCheckpoint)
             {
-                mistManager.UpdateMistPosition(checkpoint.CheckpointView.Position.y);
+                return;
             }
-            sprintManager.SetSprintNum(checkpoint.CheckpointNum + 1);
+
+            currentCheckpoint = checkpoint;
+            mistManager.UpdateMistPosition(currentCheckpoint.CheckpointView.Position.y);
+
+            sprintManager.SetSprintNum(currentCheckpoint.CheckpointNum + 1);
             sprintManager.UpdateSprintText();
+
+            spawnManager.CurrentSpawnView = currentCheckpoint.SpawnView;
+            currentCheckpoint.RespawnPlayers();
 
             if (checkpoint == lastCheckpoint)
             {
-                gameStateTrigger.Fire(GameStateType.End);
+                finishedLastCheckpoint = true;
             }
+        }
+
+        public void FinishGame()
+        {
+            gameStateTrigger.Fire(GameStateType.End);
         }
 
         private void OnCheckpointArrival(CheckpointView checkpointView, PlayerView playerView)
@@ -91,7 +142,14 @@ namespace MistRidge
             switch (checkpointAction)
             {
                 case CheckpointAction.Finish:
-                    CurrentCheckpoint.NextCheckpoint.Finish();
+                    if (!finishedLastCheckpoint && CurrentCheckpoint.NextCheckpoint == null)
+                    {
+                        CurrentCheckpoint.Finish();
+                    }
+                    else
+                    {
+                        CurrentCheckpoint.NextCheckpoint.Finish();
+                    }
                     return;
 
                 case CheckpointAction.Respawn:

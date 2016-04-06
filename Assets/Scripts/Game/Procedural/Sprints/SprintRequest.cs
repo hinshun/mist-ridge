@@ -13,5 +13,8 @@ namespace MistRidge
 
         [HideInInspector]
         public int totalChunkCount;
+
+        [HideInInspector]
+        public bool checkpointOverride;
     }
 }

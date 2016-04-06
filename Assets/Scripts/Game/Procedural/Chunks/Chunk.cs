@@ -7,6 +7,7 @@ namespace MistRidge
 {
     public class Chunk : IInitializable
     {
+        private readonly DiContainer container;
         private readonly Settings settings;
         private readonly ChunkRequest chunkRequest;
         private readonly ChunkView chunkView;
@@ -20,6 +21,7 @@ namespace MistRidge
         private CheckpointView checkpointView;
 
         public Chunk(
+                DiContainer container,
                 Settings settings,
                 ChunkRequest chunkRequest,
                 ChunkView chunkView,
@@ -27,6 +29,7 @@ namespace MistRidge
                 ChunkFeatureView chunkFeatureView,
                 IChunkPlacingStrategy chunkPlacingStrategy)
         {
+            this.container = container;
             this.settings = settings;
             this.chunkRequest = chunkRequest;
             this.chunkView = chunkView;
@@ -121,7 +124,7 @@ namespace MistRidge
                 return null;
             }
 
-            TComponent component = GameObject.Instantiate(prefab).GetComponent<TComponent>();
+            TComponent component = container.InstantiatePrefab(prefab).GetComponent<TComponent>();
 
             component.Parent = spawner.transform;
             component.LocalPosition = Vector3.zero;

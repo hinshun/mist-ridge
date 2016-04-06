@@ -33,6 +33,7 @@ namespace MistRidge
 
         public void UpdateSprintText()
         {
+            displayManager.UpdateCinematic(true);
             displayManager.UpdateSprint(true);
             displayManager.UpdateSprintText(currentSprintNum, sprintCount);
         }

@@ -63,11 +63,17 @@ namespace MistRidge
         public override void Initialize()
         {
             characterTypes = new List<CharacterType>();
-            inputTypeMapping = new Dictionary<Input, CharacterType>();
-            inputSelectMapping = new Dictionary<Input, SelectType>();
 
             characterTypes.Add(CharacterType.Jack);
             characterTypes.Add(CharacterType.Jill);
+
+            ResetVariables();
+        }
+
+        public void ResetVariables()
+        {
+            inputTypeMapping = new Dictionary<Input, CharacterType>();
+            inputSelectMapping = new Dictionary<Input, SelectType>();
 
             foreach (Input input in inputManager.Inputs)
             {
@@ -79,36 +85,16 @@ namespace MistRidge
                 {
                     inputTypeMapping[input] = CharacterType.Jill;
                 }
-                inputSelectMapping.Add(input, SelectType.None);
+
+                inputSelectMapping[input] = SelectType.None;
                 displayManager.UpdateCharacterJoin(input.DeviceNum, true);
                 displayManager.UpdateCharacterPlayerTag(input.DeviceNum, true);
-            }
-
-            if (gameManager.LastInput != null)
-            {
-                SubmitPlayer(gameManager.LastInput);
             }
         }
 
         public CharacterType ChosenCharacterType(Input input)
         {
             return inputTypeMapping[input];
-        }
-
-        private void ResetMappings()
-        {
-            foreach (Input input in inputManager.Inputs)
-            {
-                if (input.DeviceNum % 2 == 0)
-                {
-                    inputTypeMapping[input] = CharacterType.Jack;
-                }
-                else
-                {
-                    inputTypeMapping[input] = CharacterType.Jill;
-                }
-                inputSelectMapping[input] = SelectType.None;
-            }
         }
 
         public override void Update()
@@ -145,6 +131,11 @@ namespace MistRidge
             tweening = false;
             displayManager.UpdateCharacterSelect(true);
             cameraView.IsActive = false;
+
+            if (gameManager.LastInput != null)
+            {
+                SubmitPlayer(gameManager.LastInput);
+            }
         }
 
         public override void ExitState()
@@ -201,7 +192,7 @@ namespace MistRidge
                 case SelectType.None:
                     tweening = true;
 
-                    ResetMappings();
+                    ResetVariables();
                     stateMachine.ChangeState(GameStateType.Start);
                     sceneLoader.Load(settings.startMenuSceneName);
                     break;
@@ -217,7 +208,7 @@ namespace MistRidge
 
                 case SelectType.Select:
                     displayManager.UpdateCharacterArrows(input.DeviceNum, true);
-                    displayManager.UpdateCharacterJoin(input.DeviceNum, true);
+                    displayManager.UpdateCharacterJoin(input.DeviceNum, false);
                     displayManager.UpdateCharacterSelect(input.DeviceNum, true);
 
                     inputSelectMapping[input] = SelectType.Join;

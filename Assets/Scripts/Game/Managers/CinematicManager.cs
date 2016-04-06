@@ -7,13 +7,18 @@ namespace MistRidge
 {
     public class CinematicManager : IInitializable
     {
+        private readonly SpawnManager spawnManager;
         private readonly DeathManager deathManager;
 
         private CinematicType cinematicType;
         private StartingZoneView startingZoneView;
+        private PeakZoneView peakZoneView;
 
-        public CinematicManager(DeathManager deathManager)
+        public CinematicManager(
+                SpawnManager spawnManager,
+                DeathManager deathManager)
         {
+            this.spawnManager = spawnManager;
             this.deathManager = deathManager;
         }
 
@@ -41,7 +46,24 @@ namespace MistRidge
             }
         }
 
+        public PeakZoneView PeakZoneView
+        {
+            get
+            {
+                return peakZoneView;
+            }
+            set
+            {
+                peakZoneView = value;
+            }
+        }
+
         public void Initialize()
+        {
+            ResetVariables();
+        }
+
+        public void ResetVariables()
         {
             cinematicType = CinematicType.None;
         }
@@ -53,7 +75,14 @@ namespace MistRidge
                 switch(cinematicType)
                 {
                     case CinematicType.None:
-                        return deathManager.AliveRelevantPlayerPositions;
+                        List<Vector3> positions = deathManager.AliveRelevantPlayerPositions;
+
+                        if (positions.Count == 0)
+                        {
+                            positions.Add(spawnManager.CurrentSpawnView.Position);
+                        }
+
+                        return positions;
 
                     case CinematicType.StartingZone:
                         List<Vector3> turnipPositions = new List<Vector3>();
@@ -62,7 +91,10 @@ namespace MistRidge
                         return turnipPositions;
 
                     case CinematicType.PeakZone:
-                        return new List<Vector3>();
+                        List<Vector3> peakPositions = new List<Vector3>();
+                        peakPositions.Add(peakZoneView.PeakTransform.position);
+
+                        return peakPositions;
                 }
 
                 return new List<Vector3>();

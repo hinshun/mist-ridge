@@ -73,7 +73,14 @@ namespace MistRidge
 
         public void Initialize()
         {
+            ResetVariables();
+        }
+
+        public void ResetVariables()
+        {
             CurrentCamera = camera;
+            zoomOverride = 0;
+            zoomOverrideEnabled = false;
         }
 
         public void Tick()

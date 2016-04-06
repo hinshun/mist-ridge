@@ -4,7 +4,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class Player : IInitializable
+    public class Player : IInitializable, IDisposable
     {
         private readonly Settings settings;
         private readonly Input input;
@@ -55,6 +55,14 @@ namespace MistRidge
             this.itemEffectSignal = itemEffectSignal;
         }
 
+        public PlayerView PlayerView
+        {
+            get
+            {
+                return playerView;
+            }
+        }
+
         public bool IsAlive
         {
             get
@@ -64,7 +72,9 @@ namespace MistRidge
             set
             {
                 isAlive = value;
-                playerView.SetActive(value);
+                playerView.enabled = value;
+                playerView.PlayerCircle.enabled = value;
+                playerView.MeshTransform.gameObject.SetActive(value);
             }
         }
 
@@ -463,9 +473,9 @@ namespace MistRidge
             itemEffectSignal.Event += OnItemEffect;
         }
 
-        public void AddAether(int aetherCount)
+        public void Dispose()
         {
-            aetherManager.AddAether(playerView, aetherCount);
+            itemEffectSignal.Event -= OnItemEffect;
         }
 
         public void AfterImage()

@@ -55,6 +55,9 @@ namespace MistRidge
         private int afterImageParticleCount;
 
         [SerializeField]
+        private ParticleSystem respawn;
+
+        [SerializeField]
         private SpriteRenderer playerCircle;
 
         private Hashtable itemFlashInHashtable;
@@ -124,6 +127,14 @@ namespace MistRidge
             }
         }
 
+        public ParticleSystem Respawn
+        {
+            get
+            {
+                return respawn;
+            }
+        }
+
         public Transform MeshTransform
         {
             get
@@ -188,6 +199,7 @@ namespace MistRidge
             if (!checkpointsVisited.ContainsKey(checkpointView))
             {
                 checkpointsVisited[checkpointView] = true;
+                playerControlTrigger.Fire(this, false);
                 checkpointTrigger.Fire(checkpointView, this);
             }
         }
