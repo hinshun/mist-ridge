@@ -180,7 +180,6 @@ namespace MistRidge
                 case DialogueEvent.ShowPowerUp:
                     cinematicManager.CinematicType = CinematicType.Turnip;
                     cameraManager.ZoomOverride = zoomOverride;
-                    Debug.Log("show powerup");
                     break;
             }
         }

@@ -24,7 +24,7 @@ namespace MistRidge
         private void Awake()
         {
             spawnTimer = 0;
-            DisablePickable();
+            EnablePickable();
         }
 
         private void Update()
