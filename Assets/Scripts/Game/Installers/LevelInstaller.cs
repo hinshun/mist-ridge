@@ -27,6 +27,7 @@ namespace MistRidge
             Container.Install<ExecutionOrderInstaller>(
                 new List<Type>()
                 {
+                    typeof(SprintManager),
                     typeof(IChunkFeaturePickingStrategy),
                     typeof(CheckpointManager),
                     typeof(ChunkManager),

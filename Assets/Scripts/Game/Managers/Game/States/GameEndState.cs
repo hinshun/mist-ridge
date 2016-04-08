@@ -26,7 +26,6 @@ namespace MistRidge
         private readonly RankManager rankManager;
         private readonly SpawnManager spawnManager;
         private readonly PoolManager poolManager;
-        private readonly SprintManager sprintManager;
 
         private bool menuShown;
 
@@ -54,7 +53,6 @@ namespace MistRidge
                 RankManager rankManager,
                 SpawnManager spawnManager,
                 PoolManager poolManager,
-                SprintManager sprintManager,
                 GameStateMachine stateMachine)
             : base(stateMachine)
         {
@@ -76,7 +74,6 @@ namespace MistRidge
             this.rankManager = rankManager;
             this.spawnManager = spawnManager;
             this.poolManager = poolManager;
-            this.sprintManager = sprintManager;
 
             stateType = GameStateType.End;
         }
@@ -251,7 +248,6 @@ namespace MistRidge
             playerManager.ResetVariables();
             rankManager.ResetVariables();
             poolManager.ResetVariables();
-            sprintManager.ResetVariables();
             spawnManager.CurrentSpawnView = null;
             generator.ResetVariables();
 

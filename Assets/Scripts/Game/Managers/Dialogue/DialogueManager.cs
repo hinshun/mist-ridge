@@ -55,6 +55,7 @@ namespace MistRidge
             dialogueManagerView.DialogueManager = this;
 
             textHashtable = new Hashtable();
+            textHashtable.Add("name", "textTween");
             textHashtable.Add("delay", settings.textDelay);
             textHashtable.Add("onupdate", "OnUpdateText");
             textHashtable.Add("oncomplete", "OnFinishText");
@@ -74,21 +75,25 @@ namespace MistRidge
 
         public void Tick()
         {
-            if (dialogueStateType != DialogueStateType.TextFinish)
-            {
-                return;
-            }
-
             foreach(Input input in inputManager.Inputs)
             {
                 if (input.Mapping.Submit.WasPressed)
                 {
-                    dialogueStateType = DialogueStateType.TextStart;
-                    dialogueIndex++;
-                    displayManager.UpdateDialogueNext(false);
+                    if (dialogueStateType == DialogueStateType.TextFinish)
+                    {
+                        dialogueStateType = DialogueStateType.TextStart;
+                        dialogueIndex++;
+                        displayManager.UpdateDialogueNext(false);
 
-                    List<Dialogue> dialogues = GetDialogues(dialogueType);
-                    DisplayDialogues(dialogues);
+                        List<Dialogue> dialogues = GetDialogues(dialogueType);
+                        DisplayDialogues(dialogues);
+                    }
+                    else if (dialogueStateType == DialogueStateType.TextStart)
+                    {
+                        iTween.StopByName(dialogueManagerView.gameObject, "textTween");
+                        OnUpdateText(dialogue.text.Length);
+                        OnFinishText();
+                    }
 
                     return;
                 }

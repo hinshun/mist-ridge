@@ -56,6 +56,12 @@ namespace MistRidge
                 }
                 else
                 {
+                    stateMachine.MoveDirection = Vector3.MoveTowards(
+                        stateMachine.MoveDirection,
+                        Vector3.zero,
+                        player.CurrentHaltSpeed * playerController.DeltaTime
+                    );
+
                     stateMachine.ChangeState(PlayerStateType.Idle);
                 }
             }

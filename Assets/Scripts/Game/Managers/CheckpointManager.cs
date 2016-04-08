@@ -122,6 +122,7 @@ namespace MistRidge
 
         public void FinishGame()
         {
+            sprintManager.SetSprintNum(0);
             gameStateTrigger.Fire(GameStateType.End);
         }
 
