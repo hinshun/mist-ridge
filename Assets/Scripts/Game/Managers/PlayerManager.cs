@@ -114,6 +114,7 @@ namespace MistRidge
             foreach (PlayerFacade playerFacade in playerFacades.Values)
             {
                 playerFacade.Control = control;
+                playerFacade.PlayerView.CanUseItems = control;
             }
         }
 

@@ -39,8 +39,6 @@ namespace MistRidge
         public override void ExitState()
         {
             playerView.Animator.SetBool("IsFloating", false);
-
-            playerView.CanJump = true;
             stateMachine.Enabled = true;
         }
     }

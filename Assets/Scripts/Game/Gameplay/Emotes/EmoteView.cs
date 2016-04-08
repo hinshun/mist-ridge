@@ -62,7 +62,7 @@ namespace MistRidge
 
         private void FadeFinish()
         {
-            Destroy();
+            Remove();
         }
     }
 }

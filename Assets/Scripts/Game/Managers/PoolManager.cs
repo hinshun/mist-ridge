@@ -24,6 +24,15 @@ namespace MistRidge
         {
             pools = new Dictionary<int, Pool>();
             CreatePools();
+            ResetVariables();
+        }
+
+        public void ResetVariables()
+        {
+            foreach (KeyValuePair<int, Pool> entry in pools)
+            {
+                entry.Value.Clear();
+            }
         }
 
         public PoolInstanceView ReusePoolInstance(PoolInstanceView poolInstanceView, Vector3 position, Quaternion rotation)

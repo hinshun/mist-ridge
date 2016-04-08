@@ -12,6 +12,7 @@ namespace MistRidge
         private readonly AetherManager aetherManager;
         private readonly PlayerView playerView;
         private readonly PlayerStateMachine playerStateMachine;
+        private readonly PlayerController playerController;
         private readonly PlayerPhysics playerPhysics;
         private readonly ItemEffectSignal itemEffectSignal;
 
@@ -42,6 +43,7 @@ namespace MistRidge
             AetherManager aetherManager,
             PlayerView playerView,
             PlayerStateMachine playerStateMachine,
+            PlayerController playerController,
             PlayerPhysics playerPhysics,
             ItemEffectSignal itemEffectSignal)
         {
@@ -51,6 +53,7 @@ namespace MistRidge
             this.aetherManager = aetherManager;
             this.playerView = playerView;
             this.playerStateMachine = playerStateMachine;
+            this.playerController = playerController;
             this.playerPhysics = playerPhysics;
             this.itemEffectSignal = itemEffectSignal;
         }

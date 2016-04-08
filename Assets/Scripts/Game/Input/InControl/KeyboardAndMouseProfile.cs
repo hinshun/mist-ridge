@@ -35,8 +35,14 @@ namespace MistRidge
                 new InputControlMapping
                 {
                     Handle = "Cancel",
-                    Target = InputControlType.Action1,
+                    Target = InputControlType.Action2,
                     Source = KeyCodeButton( KeyCode.X )
+                },
+                new InputControlMapping
+                {
+                    Handle = "UseItem",
+                    Target = InputControlType.LeftTrigger,
+                    Source = KeyCodeButton( KeyCode.C )
                 },
                 new InputControlMapping
                 {

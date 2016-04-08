@@ -45,7 +45,7 @@ namespace MistRidge
             }
             else
             {
-                bubbleTrapView.Pop();
+                bubbleTrapView.Land(landingOrigin - Vector3.up);
             }
         }
 

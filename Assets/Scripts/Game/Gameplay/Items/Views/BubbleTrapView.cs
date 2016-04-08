@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using Zenject;
 
 namespace MistRidge
 {
@@ -33,6 +34,7 @@ namespace MistRidge
         private bool activated;
         private bool trapped;
         private bool popping;
+        private float moveId;
 
         private Hashtable moveHashtable;
         private Hashtable scaleHashtable;
@@ -42,7 +44,13 @@ namespace MistRidge
         private PlayerView playerView;
         private Vector3 finalScale;
 
-        private Transform initialParent;
+        private PlayerContainerView playerContainerView;
+
+        [PostInject]
+        public void Init(PlayerContainerView playerContainerView)
+        {
+            this.playerContainerView = playerContainerView;
+        }
 
         public float Height
         {
@@ -67,7 +75,6 @@ namespace MistRidge
             popping = false;
             playerView = null;
 
-            Parent = initialParent;
             LocalScale = initialScale;
         }
 
@@ -92,13 +99,13 @@ namespace MistRidge
 
             if (playerView != null)
             {
-                playerView.Parent = Parent;
+                playerView.Parent = playerContainerView.transform;
                 playerView.LocalScale = new Vector3(1, 1, 1);
                 playerView.BubbleTrapRelease();
             }
 
             LocalScale = initialScale;
-            Destroy();
+            Remove();
         }
 
         public void OnTriggerStay(Collider other)
@@ -128,11 +135,10 @@ namespace MistRidge
                 return;
             }
 
-            iTween.StopByName("moveTween" + GetInstanceID());
+            iTween.StopByName(gameObject, "moveTween" + moveId);
             playerView.BubbleTrapped();
             trapped = true;
 
-            Parent = playerView.Parent;
             playerView.Parent = transform;
             playerView.LocalPosition = Vector3.zero;
 
@@ -153,10 +159,10 @@ namespace MistRidge
             trapped = false;
             popping = false;
 
-            initialParent = Parent;
+            moveId = UnityEngine.Random.value;
 
             moveHashtable = new Hashtable();
-            moveHashtable.Add("name", "moveTween" + GetInstanceID());
+            moveHashtable.Add("name", "moveTween" + moveId);
             moveHashtable.Add("time", throwTime);
 
             scaleHashtable = new Hashtable();

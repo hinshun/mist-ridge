@@ -6,7 +6,7 @@ using Zenject;
 
 namespace MistRidge
 {
-    public class PlayerController : IInitializable, ITickable
+    public class PlayerController : IInitializable, IDisposable, ITickable
     {
         private readonly Settings settings;
         private readonly PlayerView playerView;
@@ -110,6 +110,11 @@ namespace MistRidge
             fixedDeltaTime = 1f / settings.fixedUpdatesPerSecond;
 
             playerView.DrawGizmos += OnDrawGizmos;
+        }
+
+        public void Dispose()
+        {
+            playerView.DrawGizmos -= OnDrawGizmos;
         }
 
         public void Tick()

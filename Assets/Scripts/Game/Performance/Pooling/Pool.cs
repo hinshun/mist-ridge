@@ -7,6 +7,7 @@ namespace MistRidge
 {
     public class Pool : IInitializable
     {
+        private readonly DiContainer container;
         private readonly ObjectPoolView objectPoolView;
         private readonly PoolRequest poolRequest;
         private readonly PoolView poolView;
@@ -14,10 +15,12 @@ namespace MistRidge
         private Queue<PoolInstanceView> poolInstanceViews;
 
         public Pool(
+                DiContainer container,
                 PoolView poolView,
                 PoolRequest poolRequest,
                 ObjectPoolView objectPoolView)
         {
+            this.container = container;
             this.poolView = poolView;
             this.poolRequest = poolRequest;
             this.objectPoolView = objectPoolView;
@@ -41,7 +44,7 @@ namespace MistRidge
 
             for (int i = 0; i < poolRequest.poolSize; ++i)
             {
-                PoolInstanceView poolInstanceView = GameObject.Instantiate(prefab).GetComponent<PoolInstanceView>();
+                PoolInstanceView poolInstanceView = container.InstantiatePrefab(prefab).GetComponent<PoolInstanceView>();
                 poolInstanceView.Parent = poolView.transform;
                 poolInstanceView.gameObject.SetActive(false);
 
@@ -67,7 +70,7 @@ namespace MistRidge
         {
             foreach (PoolInstanceView poolInstanceView in poolInstanceViews)
             {
-                poolInstanceView.Destroy();
+                poolInstanceView.Remove();
             }
         }
 

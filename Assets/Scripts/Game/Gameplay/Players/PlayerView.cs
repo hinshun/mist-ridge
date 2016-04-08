@@ -66,6 +66,7 @@ namespace MistRidge
         private Hashtable itemFlashInHashtable;
         private Hashtable itemFlashOutHashtable;
 
+        private bool canUseItems;
         private bool canJump;
         private bool canPickupItems;
         private bool isBubbleTrapped;
@@ -199,7 +200,11 @@ namespace MistRidge
         {
             get
             {
-                return !isBubbleTrapped;
+                return canUseItems && !isBubbleTrapped;
+            }
+            set
+            {
+                canUseItems = value;
             }
         }
 
@@ -281,6 +286,7 @@ namespace MistRidge
 
         private void Awake()
         {
+            canUseItems = true;
             canJump = true;
             canPickupItems = true;
             isBubbleTrapped = false;

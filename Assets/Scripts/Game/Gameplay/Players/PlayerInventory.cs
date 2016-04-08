@@ -40,6 +40,11 @@ namespace MistRidge
         public void Initialize()
         {
             itemPickupSignal.Event += OnItemPickup;
+            ResetVariables();
+        }
+
+        public void ResetVariables()
+        {
             this.playerView.CanPickupItems = true;
             itemParticleSystem = playerView.ItemUse;
             itemRenderer = itemParticleSystem.GetComponent<ParticleSystemRenderer>();

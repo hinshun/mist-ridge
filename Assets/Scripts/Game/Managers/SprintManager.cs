@@ -18,7 +18,13 @@ namespace MistRidge
 
         public void Initialize()
         {
+            ResetVariables();
+        }
+
+        public void ResetVariables()
+        {
             currentSprintNum = 0;
+            sprintCount = 0;
         }
 
         public void SetSprintCount(int count)
